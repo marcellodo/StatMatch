@@ -34,10 +34,13 @@ function (data.rec, data.don, match.vars=NULL, don.class=NULL, dist.fun="Euclide
 ################
 RANDwNND.hd <- function (rec, don, dfun="Euclidean", cut.don="rot", k=NULL)
 { 
-	p <- ncol(rec)
-	x.rec <- rec
-	x.don <- don
-		
+  if(is.null(dim(rec))) x.rec <- data.frame(rec)
+  else x.rec <- rec
+  if(is.null(dim(don))) x.rec <- data.frame(don)
+  else x.don <- don
+
+  p <- ncol(rec)
+
 	nr <- nrow(rec)
 	nd <- nrow(don)
 	if(nr>nd) cat("Warning: the no. do donors is less than the no.f recipients", fill=TRUE)
@@ -66,11 +69,14 @@ RANDwNND.hd <- function (rec, don, dfun="Euclidean", cut.don="rot", k=NULL)
         dxd <- dim(x.don)
         x.don <- as.character(as.matrix(x.don))
         dim(x.don) <- dxd
-		    mdist <- gower.dist(data.x=x.rec, data.y=x.don)
+        xx <- data.frame(rbind(x.rec, x.don))
+		    x.rec <- xx[1:nr,]
+		    x.don <- xx[-(1:nr),]
+		    mdist <- dist(data.x=x.rec, data.y=x.don, method="Gower")
     }
     else if(dfun=="Gower"){
-        if(p==1 && is.factor(x.rec)) x.rec <- list(x.rec)
-        if(p==1 && is.factor(x.don)) x.don <- list(x.don)
+        # if(p==1 && is.factor(x.rec)) x.rec <- list(x.rec)
+        # if(p==1 && is.factor(x.don)) x.don <- list(x.don)
         mdist <- gower.dist(data.x=x.rec, data.y=x.don)
         mdist[is.nan(mdist)] <- 1 # NaN can occur when p=1 and x.rec and x.don is of type logical
         mdist[is.na(mdist)] <- 1 # NA can occur when p=1 and x.rec and x.don is of type logical
@@ -207,11 +213,13 @@ RANDwNND.hd <- function (rec, don, dfun="Euclidean", cut.don="rot", k=NULL)
 			cat("The no. of donation classes in recipient data is not equal to the no. of donation classes in donor data", fill=TRUE)
 			stop("Possible reason: the variables used to classify units are not defined as factors or are factors with different levels") 	
 		}
-		
+		if(!identical(names(l.rec), names(l.don)))
+			cat("Warning: the donation classes seem built using different factors with differnt levels")
+			
 		nn.r <- unlist(lapply(l.r.lab, length))
 		nn.d <- unlist(lapply(l.d.lab, length))
 				
-		if(sum( (nn.r>0) & (nn.d==0))>0) {
+		if(sum((nn.r>0) & (nn.d==0))>0) {
 			stop("In some donation classes there are NO available donors. Please modify the definition of the donation classes")
 		}	
 		l.r.lab <- l.r.lab[nn.r>0]

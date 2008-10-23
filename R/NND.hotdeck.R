@@ -38,15 +38,18 @@ function (data.rec, data.don, match.vars, don.class=NULL, dist.fun="Euclidean", 
 	row.names(data.don) <- d.lab
 	
 ########################
-NND.hd <- function (rec, don, match.by, dfun="Euclidean", constr=FALSE, c.alg=NULL) 
+NND.hd <- function (rec, don, dfun="Euclidean", constr=FALSE, c.alg=NULL)
 { 
-	p <- length(match.by)
-	x.rec <- rec[, match.by]
-	x.don <- don[, match.by]
-	
+  if(is.null(dim(rec))) x.rec <- data.frame(rec)
+	else x.rec <- rec
+  if(is.null(dim(don))) x.don <- data.frame(don)
+	else x.don <- don
+  p <- ncol(rec)
 	nr <- nrow(x.rec)
 	nd <- nrow(x.don)
-	r.lab <- rownames(x.rec)
+	if(nr>nd) cat("Warning: the no. do donors is less than the no.f recipients", fill=TRUE)
+
+  r.lab <- rownames(x.rec)
 	if(is.null(r.lab)) r.lab <- 1:nr
 	d.lab <- rownames(x.don)
 	if(is.null(d.lab)) d.lab <- 1:nd
@@ -56,12 +59,10 @@ NND.hd <- function (rec, don, match.by, dfun="Euclidean", constr=FALSE, c.alg=NU
 
 	if(dfun=="Euclidean" || dfun=="Manhattan"){
 		cat("Warning:", dfun, "distance is being used", fill=TRUE)
-		cat("all the matching variables in data.rec and data.don are converted to numeric variables", fill=TRUE)
-		x.rec <- data.matrix(x.rec)
-		if(p==1 && !is.numeric(x.rec)) x.rec <- as.numeric(x.rec)
-		x.don <- data.matrix(x.don)
-		if(p==1 && !is.numeric(x.don)) x.don <- as.numeric(x.don)
-		mdist <- dist(x=x.rec, y=x.don, method=dfun)
+    cat("Warning: all the categorical variables in rec and don data.frame are recoded into dummies", fill=TRUE)
+    x.rec <- fact2dummy(x.rec, all=FALSE)
+    x.don <- fact2dummy(x.don, all=FALSE)
+    mdist <- dist(x=x.rec, y=x.don, method=dfun)
 	}
 	else if(dfun=="exact" || dfun=="exact matching"){
 		cat("Warning: exact matching distance is being used", fill=TRUE)
@@ -72,11 +73,14 @@ NND.hd <- function (rec, don, match.by, dfun="Euclidean", constr=FALSE, c.alg=NU
 		dxd <- dim(x.don)
 		x.don <- as.character(as.matrix(x.don))
 		dim(x.don) <- dxd
-		mdist <- gower.dist(data.x=x.rec, data.y=x.don)
+		xx <- data.frame(rbind(x.rec, x.don))
+		x.rec <- xx[1:nr,]
+		x.don <- xx[-(1:nr),]
+		mdist <- dist(data.x=x.rec, data.y=x.don, method="Gower")
 	}
 	else if(dfun=="Gower"){
-		if(p==1 && is.factor(x.rec)) x.rec <- list(x.rec)
-		if(p==1 && is.factor(x.don)) x.don <- list(x.don)
+		# if(p==1 && is.factor(x.rec)) x.rec <- list(x.rec)
+		# if(p==1 && is.factor(x.don)) x.don <- list(x.don)
 		mdist <- gower.dist(data.x=x.rec, data.y=x.don)
 		mdist[is.nan(mdist)] <- 1 # NaN can occur when p=1 and x.rec and x.don is of type logical
 		mdist[is.na(mdist)] <- 1 # NA can occur when p=1 and x.rec and x.don is of type logical
@@ -84,7 +88,6 @@ NND.hd <- function (rec, don, match.by, dfun="Euclidean", constr=FALSE, c.alg=NU
 	else{
 		mdist <- dist(x=x.rec, y=x.don, method=dfun)
 	}
-	
 	dimnames(mdist) <- list(r.lab, d.lab)
 
 # UNCONSTRAINED nearest neighbour matching
@@ -159,10 +162,10 @@ NND.hd <- function (rec, don, match.by, dfun="Euclidean", constr=FALSE, c.alg=NU
 	else fine <- list(mtc.ids=mtc.ids, dist.rd=dist.rd, noad=nad, call=match.call())
 	fine
 }
-########################
+################ NND.hd ends here #############################
 	
 	if(is.null(don.class)){ 
-		out <- NND.hd(rec=data.rec, don=data.don, match.by=match.vars, dfun=dist.fun, constr=constrained, c.alg=constr.alg )
+		out <- NND.hd(rec=data.rec[,match.vars], don=data.don[,match.vars], dfun=dist.fun, constr=constrained, c.alg=constr.alg )
 		mmm <- out$mtc.ids
 		mmm <- substring(mmm, 5)
 		if(is.null(rownames(data.rec)) && is.null(rownames(data.don)))  mtc.ids <- matrix(as.numeric(mmm), ncol=2, byrow=TRUE)
@@ -186,11 +189,19 @@ NND.hd <- function (rec, don, match.by, dfun="Euclidean", constr=FALSE, c.alg=NU
 		}
 		if(!identical(names(l.rec), names(l.don)))
 			cat("Warning: the donation classes seem built using different factors with differnt levels")
-		
-		nn.r <- lapply(l.rec, nrow)
-		nn.d <- lapply(l.don, nrow)
-		
-		if(sum(nn.d==0)>0) {
+		if(p==1){
+      nn.r <- unlist(lapply(l.rec, length))
+		  nn.d <- unlist(lapply(l.don, length))
+    }
+		else {
+      nn.r <- unlist(lapply(l.rec, nrow))
+      nn.d <- unlist(lapply(l.don, nrow))
+	  }
+    l.rec <- l.rec[nn.r>0]
+    l.don <- l.don[nn.r>0]
+    nn.r <- nn.r[nn.r>0]
+    nn.d <- nn.d[nn.r>0]
+    if(any(nn.d==0)) {
 			stop("For some donation classes there are NO donors available. Please modify the definition of the donation classes")
 		}	
 		H <- length(l.rec)
@@ -198,12 +209,12 @@ NND.hd <- function (rec, don, match.by, dfun="Euclidean", constr=FALSE, c.alg=NU
 		dist.rd <- as.list(numeric(H))
 		if(!constrained) noad <- as.list(numeric(H))
 		for(h in 1:H){
-			out <- NND.hd(rec=l.rec[[h]], don=l.don[[h]], match.by=match.vars, dfun=dist.fun, constr=constrained, c.alg=constr.alg )
-			mtc.ids[[h]] <- out$mtc.ids
-			dist.rd[[h]] <- out$dist.rd
-			if(!constrained) noad[[h]] <- out$noad
+        out <- NND.hd(rec=l.rec[[h]], don=l.don[[h]], dfun=dist.fun, constr=constrained, c.alg=constr.alg )
+        mtc.ids[[h]] <- out$mtc.ids
+			  dist.rd[[h]] <- out$dist.rd
+			  if(!constrained) noad[[h]] <- out$noad
 		}
-		mmm <- unlist(lapply(mtc.ids, t))
+    mmm <- unlist(lapply(mtc.ids, t))
 		mmm <- substring(mmm, 5)
 		mtc.ids <- matrix(mmm, ncol=2, byrow=TRUE)
 		if(is.null(rownames(data.rec)) && is.null(rownames(data.don)))  mtc.ids <- matrix(as.numeric(mmm), ncol=2, byrow=TRUE)

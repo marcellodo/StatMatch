@@ -11,54 +11,43 @@ function (data.x, data.y=data.x, rngs=NULL, KR.corr=TRUE)
 		ny <- length(y)
 		cx <- class(x) 
 		cy <- class(y)
-		delta <- rep(1, nx*ny)
+		delta <- matrix(1, nx, ny)
 		if(!identical(cx, cy)) stop("the x and y object are of different type")
 		if(is.logical(x)){
-			xx <- c(matrix(x, nx, ny))
-			yy <- c(matrix(y, nx, ny, byrow=TRUE))
-			dd <- abs(xx-yy)
-			# dd[xx==FALSE & yy==FALSE] <- 1
-			delta[(xx==FALSE & yy==FALSE)] <- 0
-			delta[(is.na(xx) | is.na(yy))] <- 0
+			dd <- abs(outer(X=x, Y=y, FUN="-"))
+			delta[outer(x==FALSE, y==FALSE, FUN="&")] <- 0
+			delta[outer(is.na(x), is.na(y), FUN="|")] <- 0
 		}
-		else if(is.character(x) ||(is.factor(x) && !is.ordered(x) )){
+		else if(is.character(x) || (is.factor(x) && !is.ordered(x)) ){
 			if(is.factor(x) && !identical(levels(x), levels(y))) stop("x and y have different levels")
 			xx <- c(matrix(as.character(x), nx, ny))
 			yy <- c(matrix(as.character(y), nx, ny, byrow=TRUE))
-			dd <- 1-(xx==yy)
-			delta[is.na(xx) | is.na(yy)] <- 0
+			dd <- 1 - outer(x, y, FUN="==")
+			delta[outer(is.na(x), is.na(y), FUN="|")] <- 0
 		}	
 		else if(is.ordered(x)){
 			if(KR.corr){
 				x <- as.numeric(x)
 				y <- as.numeric(y)
-				if(is.null(rng)) rng <- max(x,y) - 1
+				if(is.null(rng) || is.na(rng)) rng <- max(x,y) - 1
 				zx <- (x-1)/rng
 				zy <- (y-1)/rng
-				xx <- c(matrix(zx, nx, ny))
-				yy <- c(matrix(zy, nx, ny, byrow=TRUE))
-				dd <- abs(xx-yy)/(max(xx,yy)-min(xx,yy) )
-				delta[is.na(xx) | is.na(yy)] <- 0
+				dd <- abs(outer(X=zx, Y=zy, FUN="-"))/(max(zx,zy)-min(zx,zy) )
+				delta[outer(is.na(zx), is.na(zy), FUN="|")] <- 0
 			}
 			else{
 				x <- as.numeric(x)
 				y <- as.numeric(y)
-				if(is.null(rng)) rng <- max(x,y) - 1
-				xx <- c(matrix(x, nx, ny))
-				yy <- c(matrix(y, nx, ny, byrow=TRUE))
-				dd <- abs(xx-yy)/rng
-				delta[is.na(xx) | is.na(yy)] <- 0
+				if(is.null(rng) || is.na(rng)) rng <- max(x,y) - 1
+				dd <- abs(outer(X=x, Y=y, FUN="-"))/rng
+				delta[outer(is.na(x), is.na(y), FUN="|")] <- 0
 			}
 		}
 		else{
-			xx <- c(matrix(x, nx, ny))
-			yy <- c(matrix(y, nx, ny, byrow=TRUE))
-			if(is.null(rng)) rng <- max(x,y) - min(x,y)
-			dd <- abs(xx-yy)/rng
-			delta[is.na(xx) | is.na(yy)] <- 0
+  			if(is.null(rng) || is.na(rng)) rng <- max(x,y) - min(x,y)
+	 		  dd <- abs(outer(X=x, Y=y, FUN="-"))/rng
+		    delta[outer(is.na(x), is.na(y), FUN="|")] <- 0
 		}	
-		dim(dd) <- c(nx, ny)
-		dim(delta) <- c(nx, ny)
 		list(dist=dd, delta=delta)
 	}
 	

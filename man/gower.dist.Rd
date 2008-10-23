@@ -28,7 +28,7 @@ If only \code{data.x} is supplied, the dissimilarities between rows of \code{dat
 }
 
 \item{rngs}{
-The ranges to scale the numeric variables. When \code{NULL} (default) the range of a variable is estimated by jointly considering the values for the variable in \code{data.x} and those in \code{data.y}. Therefore, assuming \code{rngs=NULL}, if a variable \code{"X1"} is considered:
+A vector with the ranges to scale the variables. Its length must be equal to number of variables in \code{data.x}. In correspondence of nonnumeric variables, just put 1 or \code{NA}. When \code{rngs=NULL} (default) the range of a numeric variable is estimated by jointly considering the values for the variable in \code{data.x} and those in \code{data.y}. Therefore, assuming \code{rngs=NULL}, if a variable \code{"X1"} is considered:
 \preformatted{
 rngs["X1"] <- max(data.x[,"X1"], data.y[,"X1"]) - 
                min(data.x[,"X1"], data.y[,"X1"])}.
