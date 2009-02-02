@@ -44,13 +44,13 @@ When \code{dist.fun="Gower"} the Gower dissimilarity is considered. See function
 
 \item{cut.don}{
 A character string that, jointly with the argument \code{k}, identifies the rule to be used to form the subset of the closest donor records. 
-\describe{
+\itemize{
 
-			\item\code{cut.don="rot"}: (default) then the number of the closest donors to retain is given by \eqn{\left[\sqrt{n_{D}}\right]+1}; being \eqn{n_{D}} the total number of available donors. In this case \code{k} must not to be specified.
+			\item \code{cut.don="rot"}: (default) then the number of the closest donors to retain is given by \eqn{ \left[ \sqrt{n_{D}} \right]+1}{([n_D+1])^(1/2)}; being \eqn{ n_{D} }{n_D} the total number of available donors. In this case \code{k} must not to be specified.
 			
-			\item \code{cut.don="span"}: the number of closest donors is determined as the proportion \code{k} of all the available donors, i.e. \eqn{\left[ n_{D} \times k \right] }. Note that, in this case, \eqn{ 0< \code{k} \leq 1 }.
+			\item \code{cut.don="span"}: the number of closest donors is determined as the proportion \code{k} of all the available donors, i.e. \eqn{ \left[ n_{D} \times k \right] }{[n_D * k]}. Note that, in this case, \eqn{ 0< \code{k} \leq 1 }{0 < k <= 1}.
 			
-			\item \code{cut.don="exact"}: the \code{k}th closest donors out of the \eqn{n_{D}} are retained. In this case, \eqn{ 0<\code{k}\leq{n_{D}}}.
+			\item \code{cut.don="exact"}: the \code{k}th closest donors out of the \eqn{n_{D}}{n_D} are retained. In this case, \eqn{ 0< \code{k} \leq{ n_{D} } }{0 < k <= n_D}.
 			
 			\item \code{cut.don="min"}: the donors at the minimum distance from the recipient are retained.
 			

@@ -8,7 +8,7 @@ Transforms a factor or more factors contained in a data frame with a set of dumm
 }
 
 \usage{
-fact2dummy(data, all=TRUE) 
+fact2dummy(data, all=TRUE, lab="x") 
 }
 
 \arguments{
@@ -18,8 +18,13 @@ fact2dummy(data, all=TRUE)
 }
 
 \item{all}{
-   Logical. When \code{all=TRUE} (default) the output matrix will contain as many dummy variables as the number of the levels of the factor variable. On the contrary, when \code{all=FALSE}, the dummy variable related to the last level of the factor is dropped. 
+   Logical. When \code{all=TRUE} (default) the output matrix will contain as many dummy variables as the number of the levels of the factor variable. On the contrary, when \code{all=FALSE}, the dummy variable related to the last level of the factor is dropped.
 }
+
+\item{lab}{
+   A character string with the name of the variable to be pasted with its levels. This is used only when  \code{data} is a factor. By default it is set to \dQuote{x}.
+}
+
 }
   
 \details{

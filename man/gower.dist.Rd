@@ -46,30 +46,30 @@ By default (\code{KR.corr=TRUE}) the Kaufman and Rousseeuw (1990) extension of t
 \deqn{d(i,j) = \frac{\sum_k{\delta_{ijk} d_{ijk}}}{\sum_k{\delta_{ijk}}}}{d(i,j) = sum_k(delta_ijk * d_ijk ) / sum_k( delta_ijk )} 
 
 In particular, \eqn{d_{ijk}}{d_ijk} represents the distance between the \emph{i}th and \emph{j}th unit computed considering the \emph{k}th variable. It depends on the nature of the variable:
-\describe{
+\itemize{
 
-		\item {\code{logical} columns are considered as asymmetric binary variables, for such case \eqn{d_{ijk}=0}{d_ijk = 0} if \eqn{x_{ik} = x_{jk} = \code{TRUE}}{x_ik = x_jk = TRUE}, 1 otherwise;}
+		\item \code{logical} columns are considered as asymmetric binary variables, for such case \eqn{d_{ijk}=0}{d_ijk = 0} if \eqn{x_{ik} = x_{jk} = \code{TRUE}}{x_ik = x_jk = TRUE}, 1 otherwise;
 		
-		\item {\code{factor} or \code{character} columns are considered as categorical nominal variables and \eqn{d_{ijk}=0}{d_ijk = 0} if \eqn{x_{ik}=x_{jk}}{x_ik = x_jk}, 1 otherwise;}
+		\item \code{factor} or \code{character} columns are considered as categorical nominal variables and \eqn{d_{ijk}=0}{d_ijk = 0} if \eqn{x_{ik}=x_{jk}}{x_ik = x_jk}, 1 otherwise;
 		
-		\item {\code{numeric} columns are considered as interval-scaled variables and 
+		\item \code{numeric} columns are considered as interval-scaled variables and 
     \deqn{d_{ijk}=\frac{\left|x_{ik}-x_{jk}\right|}{R_k}}{d_ijk = abs(x_ik - x_jk) / R_k}
-    being  \eqn{R_k}{R_k} the range of the \emph{k}th variable. The range is the one supplied with the argument \code{rngs}  (\code{rngs[k]}) or the one computed on available data (when \code{rngs=NULL})}
+    being  \eqn{R_k}{R_k} the range of the \emph{k}th variable. The range is the one supplied with the argument \code{rngs}  (\code{rngs[k]}) or the one computed on available data (when \code{rngs=NULL});
 		
-		\item {\code{ordered} columns are considered as categorical ordinal variables and the values are substituted with the corresponding position index, \eqn{r_{ik}}{r_ik} in the factor levels. These position indexes (that are different from the output of the R function \code{\link[base]{rank}}) are transformed in the following manner  
+		\item \code{ordered} columns are considered as categorical ordinal variables and the values are substituted with the corresponding position index, \eqn{r_{ik}}{r_ik} in the factor levels. These position indexes (that are different from the output of the R function \code{\link[base]{rank}}) are transformed in the following manner  
     \deqn{z_{ik}=\frac{(r_{ik}-1)}{max\left(r_{ik}\right) - 1}}{z_ik = (r_ik - 1)/(max(r_ik) - 1)}
-    These new values, \eqn{z_{ik}}{z_ik}, are treated as observations of an interval scaled variable.}
+    These new values, \eqn{z_{ik}}{z_ik}, are treated as observations of an interval scaled variable.
 
 }
 
 As far as the weight \eqn{\delta_{ijk}}{delta_ijk} is concerned:
-\describe{
+\itemize{
 
-	\item {\eqn{\delta_{ijk}=0}{delta_ijk = 0} if \eqn{x_{ik} = \code{NA}}{x_ik = \code{NA}} or \eqn{x_{jk} = \code{NA}}{x_jk = NA};}
+	\item \eqn{\delta_{ijk}=0}{delta_ijk = 0} if \eqn{x_{ik} = \code{NA}}{x_ik = \code{NA}} or \eqn{x_{jk} = \code{NA}}{x_jk = NA};
 	
-	\item {\eqn{\delta_{ijk}=0}{delta_ijk = 0} if the variable is asymmetric binary  and  \eqn{x_{ik}=x_{jk}=0}{x_ik = x_jk = 0} or  \eqn{x_{ik} = x_{jk} = \code{FALSE}}{x_ik = x_jk = FALSE};}
-	\item {
-  \eqn{\delta_{ijk}=1}{delta_ijk = 1} in all the other cases.}
+	\item \eqn{\delta_{ijk}=0}{delta_ijk = 0} if the variable is asymmetric binary  and  \eqn{x_{ik}=x_{jk}=0}{x_ik = x_jk = 0} or  \eqn{x_{ik} = x_{jk} = \code{FALSE}}{x_ik = x_jk = FALSE};
+	\item 
+  \eqn{\delta_{ijk}=1}{delta_ijk = 1} in all the other cases.
 }
 
 In practice, \code{NAs} and couple of cases with \eqn{x_{ik}=x_{jk}=\code{FALSE}}{x_ik = x_jk = \code{FALSE}} do not contribute to distance computation.

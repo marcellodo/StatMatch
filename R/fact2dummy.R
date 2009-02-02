@@ -1,27 +1,21 @@
 `fact2dummy` <-
-function (data, all=TRUE) 
+function (data, all=TRUE, lab="x") 
 {
 	dum.fcn <- function(x, all=TRUE){
-		n <- length(x)
-		k <- nlevels(x)
-		lev <- levels(x)
-		mat <- matrix(lev, n, k, byrow=TRUE)
-		fine <- (mat==x)*1
-		dim(fine) <- c(n,k)
-		colnames(fine) <- lev
-		if(!all) {
-			fine <- fine[,-k]
-			fine <- matrix(fine, n, (k-1))
-			colnames(fine) <- lev[-k]
-		}
-		fine
-	} 
+    fine <- model.matrix(~x-1)
+		colnames(fine) <- levels(x)
+		if(!all) fine <- fine[,-ncol(fine)]
+		fine	} 
 	
 	if(is.null(dim(data))){
 		if(class(data)[1]=="numeric" || class(data)[1]=="integer" || class(data)[1]=="logical") oo <- cbind(1*data)
 		else{
 			oo <- dum.fcn(data, all=all)
-			colnames(oo) <- paste("x", colnames(oo), sep="=")
+			if(is.null(dim(oo))){
+					oo <- matrix(oo)
+					colnames(oo) <- paste(lab, 1, sep="")
+				}
+			colnames(oo) <- paste("x", colnames(oo), sep="")
 		}
 	}
 	else{
@@ -38,7 +32,11 @@ function (data, all=TRUE)
 			}	
 			else {
 				aa <- dum.fcn(data[,i], all=all)
-				colnames(aa) <- paste(names(data)[i], colnames(aa), sep="=")
+				if(is.null(dim(aa))){
+					aa <- matrix(aa)
+					colnames(aa) <- paste(names(data)[i], 1, sep="")
+				}
+				colnames(aa) <- paste(names(data)[i], colnames(aa), sep="")
 				out[[i]] <- aa
 			}
 		}
