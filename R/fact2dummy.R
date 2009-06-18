@@ -15,7 +15,7 @@ function (data, all=TRUE, lab="x")
 					oo <- matrix(oo)
 					colnames(oo) <- paste(lab, 1, sep="")
 				}
-			colnames(oo) <- paste("x", colnames(oo), sep="")
+			colnames(oo) <- paste(lab, colnames(oo), sep="")
 		}
 	}
 	else{

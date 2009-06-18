@@ -238,7 +238,7 @@ function (data.rec, data.don, match.vars, y.rec, z.don, method="ML", rho.yz=0, m
 		}
 		mtc.ids <- cbind(rec.id=rec.lab, don.id=don.lab)
 		fill.A <- cbind(data.rec, data.don[don.lab, z.lab])
-		colnames(fill.A) <- v.names
+		colnames(fill.A) <- c(colnames(data.rec), z.lab)
 		
 		#output
 		fine$filled.rec <- fill.A
