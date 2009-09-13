@@ -1,18 +1,18 @@
 Package: StatMatch
 Type: Package
 Title: Statistical Matching
-Version: 0.7
-Date: 2009-06-18
+Version: 0.8
+Date: 2009-09-11
 Author: Marcello D'Orazio
 Maintainer: Marcello D'Orazio <madorazi@istat.it>
 Depends: R (>= 2.7.0), proxy, lpSolve
 Suggests: optmatch
 Description: This package provides some R functions to perform
-        statistical matching between two data sources. These functions
-        can also be used to impute missing values in data sets through
-        hot-deck methods.
+        statistical matching between two data sources sharing a number
+        of common variables. These functions can also be used to impute
+        missing values in data sets through hot-deck methods.
 License: GPL (>= 2)
 LazyLoad: no
-Packaged: 2009-06-18 15:34:58 UTC; marcello
+Packaged: 2009-09-12 17:33:20 UTC; marcello
 Repository: CRAN
-Date/Publication: 2009-06-18 16:37:17
+Date/Publication: 2009-09-13 09:08:37

@@ -1,7 +1,7 @@
 `RANDwNND.hotdeck` <-
 function (data.rec, data.don, match.vars=NULL, don.class=NULL, dist.fun="Euclidean", cut.don="rot", k=NULL) 
 {
-	if(dist.fun!="Gower" || dist.fun!="exact" || dist.fun!="exact matching"){
+	if(dist.fun!="gower" || dist.fun!="Gower" || dist.fun!="exact" || dist.fun!="exact matching"){
 		require(proxy)
 	}
 	
@@ -72,9 +72,9 @@ RANDwNND.hd <- function (rec, don, dfun="Euclidean", cut.don="rot", k=NULL)
         xx <- data.frame(rbind(x.rec, x.don))
 		    x.rec <- xx[1:nr,]
 		    x.don <- xx[-(1:nr),]
-		    mdist <- dist(data.x=x.rec, data.y=x.don, method="Gower")
+		    mdist <- gower.dist(data.x=x.rec, data.y=x.don)
     }
-    else if(dfun=="Gower"){
+    else if(dfun=="Gower" || dfun=="gower"){
         # if(p==1 && is.factor(x.rec)) x.rec <- list(x.rec)
         # if(p==1 && is.factor(x.don)) x.don <- list(x.don)
         mdist <- gower.dist(data.x=x.rec, data.y=x.don)
@@ -99,24 +99,24 @@ RANDwNND.hd <- function (rec, don, dfun="Euclidean", cut.don="rot", k=NULL)
     }
 	
     min.d <- numeric(nr)
-	  max.d <- numeric(nr)
+    max.d <- numeric(nr)
     sd.d <- numeric(nr)
     cut.d <- numeric(nr)
     dist.rd <- numeric(nr)
     nad <- rep(NA, nr)
 
     don.lab <- numeric(nr)
-	  for(i in 1:nr){
-		    vd <- mdist[i,]
+	for(i in 1:nr){
+        vd <- mdist[i,]
         min.dist <- min(vd, na.rm=TRUE) # smallest distance recipient-donor
         min.d[i] <- min.dist
         max.d[i] <- max(vd, na.rm=TRUE)
-		    sd.d[i] <- sd(vd, na.rm=TRUE)
+		sd.d[i] <- sd(vd, na.rm=TRUE)
         if(cut.don=="min"){
-        short.vd <- vd[(vd==min.dist) & !is.na(vd)]
-        appo <- d.lab[(vd==min.dist) & !is.na(vd)]
-        dist.rd[i] <- min.dist
-        cut.d[i] <- min.dist
+            short.vd <- vd[(vd==min.dist) & !is.na(vd)]
+            appo <- d.lab[(vd==min.dist) & !is.na(vd)]
+            dist.rd[i] <- min.dist
+            cut.d[i] <- min.dist
 		}	
         else if(cut.don=="k.dist"){
 			if(k<min.dist) {

@@ -62,8 +62,8 @@ D'Orazio, M., Di Zio, M. and Scanu, M. (2006). \emph{Statistical Matching: Theor
 }
 
 \seealso{ 
-\code{\link[StatMatch]{NNN.hotdeck}}
-\code{\link[StatMatch]{RANDwNNN.hotdeck}}
+\code{\link[StatMatch]{NND.hotdeck}}
+\code{\link[StatMatch]{RANDwNND.hotdeck}}
 
 }
 

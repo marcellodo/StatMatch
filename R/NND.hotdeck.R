@@ -1,7 +1,8 @@
 `NND.hotdeck` <-
 function (data.rec, data.don, match.vars, don.class=NULL, dist.fun="Euclidean", constrained=FALSE, constr.alg=NULL) 
 {
-	if(dist.fun!="Gower" || dist.fun!="exact" || dist.fun!="exact matching"){
+
+    if(dist.fun!="Gower" || dist.fun!="gower" || dist.fun!="exact" || dist.fun!="exact matching"){
 		require(proxy)
 	}
 	if(constrained && constr.alg=="relax"){
@@ -40,16 +41,16 @@ function (data.rec, data.don, match.vars, don.class=NULL, dist.fun="Euclidean", 
 ########################
 NND.hd <- function (rec, don, dfun="Euclidean", constr=FALSE, c.alg=NULL)
 { 
-  if(is.null(dim(rec))) x.rec <- data.frame(rec)
+    if(is.null(dim(rec))) x.rec <- data.frame(rec)
 	else x.rec <- rec
-  if(is.null(dim(don))) x.don <- data.frame(don)
+    if(is.null(dim(don))) x.don <- data.frame(don)
 	else x.don <- don
-  p <- ncol(rec)
+    p <- ncol(rec)
 	nr <- nrow(x.rec)
 	nd <- nrow(x.don)
 	if(nr>nd) cat("Warning: the no. do donors is less than the no.f recipients", fill=TRUE)
 
-  r.lab <- rownames(x.rec)
+    r.lab <- rownames(x.rec)
 	if(is.null(r.lab)) r.lab <- 1:nr
 	d.lab <- rownames(x.don)
 	if(is.null(d.lab)) d.lab <- 1:nd
@@ -59,10 +60,10 @@ NND.hd <- function (rec, don, dfun="Euclidean", constr=FALSE, c.alg=NULL)
 
 	if(dfun=="Euclidean" || dfun=="Manhattan"){
 		cat("Warning:", dfun, "distance is being used", fill=TRUE)
-    cat("Warning: all the categorical variables in rec and don data.frame are recoded into dummies", fill=TRUE)
-    x.rec <- fact2dummy(x.rec, all=FALSE)
-    x.don <- fact2dummy(x.don, all=FALSE)
-    mdist <- dist(x=x.rec, y=x.don, method=dfun)
+        cat("Warning: all the categorical variables in rec and don data.frame are recoded into dummies", fill=TRUE)
+        x.rec <- fact2dummy(x.rec, all=FALSE)
+        x.don <- fact2dummy(x.don, all=FALSE)
+        mdist <- dist(x=x.rec, y=x.don, method=dfun)
 	}
 	else if(dfun=="exact" || dfun=="exact matching"){
 		cat("Warning: exact matching distance is being used", fill=TRUE)
@@ -76,9 +77,9 @@ NND.hd <- function (rec, don, dfun="Euclidean", constr=FALSE, c.alg=NULL)
 		xx <- data.frame(rbind(x.rec, x.don))
 		x.rec <- xx[1:nr,]
 		x.don <- xx[-(1:nr),]
-		mdist <- dist(data.x=x.rec, data.y=x.don, method="Gower")
+		mdist <- gower.dist(data.x=x.rec, data.y=x.don)
 	}
-	else if(dfun=="Gower"){
+	else if(dfun=="Gower" || dfun=="gower"){
 		# if(p==1 && is.factor(x.rec)) x.rec <- list(x.rec)
 		# if(p==1 && is.factor(x.don)) x.don <- list(x.don)
 		mdist <- gower.dist(data.x=x.rec, data.y=x.don)
@@ -190,18 +191,18 @@ NND.hd <- function (rec, don, dfun="Euclidean", constr=FALSE, c.alg=NULL)
 		if(!identical(names(l.rec), names(l.don)))
 			cat("Warning: the donation classes seem built using different factors with differnt levels")
 		if(p==1){
-      nn.r <- unlist(lapply(l.rec, length))
-		  nn.d <- unlist(lapply(l.don, length))
-    }
+            nn.r <- unlist(lapply(l.rec, length))
+            nn.d <- unlist(lapply(l.don, length))
+        }
 		else {
-      nn.r <- unlist(lapply(l.rec, nrow))
-      nn.d <- unlist(lapply(l.don, nrow))
-	  }
-    l.rec <- l.rec[nn.r>0]
-    l.don <- l.don[nn.r>0]
-    nn.r <- nn.r[nn.r>0]
-    nn.d <- nn.d[nn.r>0]
-    if(any(nn.d==0)) {
+            nn.r <- unlist(lapply(l.rec, nrow))
+            nn.d <- unlist(lapply(l.don, nrow))
+        }
+        l.rec <- l.rec[nn.r>0]
+        l.don <- l.don[nn.r>0]
+        nn.r <- nn.r[nn.r>0]
+        nn.d <- nn.d[nn.r>0]
+        if(any(nn.d==0)) {
 			stop("For some donation classes there are NO donors available. Please modify the definition of the donation classes")
 		}	
 		H <- length(l.rec)
@@ -214,7 +215,7 @@ NND.hd <- function (rec, don, dfun="Euclidean", constr=FALSE, c.alg=NULL)
 			  dist.rd[[h]] <- out$dist.rd
 			  if(!constrained) noad[[h]] <- out$noad
 		}
-    mmm <- unlist(lapply(mtc.ids, t))
+        mmm <- unlist(lapply(mtc.ids, t))
 		mmm <- substring(mmm, 5)
 		mtc.ids <- matrix(mmm, ncol=2, byrow=TRUE)
 		if(is.null(rownames(data.rec)) && is.null(rownames(data.don)))  mtc.ids <- matrix(as.numeric(mmm), ncol=2, byrow=TRUE)
