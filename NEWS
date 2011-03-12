@@ -1,0 +1,18 @@
+1.0.1	new functions harmonize.x() and comb.samples() to perform statistical
+		matching when dealing with complex sample survey data via 
+		weight calibration.
+
+		new function Frechet.bounds.cat() to explore uncertainty when dealing with 
+		categorical variables. The function Fbwidths.by.x()	permits to
+		identify the subset of the common variables that perform better in reducing 
+		uncertainty
+		
+		New function rankNND.hotdeck() to perform rank hot deck distance
+		
+		Update of RANDwNND.hotdeck() to use donor weight in selecting the donor
+		
+		new function maximum.dist() that computes ddistances according to the
+		L^Inf norm. A rank trasnformation of the variables can be used.
+		
+0.8    fixed some bugs in NND.hotdeck() and RANDwNND.hotdeck()
+

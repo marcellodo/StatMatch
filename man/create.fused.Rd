@@ -23,7 +23,7 @@ A matrix or data frame that has been used as the \emph{donor} in the statistical
 }
 
 \item{mtc.ids}{
-A matrix with two columns. Each row must contain the name or the index of the recipient record (row) in \code{data.don} and the name or the index of the corresponding donor record (row) in \code{data.don}. Note that this type of matrix is returned by the functions \code{\link[StatMatch]{NND.hotdeck}} and \code{\link[StatMatch]{RANDwNND.hotdeck}}.
+A matrix with two columns.  Each row must contain the name or the index of the recipient record (row) in \code{data.don} and the name or the index of the corresponding donor record (row) in \code{data.don}.  Note that this type of matrix is returned by the functions \code{\link[StatMatch]{NND.hotdeck}}, \code{\link[StatMatch]{RANDwNND.hotdeck}}, and \code{\link[StatMatch]{rankNND.hotdeck}}.
 }
 
 \item{z.vars}{
@@ -31,20 +31,18 @@ A character vector with the name of the variables available only in \code{data.d
 }
 
 \item{dup.x}{
-Logical. When \code{TRUE} the values of the matching variables in \code{data.don} are also \dQuote{donated} to \code{data.rec}. The name of the matching variables has to be specified with the argument \code{match.vars}. To avoid confusion, the matching variables added to \code{data.rec} are renamed by adding the suffix \dQuote{don}. By default \code{dup.x=FALSE}.
+Logical. When \code{TRUE} the values of the matching variables in \code{data.don} are also \dQuote{donated} to \code{data.rec}.  The names of the matching variables have to be specified with the argument \code{match.vars}.  To avoid confusion, the matching variables added to \code{data.rec} are renamed by adding the suffix \dQuote{don}. By default \code{dup.x=FALSE}.
 }
 
 \item{match.vars}{
-A character vector with the names of the matching variables. It has to be specified only when \code{dup.x=TRUE}.
+A character vector with the names of the matching variables.  It has to be specified only when \code{dup.x=TRUE}.
+}
+
 }
 
 
-}
-
-
-  
 \details{
-This function allows to create the synthetic (or fused) data set after the application of a statistical matching in a  \emph{micro} framework. For details D'Orazio \emph{et al.} (2006).
+This function allows to create the synthetic (or fused) data set after the application of a statistical matching in a \emph{micro} framework.  For details see D'Orazio \emph{et al.} (2006).
 } 
 
 
@@ -64,6 +62,7 @@ D'Orazio, M., Di Zio, M. and Scanu, M. (2006). \emph{Statistical Matching: Theor
 \seealso{ 
 \code{\link[StatMatch]{NND.hotdeck}}
 \code{\link[StatMatch]{RANDwNND.hotdeck}}
+\code{\link[StatMatch]{rankNND.hotdeck}}
 
 }
 
@@ -83,17 +82,20 @@ iris.don <- iris[-lab, c(1:2,4:5)] # donor data.frame
 # distances are computed on "Sepal.Length" and "Sepal.Width"
 
 out.NND <- NND.hotdeck(data.rec=iris.rec, data.don=iris.don,
-            match.vars=c("Sepal.Length", "Sepal.Width"), don.class="Species")
+            match.vars=c("Sepal.Length", "Sepal.Width"), 
+            don.class="Species")
 
-# create synthetic data.set, without the duplication of the matching variables
+# create synthetic data.set, without the 
+# duplication of the matching variables
 
 fused.0 <- create.fused(data.rec=iris.rec, data.don=iris.don, 
             mtc.ids=out.NND$mtc.ids, z.vars="Petal.Width")
 
-# create synthetic data.set, with the "duplication" of the matching variables
+# create synthetic data.set, with the "duplication" 
+# of the matching variables
 
 fused.1 <- create.fused(data.rec=iris.rec, data.don=iris.don,
-            mtc.ids=out.NND$mtc.ids, z.vars="Petal.Width", dup.x=TRUE,
-            match.vars=c("Sepal.Length", "Sepal.Width"))
+            mtc.ids=out.NND$mtc.ids, z.vars="Petal.Width",
+            dup.x=TRUE, match.vars=c("Sepal.Length", "Sepal.Width"))
 }
-\keyword{nonparametric}
+\keyword{manip}

@@ -63,5 +63,5 @@ ir.mat <- fact2dummy(iris)
 
 }
 
-\keyword{design}
+\keyword{multivariate}
 \keyword{cluster}

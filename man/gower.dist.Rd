@@ -35,14 +35,15 @@ rngs["X1"] <- max(data.x[,"X1"], data.y[,"X1"]) -
 }
 
 \item{KR.corr}{
-When \code{TRUE} (default) the extension of the Gower's dissimilarity measure proposed by Kaufman and Rousseeuw (1990) is used. Otherwise, when \code{KR.corr=FALSE}, the original Gower's (1971) dissimilarity is considered.
+When \code{TRUE} (default) the extension of the Gower's dissimilarity measure proposed by Kaufman and Rousseeuw (1990) is used. Otherwise, when \cr
+\code{KR.corr=FALSE}, the Gower's (1971) formula is considered.
 }
 }
   
 \details{
-This function computes distances among records when variables of different type (categorical and continuous) have been observed. In order to handle different types of variables, the Gower's  dissimilarity coefficient (Gower, 1971) is used. 
+This function computes distances among records when variables of different type (categorical and continuous) have been observed. In order to handle different types of variables, the Gower's  dissimilarity coefficient (Gower, 1971) is used. By default (\code{KR.corr=TRUE}) the Kaufman and Rousseeuw (1990) extension of the Gower's dissimilarity coefficient is used. 
 
-By default (\code{KR.corr=TRUE}) the Kaufman and Rousseeuw (1990) extension of the Gower's dissimilarity coefficient is used. The final dissimilarity between the \emph{i}th and \emph{j}th units is obtained as a weighted sum of dissimilarities for each variable:
+The final dissimilarity between the \emph{i}th and \emph{j}th units is obtained as a weighted sum of dissimilarities for each variable:
 \deqn{d(i,j) = \frac{\sum_k{\delta_{ijk} d_{ijk}}}{\sum_k{\delta_{ijk}}}}{d(i,j) = sum_k(delta_ijk * d_ijk ) / sum_k( delta_ijk )} 
 
 In particular, \eqn{d_{ijk}}{d_ijk} represents the distance between the \emph{i}th and \emph{j}th unit computed considering the \emph{k}th variable. It depends on the nature of the variable:
@@ -56,7 +57,7 @@ In particular, \eqn{d_{ijk}}{d_ijk} represents the distance between the \emph{i}
     \deqn{d_{ijk}=\frac{\left|x_{ik}-x_{jk}\right|}{R_k}}{d_ijk = abs(x_ik - x_jk) / R_k}
     being  \eqn{R_k}{R_k} the range of the \emph{k}th variable. The range is the one supplied with the argument \code{rngs}  (\code{rngs[k]}) or the one computed on available data (when \code{rngs=NULL});
 		
-		\item \code{ordered} columns are considered as categorical ordinal variables and the values are substituted with the corresponding position index, \eqn{r_{ik}}{r_ik} in the factor levels. These position indexes (that are different from the output of the R function \code{\link[base]{rank}}) are transformed in the following manner  
+		\item \code{ordered} columns are considered as categorical ordinal variables and the values are substituted with the corresponding position index, \eqn{r_{ik}}{r_ik} in the factor levels. When \code{KR.corr=FALSE} these position indexes (that are different from the output of the R function \code{\link[base]{rank}}) are transformed in the following manner  
     \deqn{z_{ik}=\frac{(r_{ik}-1)}{max\left(r_{ik}\right) - 1}}{z_ik = (r_ik - 1)/(max(r_ik) - 1)}
     These new values, \eqn{z_{ik}}{z_ik}, are treated as observations of an interval scaled variable.
 

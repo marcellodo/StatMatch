@@ -1,10 +1,7 @@
 `NND.hotdeck` <-
-function (data.rec, data.don, match.vars, don.class=NULL, dist.fun="Euclidean", constrained=FALSE, constr.alg=NULL) 
+function (data.rec, data.don, match.vars, don.class=NULL, dist.fun="Manhattan", constrained=FALSE, constr.alg=NULL, ...)
 {
 
-    if(dist.fun!="Gower" || dist.fun!="gower" || dist.fun!="exact" || dist.fun!="exact matching"){
-		require(proxy)
-	}
 	if(constrained && constr.alg=="relax"){
 		require(optmatch)
 	}
@@ -37,9 +34,19 @@ function (data.rec, data.don, match.vars, don.class=NULL, dist.fun="Euclidean", 
 	if(is.null(d.lab)) d.lab <- paste("don", 1:nd, sep="=")
 	else d.lab <- paste("don", d.lab, sep="=")
 	row.names(data.don) <- d.lab
-	
+    if(!is.null(match.vars)){
+        if(dist.fun=="Euclidean" || dist.fun=="euclidean" ||dist.fun=="Manhattan" ||dist.fun=="manhattan" || dist.fun=="minimax" || dist.fun=="MiniMax" || dist.fun=="Minimax"){
+            cat("Warning: The ", dist.fun, " distance is being used", fill=TRUE)
+            cat("All the categorical matching variables in rec and don data.frames, if present are recoded into dummies", fill=TRUE)
+        }
+        if(dist.fun=="exact" || dist.fun=="exact matching"){
+            cat("Warning: the exact matching distance is being used", fill=TRUE)
+            cat("all the matching variables in rec and don are converted to character variables and are treated as categorical nominal", fill=TRUE)
+        }
+    }
+
 ########################
-NND.hd <- function (rec, don, dfun="Euclidean", constr=FALSE, c.alg=NULL)
+NND.hd <- function (rec, don, dfun="Manhattan", constr=FALSE, c.alg=NULL, ...)
 { 
     if(is.null(dim(rec))) x.rec <- data.frame(rec)
 	else x.rec <- rec
@@ -48,7 +55,7 @@ NND.hd <- function (rec, don, dfun="Euclidean", constr=FALSE, c.alg=NULL)
     p <- ncol(rec)
 	nr <- nrow(x.rec)
 	nd <- nrow(x.don)
-	if(nr>nd) cat("Warning: the no. do donors is less than the no.f recipients", fill=TRUE)
+	if(nr>nd) cat("Warning: the number of donors is less than the number of recipients", fill=TRUE)
 
     r.lab <- rownames(x.rec)
 	if(is.null(r.lab)) r.lab <- 1:nr
@@ -58,16 +65,18 @@ NND.hd <- function (rec, don, dfun="Euclidean", constr=FALSE, c.alg=NULL)
 # compute matrix of distances between obs. in x.don and obs. in x.rec
 # function dist() in package "proxy" is used! 
 
-	if(dfun=="Euclidean" || dfun=="Manhattan"){
-		cat("Warning:", dfun, "distance is being used", fill=TRUE)
-        cat("Warning: all the categorical variables in rec and don data.frame are recoded into dummies", fill=TRUE)
+	if(dfun=="Euclidean" || dfun=="euclidean" || dfun=="Manhattan" || dfun=="manhattan"){
+        require(proxy)
         x.rec <- fact2dummy(x.rec, all=FALSE)
         x.don <- fact2dummy(x.don, all=FALSE)
-        mdist <- dist(x=x.rec, y=x.don, method=dfun)
+        mdist <- dist(x=x.rec, y=x.don, method=dfun, ...)
+	}
+	else if(dfun=="minimax" || dfun=="MiniMax" || dfun=="Minimax"){
+        x.rec <- fact2dummy(x.rec, all=FALSE)
+        x.don <- fact2dummy(x.don, all=FALSE)
+        mdist <- maximum.dist(data.x=x.rec, data.y=x.don, ...)
 	}
 	else if(dfun=="exact" || dfun=="exact matching"){
-		cat("Warning: exact matching distance is being used", fill=TRUE)
-		cat("all the matching variables in data.rec and data.don are converted to character variables and treated as categorical nominal", fill=TRUE)
 		dxr <- dim(x.rec)
 		x.rec <- as.character(as.matrix(x.rec))
 		dim(x.rec) <- dxr
@@ -77,17 +86,16 @@ NND.hd <- function (rec, don, dfun="Euclidean", constr=FALSE, c.alg=NULL)
 		xx <- data.frame(rbind(x.rec, x.don))
 		x.rec <- xx[1:nr,]
 		x.don <- xx[-(1:nr),]
-		mdist <- gower.dist(data.x=x.rec, data.y=x.don)
+		mdist <- gower.dist(data.x=x.rec, data.y=x.don, ...)
 	}
 	else if(dfun=="Gower" || dfun=="gower"){
-		# if(p==1 && is.factor(x.rec)) x.rec <- list(x.rec)
-		# if(p==1 && is.factor(x.don)) x.don <- list(x.don)
-		mdist <- gower.dist(data.x=x.rec, data.y=x.don)
+		mdist <- gower.dist(data.x=x.rec, data.y=x.don, ...)
 		mdist[is.nan(mdist)] <- 1 # NaN can occur when p=1 and x.rec and x.don is of type logical
 		mdist[is.na(mdist)] <- 1 # NA can occur when p=1 and x.rec and x.don is of type logical
 	}
 	else{
-		mdist <- dist(x=x.rec, y=x.don, method=dfun)
+        require(proxy)
+		mdist <- dist(x=x.rec, y=x.don, method=dfun, ...)
 	}
 	dimnames(mdist) <- list(r.lab, d.lab)
 
@@ -148,9 +156,9 @@ NND.hd <- function (rec, don, dfun="Euclidean", constr=FALSE, c.alg=NULL)
 		df1 <- data.frame(id.rec=labs[tt], mm=out.pr[tt], stringsAsFactors=FALSE)
 		df2 <- data.frame(id.don=labs[!tt], mm=out.pr[!tt], stringsAsFactors=FALSE)
 		df <- merge(df1, df2, by="mm")
-		rmd <- mdist[df$id.rec, ]
-		rmd <- rmd[ ,df$id.don]
-		dist.rd <- diag(rmd[1:nr, 1:nr])
+        rmd <- mdist[df$id.rec, , drop=FALSE]
+		rmd <- rmd[ ,df$id.don, drop=FALSE]
+        dist.rd <- diag(rmd[1:nr, 1:nr])
 		aa <- data.frame(id.rec=r.lab, pos=1:nr, stringsAsFactors=FALSE)
 		bb <- merge(aa, df, by="id.rec")
 		don.lab <- bb[order(bb$pos) , "id.don"]
