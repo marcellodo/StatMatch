@@ -1,7 +1,7 @@
 % --- Source file: RANDwNND_hotdeck.Rd ---
 \name{RANDwNND.hotdeck}
 \alias{RANDwNND.hotdeck}
-\title{Random Distance hot deck method for Statistical Matching.}
+\title{Random Distance hot deck.}
 
 \description{
   This function implements a variant of the distance hot deck method.  For each recipient record a subset of of the closest donors is retained and then a donor is selected.
@@ -16,13 +16,13 @@ RANDwNND.hotdeck(data.rec, data.don, match.vars=NULL,
 \arguments{
 
 \item{data.rec}{
-  	A numeric matrix or data frame that plays the role of \emph{recipient} in the statistical matching application.  This data frame must contain the variables (columns) that should be used, directly or indirectly, in the computation of distances between its observations (rows) and those in \code{data.don}. 
+  	A numeric matrix or data frame that plays the role of \emph{recipient}.  This data frame must contain the variables (columns) that should be used, directly or indirectly, in the computation of distances between its observations (rows) and those in \code{data.don}. 
   	
 Missing values (\code{NA}) are allowed.
 }
 
 \item{data.don}{
-   A matrix or data frame that plays the role of \emph{donor} in the statistical matching application.  The variables (columns) involved, directly or indirectly, in the computation of distances must be the same and of the same type as those in \code{data.rec}.   
+   A matrix or data frame that plays the role of \emph{donor}.  The variables (columns) involved, directly or indirectly, in the computation of distances must be the same and of the same type as those in \code{data.rec}.   
 }
 
 \item{match.vars}{
@@ -37,11 +37,9 @@ When not specified (default), no donation classes are used.  This may result in 
 }
 
 \item{dist.fun}{
-A string with the name of the distance function that has to be used.  The following distances are allowed: \dQuote{Manhattan} (aka \dQuote{City block}; default), \dQuote{Euclidean},  \dQuote{exact} or \dQuote{exact matching}, \dQuote{Gower}, \dQuote{minimax} or one of the distance functions available in the package \pkg{proxy}.  Note that the distance is computed using the function  \code{\link[proxy]{dist}} of the package \pkg{proxy} with the exception of the \dQuote{Gower} and \dQuote{minimax} cases.  When \code{dist.fun="Gower"} the Gower dissimilarity is considered (see function \code{\link[StatMatch]{gower.dist}} for details).  
-When \cr 
-\code{dist.fun="minimax"} the maximum distance is considered (see function \code{\link[StatMatch]{maximum.dist}} for details).
+A string with the name of the distance function that has to be used.  The following distances are allowed: \dQuote{Manhattan} (aka \dQuote{City block}; default), \dQuote{Euclidean}, \dQuote{Mahalanobis},\dQuote{exact} or \dQuote{exact matching}, \dQuote{Gower}, \dQuote{minimax} or one of the distance functions available in the package \pkg{proxy}.  Note that the distance is computed using the function  \code{\link[proxy]{dist}} of the package \pkg{proxy} with the exception of the \dQuote{Gower} (see function \code{\link[StatMatch]{gower.dist}} for details), \dQuote{Mahalanobis} (function \code{\link[StatMatch]{mahalanobis.dist}}) and \dQuote{minimax} (see \code{\link[StatMatch]{maximum.dist}}) cases.
 
-When \code{dist.fun= "Manhattan" }, \dQuote{Euclidean} or \dQuote{minimax} all the non numeric variables in \code{data.rec} and \code{data.don} will be converted to numeric.  On the contrary, when \code{dist.fun="exact"} or \dQuote{exact matching}, all the variables in \code{data.rec} and \code{data.don} will be converted to character and, as far as the distance computation is concerned, they will be treated as categorical nominal variables, i.e. distance is 0 if a couple of units shows the same response category and 1 otherwise. 
+When \code{dist.fun="Manhattan"}, \code{"Euclidean"}, \code{"Mahalanobis"} or \code{"minimax"} all the non numeric variables in \code{data.rec} and \code{data.don} will be converted to numeric.  On the contrary, when \code{dist.fun="exact"} or \dQuote{exact matching}, all the variables in \code{data.rec} and \code{data.don} will be converted to character and, as far as the distance computation is concerned, they will be treated as categorical nominal variables, i.e. distance is 0 if a couple of units shows the same response category and 1 otherwise. 
 }
 
 \item{cut.don}{
@@ -66,7 +64,7 @@ Depends on the \code{cut.don} argument.
 }
 
 \item{weight.don}{ 
-A character string providing the name of the variable with the weights of the donor units in \code{data.don}.  When this variable is available the selection of a donor among those in the subset of the closest donors is done with probability proportional to its weight (units with larger weight will have a higher chance ob being selected).  When \code{weight.don=NULL} (default) all the units in the subset of the closest donors will have the same probability of being selected.
+A character string providing the name of the variable with the weights associated to the  donor units in \code{data.don}.  When this variable is specified, then the selection of a donor among those in the subset of the closest donors is done with probability proportional to its weight (units with larger weight will have a higher chance of being selected).  When \code{weight.don=NULL} (default) all the units in the subset of the closest donors will have the same probability of being selected.
 }
 
 \item{...}{ 
@@ -82,7 +80,7 @@ The selection of the donor among those in the subset is carried out with equal p
 
 Note that the same donor can be used more than once.
 
-Note that this function can also be used to impute missing values in a data set.  In this case \code{data.rec} is the part of the initial data set that contains missing values; on the contrary, \code{data.don} is the part of the data set without missing values. See \R code in the Examples for details.
+This function can also be used to impute missing values in a data set.  In this case \code{data.rec} is the part of the initial data set that contains missing values; on the contrary, \code{data.don} is the part of the data set without missing values. See \R code in the Examples for details.
 } 
 
 
@@ -95,7 +93,7 @@ A matrix with the same number of rows of \code{data.rec} and two columns.  The f
 }
 
 \item{sum.dist}{
-A matrix with summary statistics concerning the subset of the closest donors from which a donor for a given recipient is chosen.  The first three columns report the minimum, the maximum and the standard deviation of the distances among the recipient record and the donors in the subset of the closest donors, respectively.  The 4th column reports the cutting distance, i.e. the value of the distance such that donors at a higher distance are discarded.  The 5th column reports the distance between the recipient and the donor chosen at random in the subset of the donors.
+A matrix with summary statistics concerning the subset of the closest donors.  The first three columns report the minimum, the maximum and the standard deviation of the distances among the recipient record and the donors in the subset of the closest donors, respectively.  The 4th column reports the cutting distance, i.e. the value of the distance such that donors at a higher distance are discarded.  The 5th column reports the distance between the recipient and the donor chosen at random in the subset of the donors.
 }
 
 \item{noad}{

@@ -1,10 +1,10 @@
 % --- Source file: rankNND_hotdeck.Rd ---
 \name{rankNND.hotdeck}
 \alias{rankNND.hotdeck}
-\title{ Rank distance hot deck method for Statistical Matching.}
+\title{ Rank distance hot deck method.}
 
 \description{
-  This function implements rank  hot deck distance method.  For each recipient record the closest donors is chosen by considering the distance among their empirical cumulative distribution function.
+  This function implements rank  hot deck distance method.  For each recipient record the closest donors is chosen by considering the distance among the percentage points of the empirical cumulative distribution function.
 }
 
 \usage{
@@ -15,13 +15,13 @@ rankNND.hotdeck(data.rec, data.don, var.rec, var.don=var.rec,
 \arguments{
 
 \item{data.rec}{
-  A numeric matrix or data frame that plays the role of \emph{recipient} in the statistical matching application.  This data frame must contain the variable \code{var.rec} to be used in computing the empirical cumulative distribution function and eventually the variables that should be used to identify the donation classes (see argument \code{don.class}) and the case weights (see argument \code{weight.rec}). 
+  A numeric matrix or data frame that plays the role of \emph{recipient}.  This data frame must contain the variable \code{var.rec} to be used in computing the percentage points of the empirical cumulative distribution function and eventually the variables that should be used to identify the donation classes (see argument \code{don.class}) and the case weights (see argument \code{weight.rec}). 
 
 Missing values (\code{NA}) are not allowed.
 }
 
 \item{data.don}{
-   A matrix or data frame that plays the role of \emph{donor} in the statistical matching application.  This data frame must contain the variable \code{var.don} to be used in computing the empirical cumulative distribution function and eventually the variables that should be used to identify the donation classes (see argument \code{don.class}) and the case weights (see argument \code{weight.don}).  
+   A matrix or data frame that plays the role of \emph{donor}.  This data frame must contain the variable \code{var.don} to be used in computing percentage points of the the empirical cumulative distribution function and eventually the variables that should be used to identify the donation classes (see argument \code{don.class}) and the case weights (see argument \code{weight.don}).  
 }
 
 \item{var.rec}{
@@ -33,7 +33,7 @@ A character vector with the name of the variable that should be ranked.  If not 
 }
 
 \item{don.class}{
-A character vector with the names of the variables (columns in both the data frames) that have to be used to identify donation classes.  In this case the computation of ranks it is limited to those units in \code{data.rec} and \code{data.doc} that belong to the same donation classes.  The case of empty donation classes should be avoided.  It would be preferable the variables used to form donation classes are defined as \code{factor}.
+A character vector with the names of the variables (columns in both the data frames) that have to be used to identify donation classes.  In each donation class the computation of percentage points is carried out independently.  Then only distances among percentage points of the units in the same donation class are computed.  The case of empty donation classes should be avoided.  It would be preferable the variables used to form donation classes are defined as \code{factor}.
 
 When not specified (default), no donation classes are used.
 }

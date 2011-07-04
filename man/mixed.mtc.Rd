@@ -4,7 +4,7 @@
 \title{Statistical Matching via Mixed Methods}
 
 \description{
-  This function implements some mixed methods to perform statistical matching between two data sources such that no units are in common and one or more continuous variables are shared. 
+  This function implements some mixed methods to perform statistical matching between two data sources. 
 }
 
 \usage{
@@ -31,29 +31,29 @@ A character vector with the name of the target variable Y that is observed only 
 }
 
 \item{z.don}{
-A character vector with the name of the target variable Z that is observed only for units in \code{data.don}. Only one continuous variable is allowed.
+A character vector with the name of the target variable Z that is observed only for units in \code{data.don}.  Only one continuous variable is allowed.
 }
 
 \item{method}{
-A character vector that identifies the method that should be used to estimate the parameters of the regression models: Y vs. \bold{X} and Z vs. \bold{X}. Maximum Likelihood method is used when \code{method="ML"} (default); on the contrary, when \code{method="MS"} the parameters are estimated according to approach proposed by Moriarity and Scheuren (2001 and 2003). See Details for further information.
+A character vector that identifies the method that should be used to estimate the parameters of the regression models: Y vs. \bold{X} and Z vs. \bold{X}.  Maximum Likelihood method is used when \code{method="ML"} (default); on the contrary, when \code{method="MS"} the parameters are estimated according to approach proposed by Moriarity and Scheuren (2001 and 2003).  See Details for further information.
 }
 
 \item{rho.yz}{
-A numeric value representing a guess for the correlation among the Y (\code{y.rec}) and the Z variable (\code{z.don}) that are not jointly observed. Note that when \code{method="MS"}, \code{cor.yz} must specify the value of the correlation coefficient \eqn{\rho_{YZ}}{rho_YZ}; on the contrary, when \code{method="ML"}, it must specify the \emph{partial correlation coefficient} among Y and Z given \bold{X} (\eqn{\rho_{YZ|\bf{X}}}{rho_YZ|X}). 
+A numeric value representing a guess for the correlation among the Y (\code{y.rec}) and the Z variable (\code{z.don}) that are not jointly observed.  When \code{method="MS"} then the argument \code{cor.yz} must specify the value of the correlation coefficient \eqn{\rho_{YZ}}{rho_YZ}; on the contrary, when \code{method="ML"}, it must specify the \emph{partial correlation coefficient} among Y and Z given \bold{X} (\eqn{\rho_{YZ|\bf{X}}}{rho_YZ|X}). 
 
-By default (\code{rho.yz=0}). In practice, in absence of auxiliary information concerning the correlation coefficient or the partial correlation coefficient then the statistical matching is carried out under the assumption of independence among Y and Z given \bold{X} (Conditional Independence Assumption, CIA ), i.e.\  \eqn{\rho_{YZ|\bf{X}}=0}{rho_YZ|X = 0}.   
+By default (\code{rho.yz=0}).  In practice, in absence of auxiliary information concerning the correlation coefficient or the partial correlation coefficient, the statistical matching is carried out under the assumption of independence among Y and Z given \bold{X} (Conditional Independence Assumption, CIA ), i.e.  \eqn{\rho_{YZ|\bf{X}}=0}{rho_YZ|X = 0}. 
 }
 
 \item{micro}{
-Logical. When \code{micro=FALSE} (default) only the parameter estimates are returned. On the contrary, when \code{micro=TRUE} the function returns also \code{data.rec} filled in with the values for the variable Z. The donors for filling in Z in \code{data.rec} are identified using a constrained distance hot deck method. In this case, the number of units (rows) in \code{data.don} must be grater or equal to the number of units (rows) in \code{data.rec}. See next argument and Details for further information.
+Logical.  When \code{micro=FALSE} (default) only the parameter estimates are returned.  On the contrary, when \code{micro=TRUE} the function returns also \code{data.rec} filled in with the values for the variable Z.  The donors for filling in Z in \code{data.rec} are identified using a constrained distance hot deck method.  In this case, the number of units (rows) in \code{data.don} must be grater or equal to the number of units (rows) in \code{data.rec}.  See next argument and Details for further information.
 }
 
 \item{constr.alg}{
-A string that has to be specified when \code{micro=TRUE}, in order to solve the transportation problem involved by the constrained distance hot deck method. Two choices are available: \dQuote{lpSolve} and \dQuote{relax}. In the first case, 
+A string that has to be specified when \code{micro=TRUE}, in order to solve the transportation problem involved by the constrained distance hot deck method.  Two choices are available: \dQuote{lpSolve} and \dQuote{relax}.  In the first case, 
 
-\code{constr.alg="lpSolve"}, the transportation problem is solved by means of the function \code{\link[lpSolve]{lp.transport}} available in the package \pkg{lpSolve}. When 
+\code{constr.alg="lpSolve"}, the transportation problem is solved by means of the function \code{\link[lpSolve]{lp.transport}} available in the package \pkg{lpSolve}.  When 
 
-\code{constr.alg="relax"} the transportation problem is solved using RELAX--IV algorithm from Bertsekas and Tseng (1994), implemented in function \cr \code{\link[optmatch]{pairmatch}} available in the package \pkg{optmatch}. Note that \cr 
+\code{constr.alg="relax"} the transportation problem is solved using RELAX--IV algorithm from Bertsekas and Tseng (1994), implemented in function \cr \code{\link[optmatch]{pairmatch}} available in the package \pkg{optmatch}.  Note that \cr 
 \code{constr.alg="relax"} is faster and requires less computational effort, but the usage of this algorithm is allowed only for research purposes (for details see function \code{relaxinfo()} in the package \pkg{optmatch}).
 }
 
@@ -67,17 +67,17 @@ This function implements some mixed methods to perform statistical matching. A m
 (ii) derivation of a complete \dQuote{synthetic} data set (recipient data set filled in with values for the Z variable) using a nonparametric approach.
 
 
-In this case, as far as (i) is concerned, it is assumed that  \eqn{ \left( \mathbf{X},Y,Z \right) }{(\bold{X},Y,Z)} follows a multivariate normal distribution. In particular, dealing with continuous variables, a particular version of the imputation method known as \emph{predictive mean matching} is used. This method consists of three steps: 
+In this case, as far as (i) is concerned, it is assumed that  \eqn{ \left( \mathbf{X},Y,Z \right) }{(\bold{X},Y,Z)} follows a multivariate normal distribution.  In particular, dealing with continuous variables, a particular version of the imputation method known as \emph{predictive mean matching} is used.  This method consists of three steps: 
 
 
-step 1) -- Regression step: The two linear regression models Y vs. \bold{X} and Z vs. \bold{X} are considered and their parameters are estimated. 
+step 1) -- Regression step: the two linear regression models Y vs. \bold{X} and Z vs. \bold{X} are considered and their parameters are estimated. 
 
 
-step 2) -- Computation of intermediate values. For the units in \code{data.rec} the following intermediate values are derived:
+step 2) -- Computation of intermediate values.  For the units in \code{data.rec} the following intermediate values are derived:
 
 \deqn{ \tilde{z}_{a} = \hat{\alpha}_{Z} + \hat{\beta}_{Z\bf{X}} \mathbf{x}_a + e_a }{z_a = alpha_Z + beta_ZX * x_a + e_a }
 
-for each \eqn{a=1,\ldots,n_{A}}{a=1,...,n_A}, being \eqn{n_A}{n_A} the number of units in \code{data.rec} (rows of \code{data.rec}). Note that, \eqn{e_a}{e_a} is a random draw from the multivariate normal distribution with zero mean and estimated residual variance  \eqn{\hat{\sigma}_{Z|\bf{X}}}{sigma_ZX}.
+for each \eqn{a=1,\ldots,n_{A}}{a=1,...,n_A}, being \eqn{n_A}{n_A} the number of units in \code{data.rec} (rows of \code{data.rec}).  Note that, \eqn{e_a}{e_a} is a random draw from the multivariate normal distribution with zero mean and estimated residual variance  \eqn{\hat{\sigma}_{Z|\bf{X}}}{sigma_ZX}.
 
 Similarly, for the units in \code{data.don} the following intermediate values are derived:
 
@@ -86,7 +86,7 @@ Similarly, for the units in \code{data.don} the following intermediate values ar
 for each \eqn{b=1,\ldots,n_{B}}{1,...,n_B}, being \eqn{n_B}{n_B} the number of units in \code{data.don} (rows of \code{data.don}). \eqn{e_b}{e_b} is a random draw from the multivariate normal distribution with zero mean and estimated residual variance \eqn{\hat{\sigma}_{Y|\bf{X}}}{sigma_YX}.
 
 
-step 3) -- Matching step. For each observation (row) in \code{data.rec} a donor is chosen in \code{data.don} through a nearest neighbor constrained distance hot deck procedure. The distances are computed between \eqn{\left( y_a, \tilde{z}_a \right)}{(y_a, z^_a)} and \eqn{\left( \tilde{y}_b, z_b \right)}{(y^_b, z_b)} using Mahalanobis distance.
+step 3) -- Matching step.  For each observation (row) in \code{data.rec} a donor is chosen in \code{data.don} through a nearest neighbor constrained distance hot deck procedure.  The distances are computed between \eqn{\left( y_a, \tilde{z}_a \right)}{(y_a, z^_a)} and \eqn{\left( \tilde{y}_b, z_b \right)}{(y^_b, z_b)} using Mahalanobis distance.
 
 
 For further details see Sections 2.5.1 and 3.6.1 in D'Orazio \emph{et al.} (2006).
@@ -95,7 +95,7 @@ In step 1) the parameters of the regression model can be estimated by means of t
 
 When \code{method="MS"}, if the value specified for the argument \code{rho.yz} is not compatible with the other correlation coefficients estimated from the data, then it is substituted with the closest value compatible with the other estimated coefficients.
  
-When \code{micro=FALSE} only the estimation of the parameters is performed (step 1). Otherwise, (\code{micro=TRUE}) the whole procedure is carried out.
+When \code{micro=FALSE} only the estimation of the parameters is performed (step 1).  Otherwise, (\code{micro=TRUE}) the whole procedure is carried out.
 
 } 
 
@@ -124,7 +124,7 @@ It is the initial guess for the partial correlation coefficient \eqn{\rho_{YZ|\b
 }
 
 \item{rho.yz}{
-Returned in output only when \code{method="MS"}. It is a vector with four values: the initial guess for \eqn{\rho_{YZ}}{ rho_YZ}; the lower and upper bounds for \eqn{\hat{\rho}_{YZ}}{rho_YZ} in the statistical matching framework given the correlation coefficients among Y and \bold{X} and the correlation coefficients among Z and \bold{X} estimated from the available data; and, finally, the closest admissible value used in computations instead of the initial \code{rho.yz} that resulted not coherent with the other correlation coefficients estimated from the available data.
+Returned in output only when \code{method="MS"}. It is a vector with four values: the initial guess for \eqn{\rho_{YZ}}{ rho_YZ}; the lower and upper bounds for \eqn{\hat{\rho}_{YZ}}{rho_YZ} in the statistical matching framework given the correlation coefficients among Y and \bold{X} and the correlation coefficients among Z and \bold{X} estimated from the available data; and, finally, the closest admissible value used in computations instead of the initial \code{rho.yz} that resulted not coherent with the others correlation coefficients estimated from the available data.
 }
 
 \item{phi}{
@@ -174,7 +174,7 @@ Moriarity, C., and Scheuren, F. (2003). \dQuote{A note on Rubin's statistical ma
 }
 
 \seealso{ 
-\code{\link[StatMatch]{NND.hotdeck}}
+\code{\link[StatMatch]{NND.hotdeck}}, \code{\link[StatMatch]{mahalanobis.dist}}
 }
 
 \examples{

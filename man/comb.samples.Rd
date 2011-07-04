@@ -5,7 +5,7 @@
 \title{Statistical Matching of data from complex sample surveys}
 
 \description{
-This function permitss to cross--tabulate two categorical variables, Y and Z, observed separately in two independent surveys (Y is collected in A and Z is collected in B) carried out on the same target population.  The two surveys share a number common variables \bold{X}.  When it is available a third survey C, carried on the same population, in which both Y and Z are collected these data are used as a source of auxiliary information.
+This function permits to cross--tabulate two categorical variables, Y and Z, observed separately in two independent surveys (Y is collected in survey A and Z is collected in survey B) carried out on the same target population.  The two surveys share a number of common variables \bold{X}.  When it is available a third survey C, carried on the same population, in which both Y and Z are collected, these data are used as a source of auxiliary information.
 
 The statistical matching is performed by carrying out calibration of the survey weights, as suggested in Renssen (1998).
 }
@@ -18,17 +18,17 @@ comb.samples(svy.A, svy.B, svy.C=NULL, y.lab, z.lab, form.x,
 \arguments{
 
 \item{svy.A}{
-A \code{svydesign} \R object that stores the data collected in the the survey A and all the information concerning the sampling design.  This type of object can be created by using the function \code{\link[survey]{svydesign}} in the package \pkg{survey} by Lumley.  All the variables specified in \code{form.x} and by \code{y.lab} must be available in \code{svy.A}.
+A \code{svydesign} \R object that stores the data collected in the survey A and all the information concerning the sampling design.  This type of object can be created by using the function \code{\link[survey]{svydesign}} in the package \pkg{survey} by Lumley.  All the variables specified in \code{form.x} and by \code{y.lab} must be available in \code{svy.A}.
 }
 
 \item{svy.B}{
-A \code{svydesign} \R object that stores the data collected in the the survey B and all the information concerning the sampling design.  This type of object can be created by using the function \code{\link[survey]{svydesign}} in the package \pkg{survey} by Lumley.  All the variables specified in \code{form.x} and by \code{z.lab} must be available in \code{svy.B}.
+A \code{svydesign} \R object that stores the data collected in the survey B and all the information concerning the sampling design.  This type of object can be created by using the function \code{\link[survey]{svydesign}} in the package \pkg{survey} by Lumley.  All the variables specified in \code{form.x} and by \code{z.lab} must be available in \code{svy.B}.
 }
 
 \item{svy.C}{
 A \code{svydesign} \R object that stores the data collected in the the survey C and all the information concerning the sampling design.  This type of object can be created by using the function \code{\link[survey]{svydesign}} in the package \pkg{survey} by Lumley.
 
-When \code{svy.C=NULL} (default), i.e. no auxiliary information is available, then the function returns the estimated table of Y vs. Z under the Conditional Independence assumption (CIA) (see Details for major information).
+When \code{svy.C=NULL} (default), i.e. no auxiliary information is available, the function returns an estimate of the contingency table of Y vs. Z under the Conditional Independence assumption (CIA) (see Details for major information).
 
 When additional auxiliary information (\code{svy.C}) is available, if \cr 
 \code{estimation="incomplete"} then \code{svy.C} must contain at least \code{y.lab} and \code{z.lab} variables.  On the contrary, when \code{estimation="synthetic"} all the variables specified in \code{form.x}, by \code{y.lab} and by \code{z.lab} must be available in \code{svy.C}.
@@ -36,25 +36,25 @@ When additional auxiliary information (\code{svy.C}) is available, if \cr
 }
 
 \item{y.lab}{
-A string providing the name of the Y variable, collected in survey A and in survey C (if available).  The Y variable must be a categorical variable.
+A string providing the name of the Y variable, collected in survey A and in survey C (if available).  The Y variable must be a categorical variable (\code{factor} or \code{integer} in \R).
 }
 
 \item{z.lab}{
-A string providing the name of the Z variable collected in survey B and in survey C (if available).  The Z variable must be a categorical variable.
+A string providing the name of the Z variable collected in survey B and in survey C (if available).  The Z variable must be a categorical variable (\code{factor} or \code{integer} in \R).
 }
 
 
 \item{form.x}{
-A \R formula specifying which of the \bold{X} variables, collected in all the surveys, have to be considered, and how have to be considered.  For instance \cr
-\code{form.x=~x1+x2} means that the variables x1 and x2 have to be considered separately without taking into account their cross--tabulation; just their marginal distribution is considered and there is also an \sQuote{Intercept} that specifies which is the size N of the population from which the samples have been selected.  In order to skip the intercept the formula has to be written in the following manner: \cr 
+A \R formula specifying which of the \bold{X} variables, collected in all the surveys, have to be considered, and how have to be considered in combining samples.  For instance \cr
+\code{form.x=~x1+x2} means that the variables x1 and x2 have to be considered separately without taking into account their cross--tabulation; just their marginal distribution is considered.  In order to skip the Intercept the formula has to be written in the following manner: \cr 
 \code{=~x1+x2-1}.
 
-When dealing with categorical variables, if the formula is written in the following manner \code{form.x=~x1:x2-1}, it means that the the joint distribution of the two variables (table of x1 vs. x2) has to be considered.
+When dealing with categorical variables, if the formula is written as \code{form.x=~x1:x2-1}, it means that the the joint distribution of the two variables (table of x1 vs. x2) has to be considered.
 
 To better understand the usage of \code{form.x} see \code{\link[stats]{model.matrix}} (see also \cr
 \code{\link[stats]{formula}}).
 
-Due to weights calibration features, it is preferable to work just with categorical \bold{X} variables.  In some cases, procedure may be successful when a single continuous variable is considered jointly with one or more categorical variables, but in most of the cases, it may be necessary to categorize the continuous variable (see Details).
+Due to weights calibration features, it is preferable to work  with categorical \bold{X} variables.  In some cases, procedure may be successful when a single continuous variable is considered jointly with one or more categorical variables, but in most of the cases, it may be necessary to categorize the continuous variable (see Details).
 }
 
 \item{estimation}{
@@ -65,12 +65,12 @@ A character string that identifies the method to be used to estimate the table o
 
 Further arguments that may be necessary for calibration.  In particular, the argument \code{calfun} allows to specyfy the calibration function.  Three alternatives are available: \cr
 (i) \code{calfun="linear"} for linear calibration (default); \cr
-(ii) \code{calfun="raking"} just to rake the survey weights; and \cr
+(ii) \code{calfun="raking"} to rake the survey weights; and \cr
 (iii) \code{calfun="logit"} for logit calibration.  See \code{\link[survey]{calibrate}} for major details.
 
 Note that when \code{calfun="linear"} there is the chance of having negative calibrated weights.  This drawback can be avoided by requiring that the final weights lie in a given interval specified via the argument \code{bounds} of the function \code{\link[survey]{calibrate}}.  Generally speaking, in sample surveys one expects that weights are greater than or equal to 1, i.e. \code{bounds=c(1, Inf)}.
 
-The number of iterations used in calibration can be modified too by using the argument \code{maxit} (by default \code{maxit=50}).
+The number of iterations used in calibration can be modified by using the argument \code{maxit} (by default \code{maxit=50}).
 
 See \code{\link[survey]{calibrate}} for further details.
 
@@ -79,16 +79,16 @@ See \code{\link[survey]{calibrate}} for further details.
 }
 
 \details{
-This function estimates the contingency table of Y vs. Z by performing calibration of the survey weights.  In practice the estimation is carried out on data in survey C by exploiting all the information from surveys A and B.  When survey C is not available the table of Y vs. Z is estimated under the assumption of Conditional Independence (CIA), i.e. \eqn{p(Y,Z)=p(Y|\bold{X}) \times p(Z|\bold{X}) \times p(\bold{X})}{p(Y,X)=p(Y|X)*p(Z|X)*p(X)}.
+This function estimates the contingency table of Y vs. Z by performing the calibration of the survey weights.  In practice the estimation is carried out on data in survey C by exploiting all the information from surveys A and B.  When survey C is not available the table of Y vs. Z is estimated under the assumption of Conditional Independence (CIA), i.e. \eqn{p(Y,Z)=p(Y|\bold{X}) \times p(Z|\bold{X}) \times p(\bold{X})}{p(Y,X)=p(Y|X)*p(Z|X)*p(X)}.
 
-When data from survey C are available, following Renssen (1998), the table of Y vs. Z can be estimated in two alternative ways: Incomplete Two--Way Stratification (ITWS) and Synthetic Two--Way Stratification (STWS).  In the first case (ITWS) the weights of the units in survey C are calibrated so that the new weights allow to reproduce the marginal distributions of Y variable estimated on survey A, and of that of Z estimated on survey B.  Note that the distribution of the \bold{X} variables in survey A and in survey B, must be harmonized before performing ITWS (see \code{\link[StatMatch]{harmonize.x}}).  
-The Synthetic Two--Way Stratification allows to estimate the table of Y vs. Z by considering also the \bold{X} variables observed in C.  This method consists in correcting the table of Y vs. Z estimated under the CIA by the residuals among Y vs. Z and the CIA estimated in survey C (for major details see Renssen, 1998).
+When data from survey C are available (Renssen, 1998), the table of Y vs. Z can be estimated by: Incomplete Two--Way Stratification (ITWS) or Synthetic Two--Way Stratification (STWS).  In the first case (ITWS) the weights of the units in survey C are calibrated so that the new weights allow to reproduce the marginal distributions of Y variable estimated on survey A, and that of Z estimated on survey B.  Note that the distribution of the \bold{X} variables in survey A and in survey B, must be harmonized before performing ITWS (see \code{\link[StatMatch]{harmonize.x}}).  
+The Synthetic Two--Way Stratification allows to estimate the table of Y vs. Z by considering also the \bold{X} variables observed in C.  This method consists in correcting the table of Y vs. Z estimated under the CIA by according to the relationship between Y and Z observed in survey C (for major details see Renssen, 1998).
 
 }
 
 
 \value{
-A \R list the results of calibration procedure according to the input arguments.  When \code{svy.C=NULL} the list will contain just two components \code{yz.CIA} (Y vs. Z estimated under the CIA) and \code{call} (the call to the function).  On the contrary, when data from \code{svy.C} are available, the following components will be available:
+A \R list with the results of the calibration procedure according to the input arguments.  When \code{svy.C=NULL} the list will contain just two components \code{yz.CIA} (Y vs. Z estimated under the CIA) and \code{call} (the call to the function).  On the contrary, when data from \code{svy.C} are available, the following components will be available:
 
 \item{yz.CIA}{
 The table of Y vs. Z estimated under the Conditional Independence Assumption (CIA).
@@ -122,7 +122,7 @@ Renssen, R.H. (1998) \dQuote{Use of Statistical Matching Techniques in Calibrati
 }
 
 \seealso{ 
-\code{\link[survey]{svydesign}}, \code{\link[survey]{calibrate}}, \code{\link[StatMatch]{harmonize.x}}
+\code{\link[survey]{calibrate}}, \code{\link[survey]{svydesign}}, \code{\link[StatMatch]{harmonize.x}}
 }
 
 \examples{

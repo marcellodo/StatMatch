@@ -4,7 +4,7 @@
 \title{Harmonizes the marginal (joint) distribution of a set of variables observed independently in two sample surveys on the same target population}
 
 \description{
-This function permits to harmonize the marginal or the joint distribution of a set of variables observed independently in two sample surveys carried out on the same target population.  This harmonization is carried out by using the calibration of the survey weights of the sample units in both the surveys, according to the procedure introduced by Renssen (1998).
+This function permits to harmonize the marginal or the joint distribution of a set of variables observed independently in two sample surveys carried out on the same target population.  This harmonization is carried out by using the calibration of the survey weights of the sample units in both the surveys according to the procedure introduced by Renssen (1998).
 }
 
 \usage{
@@ -23,11 +23,11 @@ A \code{svydesign} \R object that stores the data collected in the the survey B 
 
 \item{form.x}{
 A \R formula specifying which of the variables, common to both the surveys, have to be considered, and how have to be considered.  For instance \cr
-\code{form.x=~x1+x2} means that the marginal distribution of the variables x1 and x2 have to be harmonized and there is also an \sQuote{Intercept} that specifies which is the size N of the population from which the two samples have been selected.  In order to skip the intercept the formula has to be written in the following manner \cr \code{=~x1+x2-1}.
+\code{form.x=~x1+x2} means that the marginal distribution of the variables x1 and x2 have to be harmonized and there is also an \sQuote{Intercept}.  In order to skip the intercept the formula has to be written in the following manner \cr \code{form.x=~x1+x2-1}.
 
 When dealing with categorical variables, if the formula is written in the following manner \code{form.x=~x1:x2-1} it means that the harmonization has to be carried out by considering the joint distribution of the two variables (x1 vs. x2).  To better understand how \code{form.x} works see \code{\link[stats]{model.matrix}} (see also \code{\link[stats]{formula}}).
 
-Due to weights calibration features, it is preferable to work just with categorical \bold{X} variables.  In some cases, the procedure may be successful when a single continuous variable is considered jointly with one or more categorical variables.  When dealing with several continuous variable it may be preferable to categorize them.
+Due to weights calibration features, it is preferable to work with categorical \bold{X} variables.  In some cases, the procedure may be successful when a single continuous variable is considered jointly with one or more categorical variables.  When dealing with several continuous variable it may be preferable to categorize them.
 }
 
 \item{x.tot}{
@@ -56,7 +56,7 @@ See \code{\link[survey]{calibrate}} for further details.
 }
 
 \details{
-This function harmonizes the totals of the \bold{X} variables, observed in both survey A and survey B, to be equal to given known totals specified via \code{x.tot}.  When these totals are not known (\code{x.tot=NULL})  they are estimated by combining the estimates derived from the two separate surveys.  The harmonization is carried out according to a procedure introduced by Renssen (1998) by means of weight calibration (for major details on calibration see Sarndal and Lundstrom, 2005).  The procedure is particularly suited to deal with categorical \bold{X} variables, in this case it permits to harmonize the joint or the marginal distribution of the categorical variables being considered. Note that an incomplete crossing of the \bold{X} variables can be considered: i.e. harmonisation wrt to the joint distribution of \eqn{X_1 \times X_2}{X_1 x X_2} and the marginal distribution of \eqn{X_3}{x_3}).
+This function harmonizes the totals of the \bold{X} variables, observed in both survey A and survey B, to be equal to given known totals specified via \code{x.tot}.  When these totals are not known (\code{x.tot=NULL})  they are estimated by combining the estimates derived from the two separate surveys.  The harmonization is carried out according to a procedure introduced by Renssen (1998) based on calibration of survey weights (for major details on calibration see Sarndal and Lundstrom, 2005).  The procedure is particularly suited to deal with categorical \bold{X} variables, in this case it permits to harmonize the joint or the marginal distribution of the categorical variables being considered. Note that an incomplete crossing of the \bold{X} variables can be considered: i.e. harmonisation wrt to the joint distribution of \eqn{X_1 \times X_2}{X_1 x X_2} and the marginal distribution of \eqn{X_3}{x_3}).
 
 The calibration procedure may not produce the final result due to convergence problems.  In this case an error message appears.  In order to reach convergence it may be necessary to launch the procedure with less constraints (i.e a reduced number of population totals) by joining adjacent categories or by discarding some variables.  
 
@@ -68,7 +68,7 @@ Post--stratification is a special case of calibration; all the weights of the un
 
 
 \value{
-A \R list the results of calibration procedures carried out on survey A and survey B, respectively.  In particular the following components will be provided:
+A \R with list the results of calibration procedures carried out on survey A and survey B, respectively.  In particular the following components will be provided:
 
 \item{cal.A}{
 The survey object \code{svy.A} after the calibration; in particular, the weights now are calibrated with respect to the totals of the \bold{X} variables.
@@ -108,8 +108,7 @@ Sarndal, C.E. and Lundstrom, S. (2005) \emph{Estimation in Surveys with Nonrespo
 }
 
 \seealso{ 
-\code{\link[survey]{calibrate}}
-\code{\link[survey]{postStratify}}
+\code{\link[StatMatch]{comb.samples}}, \code{\link[survey]{calibrate}}, \code{\link[survey]{svydesign}}, \code{\link[survey]{postStratify}}, 
 
 }
 

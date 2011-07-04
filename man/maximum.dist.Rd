@@ -14,17 +14,17 @@ maximum.dist(data.x, data.y=data.x, rank=FALSE)
 \arguments{
 
 \item{data.x}{
-  A matrix or a data frame containing variables that should be used in the computation of the distance. Only continuous variables are allowed.  Missing values (\code{NA}) are not allowed.
+  A matrix or a data frame containing variables that should be used in the computation of the distance.  Only continuous variables are allowed.  Missing values (\code{NA}) are not allowed.
 
 When only \code{data.x} is supplied, the distances between rows of \code{data.x} is computed. 
 }
 
 \item{data.y}{
-   A numeric matrix or data frame with the same variables, of the same type, as those in \code{data.x} (Only continuous variables are allowed).  Dissimilarities between rows of \code{data.x} and rows of \code{data.y} will be computed.  If not provided, by default it is assumed equal to \code{data.x} and only dissimilarities between rows of \code{data.x} will be computed. 
+   A numeric matrix or data frame with the same variables, of the same type, as those in \code{data.x} (only continuous variables are allowed).  Dissimilarities between rows of \code{data.x} and rows of \code{data.y} will be computed.  If not provided, by default it is assumed \code{data.y=data.x} and only dissimilarities between rows of \code{data.x} will be computed. 
 }
 
 \item{rank}{
-Logical, when \code{TRUE} the original values are substituted by their ranks divided by the number of values plus one (following suggestion in Kovar et al. 1988).  This rank transformation allows to remove the effect of different scales of the variables on the distance computation.  Note that in ranking values tied observations assume the average of their position 
+Logical, when \code{TRUE} the original values are substituted by their ranks divided by the number of values plus one (following suggestion in Kovar et al. 1988).  This rank transformation permits to remove the effect of different scales on the distance computation.  When computing ranks the tied observations assume the average of their position 
 (\code{ties.method = "average"} in calling the \code{\link[base]{rank}} function). 
 
 }
@@ -32,7 +32,7 @@ Logical, when \code{TRUE} the original values are substituted by their ranks div
 
   
 \details{
-This function computes the \eqn{L^\infty}{L^Inf} distance also know as minimax distance.  In practice the distance among two records is the maximum of the absolute differences among the observed variables :
+This function computes the \eqn{L^\infty}{L^Inf} distance also know as minimax distance.  In practice the distance among two records is the maximum of the absolute differences among the observed variables:
 
 \deqn{d(i,j) = max \left( \left|x_{1i}-x_{1j} \right|, \left|x_{2i}-x_{2j} \right|,\ldots,\left|x_{Ki}-x_{Kj} \right| \right)}{d(i,j) =max(|x_1i-x_1j|,|x_2i-x_2j|,...,|x_Ki-x_Kj|) }
 

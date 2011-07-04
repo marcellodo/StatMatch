@@ -4,7 +4,7 @@
 \title{Computes the Frechet bounds of cells in a contingency table by considering all the possible subsets of the common variables.}
 
 \description{
-  This function permits to compute the bounds for cell probabilities in the contingency table Y vs. Z starting from the marginal tables (\bold{X} vs. Y), (\bold{X} vs. Z) and the joint distribution of the \bold{X} variables, by considering all the possible subsets of the \bold{X} variables.  In this manner it is possible to identify which subset of the \bold{X} variables produces the major reduction of the uncertainty measured in terms of the bounds width.
+  This function permits to compute the bounds for cell probabilities in the contingency table Y vs. Z starting from the marginal tables (\bold{X} vs. Y), (\bold{X} vs. Z) and the joint distribution of the \bold{X} variables, by considering all the possible subsets of the \bold{X} variables.  In this manner it is possible to identify which subset of the \bold{X} variables produces the major reduction of the uncertainty measured in terms of the width of the bounds.
 }
 
 \usage{
@@ -36,7 +36,7 @@ A single categorical Z variable is allowed.  One or more categorical variables c
 
 \details{
 This function permits to compute the Frechet bounds for the frequencies in the contingency table of Y vs. Z, starting from the conditional distributions P(Y|\bold{X}) and P(Z|\bold{X}) (for details see \cr
-\code{\link[StatMatch]{Frechet.bounds.cat}}), by considering all the possible subsets of the \bold{X}.  In this manner it is possible to identify the subset of the \bold{X} variables, with highest association with both Y and Z, that permits to reduce the uncertainty concerning the distribution of Y vs. Z.  The reduction of the uncertainty is measured in terms of the average of the widths of the bounds estimated for the cells in the table of Y vs. Z:
+\code{\link[StatMatch]{Frechet.bounds.cat}}), by considering all the possible subsets of the \bold{X} variables.  In this manner it is possible to identify the subset of the \bold{X} variables, with highest association with both Y and Z, that permits to reduce the uncertainty concerning the distribution of Y vs. Z.  The reduction of the uncertainty is measured in terms of the average of the widths of the bounds for the cells in the table of Y vs. Z:
 
 \deqn{ \bar{d} = \frac{1}{J \times K} \sum_{j,k} ( p^{up}_{j,k} - p^{low}_{j,k} )}{d=(1/(J*K))*sum_(i,k)(up(p(y=j,z=k))-low(p(y=j,z=k)))}
 
@@ -65,7 +65,7 @@ D'Orazio, M., Di Zio, M. and Scanu, M. (2006). \emph{Statistical Matching: Theor
 }
 
 \seealso{ 
-\code{\link[StatMatch]{Frechet.bounds.cat}}
+\code{\link[StatMatch]{Frechet.bounds.cat}}, \code{\link[StatMatch]{harmonize.x}}
 }
 
 \examples{

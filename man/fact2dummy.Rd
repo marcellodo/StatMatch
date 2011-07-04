@@ -4,7 +4,7 @@
 \title{Transforms a categorical variable in a set of dummy variables}
 
 \description{
-Transforms a factor or more factors contained in a data frame with a set of dummy variables.
+Transforms a factor or more factors contained in a data frame in a set of dummy variables.
 }
 
 \usage{

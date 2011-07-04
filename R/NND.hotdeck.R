@@ -1,14 +1,12 @@
 `NND.hotdeck` <-
 function (data.rec, data.don, match.vars, don.class=NULL, dist.fun="Manhattan", constrained=FALSE, constr.alg=NULL, ...)
 {
-
 	if(constrained && constr.alg=="relax"){
 		require(optmatch)
 	}
 	if(constrained && (constr.alg=="lpSolve" || constr.alg=="lpsolve")){
 		require(lpSolve)
 	}
-
 	p <- length(match.vars)
 	if(!is.null(dim(data.rec))){
 		nr <- nrow(data.rec)
@@ -35,7 +33,7 @@ function (data.rec, data.don, match.vars, don.class=NULL, dist.fun="Manhattan", 
 	else d.lab <- paste("don", d.lab, sep="=")
 	row.names(data.don) <- d.lab
     if(!is.null(match.vars)){
-        if(dist.fun=="Euclidean" || dist.fun=="euclidean" ||dist.fun=="Manhattan" ||dist.fun=="manhattan" || dist.fun=="minimax" || dist.fun=="MiniMax" || dist.fun=="Minimax"){
+        if(dist.fun=="Euclidean" || dist.fun=="euclidean" ||dist.fun=="Manhattan" || dist.fun=="Mahalanobis" || dist.fun=="mahalanobis" || dist.fun=="manhattan" || dist.fun=="minimax" || dist.fun=="MiniMax" || dist.fun=="Minimax"){
             cat("Warning: The ", dist.fun, " distance is being used", fill=TRUE)
             cat("All the categorical matching variables in rec and don data.frames, if present are recoded into dummies", fill=TRUE)
         }
@@ -48,32 +46,34 @@ function (data.rec, data.don, match.vars, don.class=NULL, dist.fun="Manhattan", 
 ########################
 NND.hd <- function (rec, don, dfun="Manhattan", constr=FALSE, c.alg=NULL, ...)
 { 
-    if(is.null(dim(rec))) x.rec <- data.frame(rec)
-	else x.rec <- rec
-    if(is.null(dim(don))) x.don <- data.frame(don)
-	else x.don <- don
+    x.rec <- rec
+    x.don <- don
     p <- ncol(rec)
 	nr <- nrow(x.rec)
 	nd <- nrow(x.don)
 	if(nr>nd) cat("Warning: the number of donors is less than the number of recipients", fill=TRUE)
 
     r.lab <- rownames(x.rec)
-	if(is.null(r.lab)) r.lab <- 1:nr
+	if(is.null(r.lab)) r.lab <- paste("rec", 1:nr, sep="=")
 	d.lab <- rownames(x.don)
-	if(is.null(d.lab)) d.lab <- 1:nd
+	if(is.null(d.lab)) d.lab <-  paste("don", 1:nr, sep="=")
 
 # compute matrix of distances between obs. in x.don and obs. in x.rec
 # function dist() in package "proxy" is used! 
-
 	if(dfun=="Euclidean" || dfun=="euclidean" || dfun=="Manhattan" || dfun=="manhattan"){
         require(proxy)
-        x.rec <- fact2dummy(x.rec, all=FALSE)
-        x.don <- fact2dummy(x.don, all=FALSE)
+        if(is.data.frame(x.rec)) x.rec <- fact2dummy(x.rec, all=FALSE)
+        if(is.data.frame(x.don)) x.don <- fact2dummy(x.don, all=FALSE)
         mdist <- dist(x=x.rec, y=x.don, method=dfun, ...)
 	}
+	else if(dfun=="Mahalanobis" || dfun=="mahalanobis"){
+        if(is.data.frame(x.rec)) x.rec <- fact2dummy(x.rec, all=FALSE)
+        if(is.data.frame(x.don)) x.don <- fact2dummy(x.don, all=FALSE)
+        mdist <- mahalanobis.dist(data.x=x.rec, data.y=x.don, ...)
+	}
 	else if(dfun=="minimax" || dfun=="MiniMax" || dfun=="Minimax"){
-        x.rec <- fact2dummy(x.rec, all=FALSE)
-        x.don <- fact2dummy(x.don, all=FALSE)
+        if(is.data.frame(x.rec)) x.rec <- fact2dummy(x.rec, all=FALSE)
+        if(is.data.frame(x.don)) x.don <- fact2dummy(x.don, all=FALSE)
         mdist <- maximum.dist(data.x=x.rec, data.y=x.don, ...)
 	}
 	else if(dfun=="exact" || dfun=="exact matching"){
@@ -97,7 +97,7 @@ NND.hd <- function (rec, don, dfun="Manhattan", constr=FALSE, c.alg=NULL, ...)
         require(proxy)
 		mdist <- dist(x=x.rec, y=x.don, method=dfun, ...)
 	}
-	dimnames(mdist) <- list(r.lab, d.lab)
+    dimnames(mdist) <- list(r.lab, d.lab)
 
 # UNCONSTRAINED nearest neighbour matching
 
@@ -174,7 +174,7 @@ NND.hd <- function (rec, don, dfun="Manhattan", constr=FALSE, c.alg=NULL, ...)
 ################ NND.hd ends here #############################
 	
 	if(is.null(don.class)){ 
-		out <- NND.hd(rec=data.rec[,match.vars], don=data.don[,match.vars], dfun=dist.fun, constr=constrained, c.alg=constr.alg )
+		out <- NND.hd(rec=data.rec[,match.vars, drop=FALSE], don=data.don[,match.vars, drop=FALSE], dfun=dist.fun, constr=constrained, c.alg=constr.alg )
 		mmm <- out$mtc.ids
 		mmm <- substring(mmm, 5)
 		if(is.null(rownames(data.rec)) && is.null(rownames(data.don)))  mtc.ids <- matrix(as.numeric(mmm), ncol=2, byrow=TRUE)
@@ -185,12 +185,12 @@ NND.hd <- function (rec, don, dfun="Manhattan", constr=FALSE, c.alg=NULL, ...)
 	}
 	else{
 		if(length(don.class)==1){
-			l.rec <- split(data.rec[ ,match.vars], f=data.rec[ ,don.class])
-			l.don <- split(data.don[ ,match.vars], f=data.don[ ,don.class])
+			l.rec <- split(data.rec[ ,match.vars, drop=FALSE], f=data.rec[ ,don.class])
+			l.don <- split(data.don[ ,match.vars, drop=FALSE], f=data.don[ ,don.class])
 		}
 		else{
-			l.rec <- split(data.rec[ ,match.vars], f=as.list(data.rec[ ,don.class]))
-			l.don <- split(data.don[ ,match.vars], f=as.list(data.don[ ,don.class]))
+			l.rec <- split(data.rec[ ,match.vars, drop=FALSE], f=as.list(data.rec[ ,don.class]))
+			l.don <- split(data.don[ ,match.vars, drop=FALSE], f=as.list(data.don[ ,don.class]))
 		}
 		if(length(l.rec)!=length(l.don)){
 			cat("The no. of donation classes in recipient data is not equal to the no. of donation classes in donor data", fill=TRUE)

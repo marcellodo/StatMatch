@@ -1,3 +1,11 @@
+1.0.2   new function mahalanobis.dist() to compute the mahalanobis distance
+
+		fixed a bug in mixed.mtc() when computing the range of admissible values
+		for rho_yz
+		
+		fixed a bug in NND.hotdeck()  and RANDwNND.hotdeck() when
+		managing of the row.names
+		
 1.0.1	new functions harmonize.x() and comb.samples() to perform statistical
 		matching when dealing with complex sample survey data via 
 		weight calibration.

@@ -25,7 +25,7 @@ function (data.rec, data.don, match.vars=NULL, don.class=NULL, dist.fun="Manhatt
 	row.names(data.don) <- d.lab
 	p <- length(match.vars)
     if(!is.null(match.vars)){
-        if(dist.fun=="Euclidean" || dist.fun=="euclidean" ||dist.fun=="Manhattan" ||dist.fun=="manhattan" || dist.fun=="minimax" || dist.fun=="MiniMax" || dist.fun=="Minimax"){
+        if(dist.fun=="Euclidean" || dist.fun=="euclidean" || dist.fun=="Manhattan" || dist.fun=="manhattan" || dist.fun=="Mahalanobis" || dist.fun=="mahalanobis" || dist.fun=="minimax" || dist.fun=="MiniMax" || dist.fun=="Minimax"){
             cat("Warning: The ", dist.fun, " distance is being used", fill=TRUE)
             cat("All the categorical matching variables in rec and don data.frames, if present, are recoded into dummies", fill=TRUE)
         }
@@ -37,18 +37,18 @@ function (data.rec, data.don, match.vars=NULL, don.class=NULL, dist.fun="Manhatt
 ################
 RANDwNND.hd <- function (rec, don, dfun="Manhattan", cut.don="rot", k=NULL, w.don=NULL, ...)
 { 
-    if(is.null(dim(rec))) x.rec <- data.frame(rec)
-    else x.rec <- rec
-    if(is.null(dim(don))) x.rec <- data.frame(don)
-    else x.don <- don
+    x.rec <- rec
+    x.don <- don
     p <- ncol(rec)
   	nr <- nrow(rec)
 	nd <- nrow(don)
 	if(nr>nd) cat("Warning: the number of donors is less than the number of recipients", fill=TRUE)
-	r.lab <- rownames(rec)
-	if(is.null(r.lab)) r.lab <- 1:nr
-	d.lab <- rownames(don)
-	if(is.null(d.lab)) d.lab <- 1:nd
+
+    r.lab <- rownames(x.rec)
+	if(is.null(r.lab)) r.lab <- paste("rec", 1:nr, sep="=")
+	d.lab <- rownames(x.don)
+	if(is.null(d.lab)) d.lab <-  paste("don", 1:nr, sep="=")
+
     if(is.null(w.don)) ww <- rep(1,nd)
     else ww <- w.don
 # compute matrix of distances between obs. in x.don and obs. in x.rec
@@ -59,6 +59,11 @@ RANDwNND.hd <- function (rec, don, dfun="Manhattan", cut.don="rot", k=NULL, w.do
         x.don <- fact2dummy(x.don, all=FALSE)
         mdist <- dist(x=x.rec, y=x.don, method=dfun, ...)
     }
+	else if(dfun=="Mahalanobis" || dfun=="mahalanobis"){
+        if(is.data.frame(x.rec)) x.rec <- fact2dummy(x.rec, all=FALSE)
+        if(is.data.frame(x.don)) x.don <- fact2dummy(x.don, all=FALSE)
+        mdist <- mahalanobis.dist(data.x=x.rec, data.y=x.don, ...)
+	}
 	else if(dfun=="minimax" || dfun=="MiniMax" || dfun=="Minimax"){
         x.rec <- fact2dummy(x.rec, all=FALSE)
         x.don <- fact2dummy(x.don, all=FALSE)

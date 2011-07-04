@@ -107,21 +107,25 @@ function (data.rec, data.don, match.vars, y.rec, z.don, method="ML", rho.yz=0, m
 
 		# estimation of S.yz
 		# step.1 checks if the input value for Cor(Y,Z), rho.yz, is admissible  
-		c.xy <- c(cor(x.A, y.A))
-		c.xz <- c(cor(x.B, z.B))
 		if(p.x==1){
+       		c.xy <- c(cor(x.A, y.A))
+    		c.xz <- c(cor(x.B, z.B))
 			low.c <- c.xy*c.xz - sqrt( (1-c.xy^2)*(1-c.xz^2) )
 			up.c <-  c.xy*c.xz + sqrt( (1-c.xy^2)*(1-c.xz^2) )
 		}      
 		else{
-			ic.x <- solve(cov2cor(S.x))
-			mc1 <- matrix( rep(c.xy, p.x), ncol=p.x )
-			mc2 <- matrix( rep(c.xz, p.x), ncol=p.x, byrow=TRUE)
-			cc <- mc1 * ic.x * mc2
-			dd1 <- 1 - sum( mc1 * ic.x * t(mc1) )
-			dd2 <- 1 - sum( t(mc2) * ic.x * mc2 )  
-			low.c <- sum(cc) - sqrt(dd1*dd2)
-			up.c <- sum(cc) + sqrt(dd1*dd2)
+            eps <- 0.0001
+            cc <- cov2cor(vc)
+            rr <- seq(-1, 1, eps)
+            k <- length(rr)
+            vdet <- rep(0,k)
+            for(i in 1:k){
+                cc[pos.z, pos.y] <- cc[pos.y, pos.z] <- rr[i]
+                vdet[i] <- det(cc)
+            }
+            cc.yz <- rr[vdet>=0]
+            low.c <- min(cc.yz)
+            up.c <- max(cc.yz)
 		}
 		# step.2 checks whether the input value rho.yz for Cor(Y,Z) is addmisible. Otherwise takes the closest admissible value.
 		cat("input value for rho.yz is", rho.yz, fill=TRUE)

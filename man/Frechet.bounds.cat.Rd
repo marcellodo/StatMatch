@@ -22,7 +22,7 @@ A \R table crossing the \bold{X} variables.  This table must be obtained by usin
 A \R table of \bold{X} vs. Y variable.  This table must be obtained by using the function \code{\link[stats]{xtabs}} or \code{\link[base]{table}}, e.g. \cr
 \code{table.xy <- xtabs(~x1+x2+x3+y, data=data.A)}.
 
-A single categorical Y variables is allowed.  One or more categorical variables can be considered as \bold{X} variables (common variables).  Obviously, the same \bold{X} variables in \code{tab.x} must be available in \code{tab.xy}.  Moreover, it is assumed that the joint distribution of the \bold{X} variables computed from \code{tab.xy} is equal to \code{tab.x}; a warning appears if this is not true.
+A single categorical Y variable is allowed.  One or more categorical variables can be considered as \bold{X} variables (common variables).  Obviously, the same \bold{X} variables in \code{tab.x} must be available in \code{tab.xy}.  Moreover, it is assumed that the joint distribution of the \bold{X} variables computed from \code{tab.xy} is equal to \code{tab.x}; a warning appears if this is not true.
 }
 
 \item{tab.xz}{
@@ -39,7 +39,7 @@ A string specifying the data structure of the output. When \cr \code{print.f="ta
 }
 
 \details{
-This function permits to compute the Frechet bounds for the relative frequencies in the contingency table of Y vs.Z, starting from the conditional distributions P(Y|X) and P(Z|X).  The bounds for the relative frequencies \eqn{p_{j,k}}{p(y=j,z=k)} in the table Y vs. Z are:
+This function permits to compute the Frechet bounds for the relative frequencies in the contingency table of Y vs.Z, starting from the distributions P(Y|X), P(Z|X) and P(X).  The bounds for the relative frequencies \eqn{p_{j,k}}{p(y=j,z=k)} in the table Y vs. Z are:
 
 \deqn{  p^{low}_{YZ}(j,k) = \sum_{i}  p_X(i)\max (0; p_{Y|X}(j|i) + p_{Z|X}(k|i)-1 ) }{p(y=j,z=k) >= sum_i(p(x=i) * max(0; p(y=j|x=i) + p(z=k|x=i) - 1) )}
 
@@ -50,9 +50,9 @@ The relative frequencies \eqn{p_X(i)=n_i/n}{p(x=i)=n_i/n \bullet} are computed f
 the relative frequencies \eqn{p_{Y|X}(j|i)=n_{ij}/n_{i \bullet}}{p(y=j|x=i)=n_ij/n_i.} are computed from the \code{tab.xy}, \cr
 finally, \eqn{p_{Z|X}(k|i)=n_{ik}/n_{k \bullet}}{p(z=k|x=i)=n_ik/n_i.} are derived from \code{tab.xy}.
 
-The underlying assumption is that the marginal distribution of the \bold{X} variables to be the same in all the input tables: \code{tab.x}, \code{tab.xy} and \code{tab.xz}.  If this is not true a warning message will appear.
+It is assumed that the marginal distribution of the \bold{X} variables is the same in all the input tables: \code{tab.x}, \code{tab.xy} and \code{tab.xz}.  If this is not true a warning message will appear.
 
-Note that the cells bounds for the the relative frequencies in the contingency table of Y vs.Z are also computed  without considering the \bold{X} variables, in the following manner:
+Note that the cells bounds for the relative frequencies in the contingency table of Y vs. Z are computed also without considering the \bold{X} variables:
 
 \deqn{ \max\{0; p_{Y}(j) + p_{Z}(k)-1\} \leq p_{YZ}(j,k) \leq \min \{ p_{Y}(j); p_{Z}(k)\}}{max(0;p(y=j)+p(z=k)-1) <= p(y=j,z=k) <= min(p(y=j);p(z=k))}
 
@@ -63,7 +63,7 @@ Finally, the contingency table of Y vs. Z estimated under the Conditional Indepe
 }
 
 \value{
-When \code{print.f="tables"} (default) a list with the following estimated tables of Y vs. Z:
+When \code{print.f="tables"} (default) a list with the following tables:
 
 \item{low.u}{
 The estimated lower bounds for the relative frequencies in the table Y vs. Z without conditioning on the \bold{X} variables.
@@ -103,7 +103,7 @@ D'Orazio, M., Di Zio, M. and Scanu, M. (2006). \emph{Statistical Matching: Theor
 }
 
 \seealso{ 
-\code{\link[StatMatch]{Fbwidths.by.x}}
+\code{\link[StatMatch]{Fbwidths.by.x}}, \code{\link[StatMatch]{harmonize.x}}
 }
 
 \examples{

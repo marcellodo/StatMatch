@@ -15,19 +15,19 @@ create.fused(data.rec, data.don, mtc.ids,
 \arguments{
 
 \item{data.rec}{
-A matrix or data frame that has been used as \emph{recipient} in the statistical matching application. 
+A matrix or data frame that plays the role of \emph{recipient} in the statistical matching application. 
 }
 
 \item{data.don}{
-A matrix or data frame that has been used as the \emph{donor} in the statistical matching application.
+A matrix or data frame that that plays the role of \emph{donor} in the statistical matching application.
 }
 
 \item{mtc.ids}{
-A matrix with two columns.  Each row must contain the name or the index of the recipient record (row) in \code{data.don} and the name or the index of the corresponding donor record (row) in \code{data.don}.  Note that this type of matrix is returned by the functions \code{\link[StatMatch]{NND.hotdeck}}, \code{\link[StatMatch]{RANDwNND.hotdeck}}, and \code{\link[StatMatch]{rankNND.hotdeck}}.
+A matrix with two columns.  Each row must contain the name or the index of the recipient record (row) in \code{data.don} and the name or the index of the corresponding donor record (row) in \code{data.don}.  Note that this type of matrix is returned by the functions \code{\link[StatMatch]{NND.hotdeck}}, \code{\link[StatMatch]{RANDwNND.hotdeck}}, \code{\link[StatMatch]{rankNND.hotdeck}}, and \code{\link[StatMatch]{mixed.mtc}}.
 }
 
 \item{z.vars}{
-A character vector with the name of the variables available only in \code{data.don} that should be \dQuote{donated} to \code{data.rec}.
+A character vector with the names of the variables available only in \code{data.don} that should be \dQuote{donated} to \code{data.rec}.
 }
 
 \item{dup.x}{
@@ -48,7 +48,7 @@ This function allows to create the synthetic (or fused) data set after the appli
 
 \value{
 
-The \code{data.rec} data frame with the \code{z.vars} filled in and, when \code{dup.x=TRUE}, with the values of the matching variables for the donor records.
+The data frame \code{data.rec} with the \code{z.vars} filled in and, when \code{dup.x=TRUE}, with the values of the matching variables \code{match.vars} observed on the donor records.
 
 }
 \references{

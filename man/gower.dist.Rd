@@ -43,7 +43,7 @@ When \code{TRUE} (default) the extension of the Gower's dissimilarity measure pr
 \details{
 This function computes distances among records when variables of different type (categorical and continuous) have been observed. In order to handle different types of variables, the Gower's  dissimilarity coefficient (Gower, 1971) is used. By default (\code{KR.corr=TRUE}) the Kaufman and Rousseeuw (1990) extension of the Gower's dissimilarity coefficient is used. 
 
-The final dissimilarity between the \emph{i}th and \emph{j}th units is obtained as a weighted sum of dissimilarities for each variable:
+The final dissimilarity between the \emph{i}th and \emph{j}th unit is obtained as a weighted sum of dissimilarities for each variable:
 \deqn{d(i,j) = \frac{\sum_k{\delta_{ijk} d_{ijk}}}{\sum_k{\delta_{ijk}}}}{d(i,j) = sum_k(delta_ijk * d_ijk ) / sum_k( delta_ijk )} 
 
 In particular, \eqn{d_{ijk}}{d_ijk} represents the distance between the \emph{i}th and \emph{j}th unit computed considering the \emph{k}th variable. It depends on the nature of the variable:

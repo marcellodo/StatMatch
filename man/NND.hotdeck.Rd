@@ -1,7 +1,7 @@
 % --- Source file: NND_hotdeck.Rd ---
 \name{NND.hotdeck}
 \alias{NND.hotdeck}
-\title{Distance Hot Deck Method for Statistical Matching}
+\title{Distance Hot Deck method.}
 
 \description{
   This function implements the distance hot deck method to match the records of two data sources that share some variables. 
@@ -16,17 +16,17 @@ NND.hotdeck(data.rec, data.don, match.vars,
 \arguments{
 
 \item{data.rec}{
-  	A matrix or data frame that plays the role of \emph{recipient} in the statistical matching application.  This data frame must contain the variables (columns) that should be used, directly or indirectly, in the computation of distances between its observations (rows) and those of \code{data.don}. 
+  	A matrix or data frame that plays the role of \emph{recipient}.  This data frame must contain the variables (columns) that should be used, directly or indirectly, in the computation of distances between its observations (rows) and those of \code{data.don}. 
 
 Missing values (\code{NA}) are allowed.
 }
 
 \item{data.don}{
-   A matrix or data frame that plays the role of \emph{donor} in the statistical matching application.  The variables (columns) involved, directly or indirectly, in the computation of distance must be the same and of the same type as those in \code{data.rec}.   
+   A matrix or data frame that plays the role of \emph{donor}.  The variables (columns) involved, directly or indirectly, in the computation of distance must be the same and of the same type as those in \code{data.rec}.   
 }
 
 \item{match.vars}{
-A character vector with the names of the variables (the columns in both the data frames) that have to be used to compute distances among records (rows) in \code{data.rec} and those in \code{data.don}.
+A character vector with the names of the matching variables (the columns in both the data frames) that have to be used to compute distances among records (rows) in \code{data.rec} and those in \code{data.don}.
 }
 
 \item{don.class}{
@@ -36,19 +36,18 @@ When not specified (default) no donation classes are used.  This may result in a
 }
 
 \item{dist.fun}{
-A string with the name of the distance function that has to be used.  The following distances are allowed: \dQuote{Manhattan} (aka \dQuote{City block}; default), \dQuote{Euclidean},  \dQuote{exact} or \dQuote{exact matching}, \dQuote{Gower}, \dQuote{minimax} or one of the distance functions available in the package \pkg{proxy}.  Note that the distance is computed using the function  \code{\link[proxy]{dist}} of the package \pkg{proxy} with the exception of the \dQuote{Gower} and \dQuote{minimax} cases.  When \cr \code{dist.fun="Gower"} the Gower dissimilarity is considered (see function \code{\link[StatMatch]{gower.dist}} for details).
-When \code{dist.fun="minimax"} the maximum distance is considered (see function \code{\link[StatMatch]{maximum.dist}} for details).
+A string with the name of the distance function that has to be used.  The following distances are allowed: \dQuote{Manhattan} (aka \dQuote{City block}; default), \dQuote{Euclidean}, \dQuote{Mahalanobis},\dQuote{exact} or \dQuote{exact matching}, \dQuote{Gower}, \dQuote{minimax} or one of the distance functions available in the package \pkg{proxy}.  Note that the distance is computed using the function  \code{\link[proxy]{dist}} of the package \pkg{proxy} with the exception of the \dQuote{Gower} (see function \code{\link[StatMatch]{gower.dist}} for details), \dQuote{Mahalanobis} (function \code{\link[StatMatch]{mahalanobis.dist}}) and \dQuote{minimax} (see \code{\link[StatMatch]{maximum.dist}}) cases.
 
-When \code{dist.fun= "Manhattan" }, \dQuote{Euclidean} or \dQuote{minimax} all the non numeric variables in \code{data.rec} and \code{data.don} will be converted to numeric.  On the contrary, when \code{dist.fun="exact"} or \dQuote{exact matching}, all the variables in \code{data.rec} and \code{data.don} will be converted to character and, as far as the distance computation is concerned, they will be treated as categorical nominal variables, i.e. distance is 0 if a couple of units shows the same response category and 1 otherwise. 
+When \code{dist.fun="Manhattan"}, \code{"Euclidean"}, \code{"Mahalanobis"} or \code{"minimax"} all the non numeric variables in \code{data.rec} and \code{data.don} will be converted to numeric.  On the contrary, when \code{dist.fun="exact"} or \dQuote{exact matching}, all the variables in \code{data.rec} and \code{data.don} will be converted to character and, as far as the distance computation is concerned, they will be treated as categorical nominal variables, i.e. distance is 0 if a couple of units shows the same response category and 1 otherwise. 
 
 }
 
 \item{constrained}{
-Logical. When \code{constrained=FALSE} (default) each record in \code{data.don} can be used as a donor more than once.  On the contrary, when \cr \code{constrained=TRUE} each record in \code{data.don} can be used as a donor only once.  In this case, the set of donors is selected by solving a transportation problem, so to minimize the overall matching distance.  See description of the argument \code{constr.alg} for details.
+Logical.  When \code{constrained=FALSE} (default) each record in \code{data.don} can be used as a donor more than once.  On the contrary, when \cr \code{constrained=TRUE} each record in \code{data.don} can be used as a donor only once.  In this case, the set of donors is selected by solving a transportation problem, in order to minimize the overall matching distance.  See description of the argument \code{constr.alg} for details.
 }
 
 \item{constr.alg}{
-A string that has to be specified when \code{constrained=TRUE}.  Two choices are available: \dQuote{lpSolve} and \dQuote{relax}.  In the first case, \code{constr.alg="lpSolve"}, the transportation problem is solved by means of the function \code{\link[lpSolve]{lp.transport}} available in the package \pkg{lpSolve}.  When \code{constr.alg="relax"} the transportation problem is solved using RELAX--IV algorithm from Bertsekas and Tseng (1994), implemented in function \code{\link[optmatch]{pairmatch}} available in the package \pkg{optmatch}.  Note that \code{constr.alg="relax"} is faster and requires less computational effort, but the usage of this algorithm is allowed only for research purposes (for details see function \code{relaxinfo()} in the package \pkg{optmatch}).
+A string that has to be specified when \code{constrained=TRUE}.  Two choices are available: \dQuote{lpSolve} and \dQuote{relax}.  In the first case, \code{constr.alg="lpSolve"}, the transportation problem is solved by means of the function \code{\link[lpSolve]{lp.transport}} available in the package \pkg{lpSolve}.  When \code{constr.alg="relax"} the transportation problem is solved using RELAX--IV algorithm from Bertsekas and Tseng (1994), implemented in function \code{\link[optmatch]{pairmatch}} available in the package \pkg{optmatch}.  Note that \code{constr.alg="relax"} is faster  but the usage of the algorithm is allowed only for research purposes (for details see function \code{relaxinfo()} in the package \pkg{optmatch}).
 }
 
 \item{...}{ 
@@ -59,11 +58,11 @@ Additional arguments that may be required by \code{\link[StatMatch]{gower.dist}}
 }
   
 \details{
-This function finds a donor record in \code{data.don} for each record in the recipient data frame \code{data.rec}.  In the unconstrained case, for each record in the recipient data set it searches for the closest donor record in \code{data.don}, according to the chosen distance function.  When there are more donor records are at the minimum distance from the given recipient record, one of them is picked at random.
+This function finds a donor record in \code{data.don} for each record in the recipient data frame \code{data.rec}.  In the unconstrained case, it searches for the closest donor record in \code{data.don} for each record in the recipient data set, according to the chosen distance function.  When for a given recipient record there are more donors available at the minimum distance, one of them is picked at random.
 
 In the constrained case the set of donors is chosen in order to minimize the overall matching distance.  In this case the number of units (rows) in the donor data set has to be larger or equal to the number of units of the recipient data set.  When the donation classes are used, this condition must be satisfied in each donation class.  For further details on nearest neighbor distance hot deck refer to Chapter 2 in D'Orazio \emph{et al.} (2006).
 
-Note that this function can also be used to impute missing values in a data set using the nearest neighbor distance hot deck.  In this case \code{data.rec} is the part of the initial data set that contains missing values; on the contrary, \code{data.don} is the part of the data set without missing values.  See \R code in the Examples for details.
+This function can also be used to impute missing values in a data set using the nearest neighbor distance hot deck.  In this case \code{data.rec} is the part of the initial data set that contains missing values; on the contrary, \code{data.don} is the part of the data set without missing values.  See \R code in the Examples for details.
 } 
 
 \value{
