@@ -1,10 +1,17 @@
+1.0.3	now mixed.mtc() can handle also categorical common variables
+
+		fixed a bug in comb.samples() when handling factor levels
+
+		new error messages in RANDwNND.hotdeck() when computing ditances 
+		between units with missing values
+
 1.0.2   new function mahalanobis.dist() to compute the mahalanobis distance
 
 		fixed a bug in mixed.mtc() when computing the range of admissible values
 		for rho_yz
 		
 		fixed a bug in NND.hotdeck()  and RANDwNND.hotdeck() when
-		managing of the row.names
+		managing the row.names
 		
 1.0.1	new functions harmonize.x() and comb.samples() to perform statistical
 		matching when dealing with complex sample survey data via 
@@ -12,12 +19,12 @@
 
 		new function Frechet.bounds.cat() to explore uncertainty when dealing with 
 		categorical variables. The function Fbwidths.by.x()	permits to
-		identify the subset of the common variables that perform better in reducing 
+		identify the subset of the common variables that performs better in reducing 
 		uncertainty
 		
 		New function rankNND.hotdeck() to perform rank hot deck distance
 		
-		Update of RANDwNND.hotdeck() to use donor weight in selecting the donor
+		Update of RANDwNND.hotdeck() to use donor weight in selecting a donor
 		
 		new function maximum.dist() that computes ddistances according to the
 		L^Inf norm. A rank trasnformation of the variables can be used.

@@ -49,7 +49,7 @@ rankNND.hd <- function (x.rec, x.don, w.rec=NULL, w.don=NULL)
 { 
     nr <- length(x.rec)
 	nd <- length(x.don)
-	if(nr>nd) cat("Warning: the number of donors is less than the number of recipients", fill=TRUE)
+	if(nr>nd) cat("Warning: the number of donors is less \n than the number of recipients", fill=TRUE)
 
     if(is.null(w.rec)) w.rec <- rep(1,nr)
     if(is.null(w.don)) w.don <- rep(1,nd)
@@ -106,11 +106,11 @@ rankNND.hd <- function (x.rec, x.don, w.rec=NULL, w.don=NULL)
 			l.don <- split(data.don[ ,c(var.don, weight.don)], f=as.list(data.don[ ,don.class]))
 		}
 		if(length(l.rec)!=length(l.don)){
-			cat("The no. of donation classes in recipient data is not equal to the no. of donation classes in donor data", fill=TRUE)
-			stop("Possible reason: the variables used to classify units are not defined as factors or are factors with different levels") 	
+			cat("The no. of donation classes in recipient data is not equal to \n the no. of donation classes in donor data", fill=TRUE)
+			stop("Possible reason: the variables used to classify units are not \n defined as factors or are factors with different levels")
 		}
 		if(!identical(names(l.rec), names(l.don)))
-			cat("Warning: the donation classes seem built using different factors with differnt levels")
+			cat("Warning: the donation classes seem built using \n different factors with differnt levels")
 
         nn.r <- unlist(lapply(l.rec, nrow))
         nn.d <- unlist(lapply(l.don, nrow))
@@ -120,7 +120,7 @@ rankNND.hd <- function (x.rec, x.don, w.rec=NULL, w.don=NULL)
         nn.r <- nn.r[nn.r>0]
         nn.d <- nn.d[nn.r>0]
         if(any(nn.d==0)) {
-			stop("For some donation classes there are NO donors available. Please modify the definition of the donation classes")
+			stop("For some donation classes there are NO donors available. \n Please modify the definition of the donation classes")
 		}	
 		H <- length(l.rec)
 		mtc.ids <- as.list(numeric(H))

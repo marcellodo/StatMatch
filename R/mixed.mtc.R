@@ -4,9 +4,7 @@ function (data.rec, data.don, match.vars, y.rec, z.don, method="ML", rho.yz=0, m
 	if((micro & constr.alg=="lpSolve") | (micro & constr.alg=="lpsolve") ) require(lpSolve)
 	if((micro & constr.alg=="relax") ) require(optmatch)
 	
-	if(is.list(data.rec))  data.rec <- data.matrix(data.rec)
-	if(is.list(data.don))  data.don <- data.matrix(data.don)
-	nA <- nrow(data.rec)	
+	nA <- nrow(data.rec)
 	nB <- nrow(data.don)
 	A.lab <- rownames(data.rec)
 	if(is.null(A.lab)) A.lab <- 1:nA
@@ -14,7 +12,20 @@ function (data.rec, data.don, match.vars, y.rec, z.don, method="ML", rho.yz=0, m
 	B.lab <- rownames(data.don)
 	if(is.null(B.lab)) B.lab <- 1:nB
 	B.lab <- paste("B", B.lab, sep="=")
-		
+
+#	if(is.list(data.rec))  data.rec <- data.matrix(data.rec)
+#	if(is.list(data.don))  data.don <- data.matrix(data.don)
+    xrec <- data.rec[,match.vars]
+    xrec <- fact2dummy(data=xrec, all=FALSE)
+    data.rec <- cbind(xrec, data.rec[, y.rec])
+    colnames(data.rec) <- c(colnames(xrec), y.rec)
+
+    xdon <- data.don[,match.vars]
+    xdon <- fact2dummy(data=xdon, all=FALSE)
+    data.don <- cbind(xdon, data.don[, z.don])
+    colnames(data.don) <- c(colnames(xdon), z.don)
+
+    match.vars <- colnames(xrec)
 	p.x <- length(match.vars)
 	x.A <- matrix(c(data.rec[,match.vars]), ncol=p.x)
 	pos.x.A <- match(match.vars, colnames(data.rec))
@@ -217,8 +228,9 @@ function (data.rec, data.don, match.vars, y.rec, z.don, method="ML", rho.yz=0, m
 
 		# the function pairmatch() in library optMatch are used
         else if(constr.alg=="relax"){
-                if(nA > nB) stop("pairmatch() function in library optmatch requires the no. 
-                                                        of donors to be greater or equal than the no. of recipients")
+                if(nA > nB) stop("pairmatch() function in package 'optmatch' \n
+                                  requires the no. of donors to be greater \n
+                                  or equal than the no. of recipients")
                 out.pr <- pairmatch(madist)
                 labs <- names(out.pr)
                 tt <- labs %in% A.lab

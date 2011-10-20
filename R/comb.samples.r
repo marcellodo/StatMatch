@@ -4,20 +4,18 @@ function(svy.A, svy.B, svy.C=NULL, y.lab, z.lab, form.x, estimation=NULL, ...)
 
     require(survey)
     data.A <- svy.A$variables
-    l1.y <- levels(data.A[, y.lab])[1]
-    if( grepl("(", l1.y, fixed=TRUE) || grepl(")", l1.y, fixed=TRUE) || grepl("[", l1.y, fixed=TRUE) || grepl("]", l1.y, fixed=TRUE) ){
-        levels(data.A[, y.lab]) <- 1:nlevels(data.A[, y.lab])
-        svy.A$variables <- data.A
-    }
+    y.lev <- levels(data.A[, y.lab])
+    levels(data.A[, y.lab]) <- 1:nlevels(data.A[, y.lab])
+    svy.A$variables <- data.A
+
     n.A <- nrow(data.A)
     w.A <- weights(svy.A)
 
     data.B <- svy.B$variables
-    l1.z <- levels(data.B[, z.lab])[1]
-    if( grepl("(", l1.z, fixed=TRUE) || grepl(")", l1.z, fixed=TRUE) || grepl("[", l1.z, fixed=TRUE) || grepl("]", l1.z, fixed=TRUE) ){
-        levels(data.B[, z.lab]) <- 1:nlevels(data.B[, z.lab])
-        svy.B$variables <- data.B
-    }
+    z.lev <- levels(data.B[, z.lab])
+    levels(data.B[, z.lab]) <- 1:nlevels(data.B[, z.lab])
+    svy.B$variables <- data.B
+
     n.B <- nrow(data.B)
     w.B <- weights(svy.B)
 
@@ -43,18 +41,19 @@ function(svy.A, svy.B, svy.C=NULL, y.lab, z.lab, form.x, estimation=NULL, ...)
     gamma.p <- n.A/(n.A+n.B)
     XX.pool <- gamma.p*XX.wA + (1-gamma.p)*XX.wB
     YZ.CIA <- t(beta.yx.A) %*% XX.pool %*% beta.zx.B
-
+    dimnames(YZ.CIA) <- list(y.lev, z.lev)
+    
 ###########################
 # use of auxiliary sample "svy.C"
     if(!is.null(svy.C)){
         data.C <- svy.C$variables
-        if( grepl("(", l1.y, fixed=TRUE) || grepl(")", l1.y, fixed=TRUE) || grepl("[", l1.y, fixed=TRUE) || grepl("]", l1.y, fixed=TRUE) ){
-            levels(data.C[, y.lab]) <- 1:nlevels(data.C[, y.lab])
-        }
-
-        if( grepl("(", l1.z, fixed=TRUE) || grepl(")", l1.z, fixed=TRUE) || grepl("[", l1.z, fixed=TRUE) || grepl("]", l1.z, fixed=TRUE) ){
-            levels(data.C[, z.lab]) <- 1:nlevels(data.C[, z.lab])}
-
+        y.lev.C <- levels(data.C[, y.lab])
+        z.lev.C <- levels(data.C[, z.lab])
+        #check
+        if( all.equal(y.lev, y.lev.C) ) levels(data.C[, y.lab]) <- 1:nlevels(data.C[, y.lab])
+        else stop("The levels of y.lab in svy.A and in svy.C do not match")
+        if( all.equal(z.lev, z.lev.C) ) levels(data.C[, z.lab]) <- 1:nlevels(data.C[, z.lab])
+        else stop("The levels of z.lab in svy.B and in svy.C do not match")
         svy.C$variables <- data.C
         n.C <- nrow(data.C)
         w.C <- weights(svy.C)
@@ -101,6 +100,7 @@ function(svy.A, svy.B, svy.C=NULL, y.lab, z.lab, form.x, estimation=NULL, ...)
         ww.C <- weights(cal.C)
         f.yz <- paste("ww.C", paste(y.lab, z.lab, sep="+"), sep="~")
         YZ.noCIA <- xtabs(as.formula(f.yz), data=data.C)
+        dimnames(YZ.noCIA) <- list(y.lev, z.lev)
         out <- list(yz.CIA=YZ.CIA, cal.C=cal.C, yz.est=YZ.noCIA, call=match.call())
     }
 # output

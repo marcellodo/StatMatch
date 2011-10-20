@@ -27,11 +27,11 @@ function (data.rec, data.don, match.vars=NULL, don.class=NULL, dist.fun="Manhatt
     if(!is.null(match.vars)){
         if(dist.fun=="Euclidean" || dist.fun=="euclidean" || dist.fun=="Manhattan" || dist.fun=="manhattan" || dist.fun=="Mahalanobis" || dist.fun=="mahalanobis" || dist.fun=="minimax" || dist.fun=="MiniMax" || dist.fun=="Minimax"){
             cat("Warning: The ", dist.fun, " distance is being used", fill=TRUE)
-            cat("All the categorical matching variables in rec and don data.frames, if present, are recoded into dummies", fill=TRUE)
+            cat("All the categorical matching variables in rec and don data.frames, \n if present, are recoded into dummies", fill=TRUE)
         }
         if(dist.fun=="exact" || dist.fun=="exact matching"){
             cat("Warning: the exact matching distance is being used", fill=TRUE)
-            cat("all the matching variables in rec and don are converted to character variables and are treated as categorical nominal", fill=TRUE)
+            cat("all the matching variables in rec and don are converted to \n character variables and are treated as categorical nominal", fill=TRUE)
         }
     }
 ################
@@ -117,6 +117,11 @@ RANDwNND.hd <- function (rec, don, dfun="Manhattan", cut.don="rot", k=NULL, w.do
     
 	for(i in 1:nr){
         vd <- mdist[i,]
+        if(sum(is.na(vd))==nd) stop("The missing values on the mtc. vars determine missing distances")
+#        cat("rec obs: ", i, fill=TRUE) #add check
+#        cat("number of donors: ", nd, fill=TRUE) #add check
+#        cat("number of non-miss distances: ", sum(!is.na(vd)), fill=TRUE) #add check
+#        cat("distances:", summary(vd), fill=TRUE) #add check
         min.dist <- min(vd, na.rm=TRUE) # smallest distance recipient-donor
         min.d[i] <- min.dist
         max.d[i] <- max(vd, na.rm=TRUE)
@@ -145,6 +150,8 @@ RANDwNND.hd <- function (rec, don, dfun="Manhattan", cut.don="rot", k=NULL, w.do
 			if(length(vd)<k) kk <- length(appo)
 			else kk <- k
             pos <- pos[1:kk]
+#            cat("k:", k, fill=TRUE) #add check
+#            cat("closest donors", pos, fill=TRUE) #add check
             appo <- d.lab[pos]
 			short.vd <- vd[pos]
 			short.ww <- ww[pos]
@@ -229,17 +236,17 @@ pps.draw <- function(n, w){
 			l.don <- split(data.don, f=as.list(data.don[ ,don.class]))
 		}
 		if(length(l.rec)!=length(l.don)){
-			cat("The no. of donation classes in recipient data is not equal to the no. of donation classes in donor data", fill=TRUE)
-			stop("Possible reason: the variables used to classify units are not defined as factors or are factors with different levels") 	
+			cat("The no. of donation classes in recipient data is not equal \n to the no. of donation classes in donor data", fill=TRUE)
+			stop("Possible reason: the variables used to classify units are not \n defined as factors or are factors with different levels")
 		}
 		if(!identical(names(l.rec), names(l.don)))
-			cat("Warning: the donation classes seem built using different factors with differnt levels")
+			cat("Warning: the donation classes seem built \n using different factors with differnt levels")
 			
 		nn.r <- unlist(lapply(l.r.lab, length))
 		nn.d <- unlist(lapply(l.d.lab, length))
 				
 		if(sum((nn.r>0) & (nn.d==0))>0) {
-			stop("In some donation classes there are NO available donors. Please modify the definition of the donation classes")
+			stop("In some donation classes there are NO available donors. \n Please modify the definition of the donation classes")
 		}	
 		l.r.lab <- l.r.lab[nn.r>0]
 		l.d.lab <- l.d.lab[nn.r>0]

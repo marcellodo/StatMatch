@@ -15,11 +15,11 @@ mixed.mtc(data.rec, data.don, match.vars, y.rec, z.don, method="ML",
 \arguments{
 
 \item{data.rec}{
-  	A matrix or data frame that plays the role of \emph{recipient} in the statistical matching application. This data set must contain all variables (columns) that should be used in statistical matching, i.e. the variables called by the arguments \cr \code{match.vars} and \code{y.rec}. Note that, all variables must be continuous. Missing values (\code{NA}) are not allowed.
+  	A matrix or data frame that plays the role of \emph{recipient} in the statistical matching application. This data set must contain all variables (columns) that should be used in statistical matching, i.e. the variables called by the arguments \cr \code{match.vars} and \code{y.rec}. Note that continuous variables are expected, if there are some categorical variables they are recoded into dummies. Missing values (\code{NA}) are not allowed.
 }
 
 \item{data.don}{
-   A matrix or data frame that plays the role of \emph{donor} in the statistical matching application. This data set must contain all the numeric variables (columns) that should be used in statistical matching, i.e. the variables called by the arguments \code{match.vars} and \code{z.don}. All variables must be continuous. Missing values (\code{NA}) are not allowed. 
+   A matrix or data frame that plays the role of \emph{donor} in the statistical matching application. This data set must contain all the numeric variables (columns) that should be used in statistical matching, i.e. the variables called by the arguments \code{match.vars} and \code{z.don}. Note that continuous variables are expected, if there are some categorical variables they are recoded into dummies. Missing values (\code{NA}) are not allowed. 
 }
 
 \item{match.vars}{
@@ -67,7 +67,9 @@ This function implements some mixed methods to perform statistical matching. A m
 (ii) derivation of a complete \dQuote{synthetic} data set (recipient data set filled in with values for the Z variable) using a nonparametric approach.
 
 
-In this case, as far as (i) is concerned, it is assumed that  \eqn{ \left( \mathbf{X},Y,Z \right) }{(\bold{X},Y,Z)} follows a multivariate normal distribution.  In particular, dealing with continuous variables, a particular version of the imputation method known as \emph{predictive mean matching} is used.  This method consists of three steps: 
+In this case, as far as (i) is concerned, it is assumed that  \eqn{ \left( \mathbf{X},Y,Z \right) }{(\bold{X},Y,Z)} follows a multivariate normal distribution.  Please note that if some of \bold{X} are categorical, then they are recoded into dummies before starting with the estimation.  In such a case the assumption of multivariate normal distribution maybe questionable.  
+
+The whole procedure is based on the imputation method known as \emph{predictive mean matching}.  The procedure consists of three steps: 
 
 
 step 1) -- Regression step: the two linear regression models Y vs. \bold{X} and Z vs. \bold{X} are considered and their parameters are estimated. 
@@ -179,98 +181,92 @@ Moriarity, C., and Scheuren, F. (2003). \dQuote{A note on Rubin's statistical ma
 
 \examples{
 
-# Example with fictitious data
-# Set the correlation matrix
-mat.cor <- matrix(0, 4, 4)
-mat.cor[lower.tri(mat.cor)] <- c(0.3, 0.5, 0.7, 0.8, 0.4, 0.8)
-mat.cor <- mat.cor+t(mat.cor)
-diag(mat.cor) <- 1
-dimnames(mat.cor) <- list(c("x1","x2","y","z"), c("x1","x2","y","z"))
+# reproduce the statistical matching framework
+# starting from the iris data.frame
+set.seed(98765)
+pos <- sample(1:150, 50, replace=FALSE)
+ir.A <- iris[pos,c(1,3:5)]
+ir.B <- iris[-pos, 2:5]
 
-# generate data from multivariate normal distribution
-require(mvtnorm)
-data.all <- rmvnorm(n=100, mean=rep(0,4), sigma=mat.cor)
-dimnames(data.all) <- list(1:100, c("x1","x2","y","z"))
-
-# reproduce statistical matching framework
-data.A <- data.all[1:50, 1:3] #z deleted
-data.B <- data.all[51:100, c(1:2,4)] #y deleted
+xx <- intersect(colnames(ir.A), colnames(ir.B))
+xx  # common variables
 
 # ML estimation method under CIA ((rho_YZ|X=0));
 # only parameter estimates (micro=FALSE)
-mtc.1 <- mixed.mtc(data.rec=data.A, data.don=data.B,
-                    match.vars=c("x1","x2"), y.rec="y", z.don="z")
+# only continuous matching variables
+xx.mtc <- c("Petal.Length", "Petal.Width")
+mtc.1 <- mixed.mtc(data.rec=ir.A, data.don=ir.B, match.vars=xx.mtc,
+                    y.rec="Sepal.Length", z.don="Sepal.Width")
 
-# estimated vs. true correlation matrix
-mtc.1$cor - mat.cor
+# estimated correlation matrix
+mtc.1$cor 
+
+# ML estimation method under CIA ((rho_YZ|X=0));
+# only parameter estimates (micro=FALSE)
+# categorical variable 'Species' used as matching variable
+
+xx.mtc <- xx
+mtc.2 <- mixed.mtc(data.rec=ir.A, data.don=ir.B, match.vars=xx.mtc,
+                    y.rec="Sepal.Length", z.don="Sepal.Width")
+
+# estimated correlation matrix
+mtc.2$cor 
+
 
 # ML estimation method with partial correlation coefficient
 # set equal to 0.5 (rho_YZ|X=0.5)
 # only parameter estimates (micro=FALSE)
 
-mtc.2 <- mixed.mtc(data.rec=data.A, data.don=data.B,
-                    match.vars=c("x1","x2"), y.rec="y", 
-                    z.don="z", rho.yz=0.5)
+mtc.3 <- mixed.mtc(data.rec=ir.A, data.don=ir.B, match.vars=xx.mtc,
+                    y.rec="Sepal.Length", z.don="Sepal.Width",
+                    rho.yz=0.5)
 
-# estimated vs. true correlation matrix
-mtc.2$cor - mat.cor
+# estimated correlation matrix
+mtc.3$cor 
 
 # ML estimation method with partial correlation coefficient
 # set equal to 0.5 (rho_YZ|X=0.5)
 # with imputation step (micro=TRUE)
 
-mtc.3 <- mixed.mtc(data.rec=data.A, data.don=data.B,
-                    match.vars=c("x1","x2"), y.rec="y",
-                    z.don="z", rho.yz=0.5, micro=TRUE, 
-                    constr.alg="lpSolve")
-
-# estimated vs. true correlation matrix
-mtc.3$cor - mat.cor
+mtc.4 <- mixed.mtc(data.rec=ir.A, data.don=ir.B, match.vars=xx.mtc,
+                    y.rec="Sepal.Length", z.don="Sepal.Width",
+                    rho.yz=0.5, micro=TRUE, constr.alg="lpSolve")
 
 # first rows of data.rec filled in with z
-head(mtc.3$filled.rec)
+head(mtc.4$filled.rec)
 
-
-
+#
 # Moriarity and Scheuren estimation method under CIA;
 # only with parameter estimates (micro=FALSE)
-mtc.4 <- mixed.mtc(data.rec=data.A, data.don=data.B,
-                    match.vars=c("x1","x2"), y.rec="y",
-                    z.don="z", method="MS")
-
-# estimated vs. true correlation matrix
-mtc.4$cor - mat.cor
-
-# Moriarity and Scheuren estimation method
-# with correlation coefficient set equal to 0.2 (rho_YZ=0.2)
-# only parameter estimates (micro=FALSE)
-
-mtc.5 <- mixed.mtc(data.rec=data.A, data.don=data.B,
-                    match.vars=c("x1","x2"), y.rec="y", 
-                    z.don="z", method="MS", rho.yz=0.2)
+mtc.5 <- mixed.mtc(data.rec=ir.A, data.don=ir.B, match.vars=xx.mtc,
+                    y.rec="Sepal.Length", z.don="Sepal.Width",
+                    method="MS")
 
 # the starting value of rho.yz and the value used
 # in computations
 mtc.5$rho.yz
 
-# estimated vs. true correlation matrix
-mtc.5$cor - mat.cor
+# estimated correlation matrix
+mtc.5$cor 
 
 # Moriarity and Scheuren estimation method
-# with correlation coefficient set equal to 0.6 (rho_YZ=0.6)
+# with correlation coefficient set equal to -0.15 (rho_YZ=-0.15)
 # with imputation step (micro=TRUE)
 
-mtc.6 <- mixed.mtc(data.rec=data.A, data.don=data.B,
-                    match.vars=c("x1","x2"), y.rec="y", z.don="z", 
-                    rho.yz=0.6, method="MS",
+mtc.6 <- mixed.mtc(data.rec=ir.A, data.don=ir.B, match.vars=xx.mtc,
+                    y.rec="Sepal.Length", z.don="Sepal.Width",
+                    method="MS", rho.yz=-0.15, 
                     micro=TRUE, constr.alg="lpSolve")
 
-# estimated vs. true correlation matrix
-mtc.6$cor - mat.cor
+# the starting value of rho.yz and the value used
+# in computations
+mtc.6$rho.yz
+
+# estimated correlation matrix
+mtc.6$cor
 
 # first rows of data.rec filled in with z imputed values
 head(mtc.6$filled.rec)
-
 
 }
 

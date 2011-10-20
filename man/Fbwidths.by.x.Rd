@@ -91,9 +91,12 @@ freq.xz <- xtabs(~Eth+Sex+Age+c.Days, data=quine.B)
 bounds.yz <- Fbwidths.by.x(tab.x=freq.x, tab.xy=freq.xy,
         tab.xz=freq.xz)
 bounds.yz$av.widths
-barplot(bounds.yz$av.widths$av.width,
-         names.arg=row.names(bounds.yz$av.widths), las=2,
-         cex.names=0.75)
+#
+# to view a plot of the av.widths run also the
+#following code
+#barplot(bounds.yz$av.widths$av.width,
+#         names.arg=row.names(bounds.yz$av.widths), las=2,
+#         cex.names=0.75)
 
 }
 

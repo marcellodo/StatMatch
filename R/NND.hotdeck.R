@@ -35,11 +35,11 @@ function (data.rec, data.don, match.vars, don.class=NULL, dist.fun="Manhattan", 
     if(!is.null(match.vars)){
         if(dist.fun=="Euclidean" || dist.fun=="euclidean" ||dist.fun=="Manhattan" || dist.fun=="Mahalanobis" || dist.fun=="mahalanobis" || dist.fun=="manhattan" || dist.fun=="minimax" || dist.fun=="MiniMax" || dist.fun=="Minimax"){
             cat("Warning: The ", dist.fun, " distance is being used", fill=TRUE)
-            cat("All the categorical matching variables in rec and don data.frames, if present are recoded into dummies", fill=TRUE)
+            cat("All the categorical matching variables in rec and don \n data.frames, if present are recoded into dummies", fill=TRUE)
         }
         if(dist.fun=="exact" || dist.fun=="exact matching"){
             cat("Warning: the exact matching distance is being used", fill=TRUE)
-            cat("all the matching variables in rec and don are converted to character variables and are treated as categorical nominal", fill=TRUE)
+            cat("all the matching variables in rec and don are converted \n to character variables and are treated as categorical nominal", fill=TRUE)
         }
     }
 
@@ -51,7 +51,7 @@ NND.hd <- function (rec, don, dfun="Manhattan", constr=FALSE, c.alg=NULL, ...)
     p <- ncol(rec)
 	nr <- nrow(x.rec)
 	nd <- nrow(x.don)
-	if(nr>nd) cat("Warning: the number of donors is less than the number of recipients", fill=TRUE)
+	if(nr>nd) cat("Warning: the number of donors is less than \n the number of recipients", fill=TRUE)
 
     r.lab <- rownames(x.rec)
 	if(is.null(r.lab)) r.lab <- paste("rec", 1:nr, sep="=")
@@ -107,6 +107,7 @@ NND.hd <- function (rec, don, dfun="Manhattan", constr=FALSE, c.alg=NULL, ...)
 		don.lab <- numeric(nr)
 		for(i in 1:nr){
 			vd <- mdist[i,]
+			if(all(is.na(vd))) stop("All the distances are NA \n this is due to the presence of NA in the \n matching variables")
 			min.d <- min(vd) # smallest distance recipient-donor
 			dist.rd[i] <- min.d
 			appo <- d.lab[vd==min.d]
@@ -130,7 +131,7 @@ NND.hd <- function (rec, don, dfun="Manhattan", constr=FALSE, c.alg=NULL, ...)
                 appo <- lp.transport(cost.mat=mdist, row.signs=r.sig, row.rhs=r.rhs, col.signs=c.sig, col.rhs=c.rhs)
 		}   
 		else if(nr > nd){
-			stop("There more recipients than donors!")
+			warning("There more recipients than donors!")
 			cat("some donors will be used more than once", fill=TRUE)
 			r.sig <- rep("==", nr)
 			r.rhs <- rep(1, nr)
@@ -148,8 +149,7 @@ NND.hd <- function (rec, don, dfun="Manhattan", constr=FALSE, c.alg=NULL, ...)
 
 # the function pairmatch() in library optMatch are used
 	if(constr && c.alg=="relax"){
-		if(nr > nd) stop("pairmatch() function in library optmatch requires the no. 
-							of donors to be greater or equal than the no. of recipients")
+		if(nr > nd) stop("The pairmatch() function in package 'optmatch' requires the no. \n of donors to be greater or equal than the no. of recipients")
 		out.pr <- pairmatch(mdist)
 		labs <- names(out.pr)
 		tt <- labs %in% r.lab
@@ -194,10 +194,10 @@ NND.hd <- function (rec, don, dfun="Manhattan", constr=FALSE, c.alg=NULL, ...)
 		}
 		if(length(l.rec)!=length(l.don)){
 			cat("The no. of donation classes in recipient data is not equal to the no. of donation classes in donor data", fill=TRUE)
-			stop("Possible reason: the variables used to classify units are not defined as factors or are factors with different levels") 	
+			stop("Possible reason: the variables used to group the units are \n not defined as factors or are factors with different levels")
 		}
 		if(!identical(names(l.rec), names(l.don)))
-			cat("Warning: the donation classes seem built using different factors with differnt levels")
+			cat("Warning: the donation classes seem built using \n different factors with differnt levels")
 		if(p==1){
             nn.r <- unlist(lapply(l.rec, length))
             nn.d <- unlist(lapply(l.don, length))
@@ -211,7 +211,7 @@ NND.hd <- function (rec, don, dfun="Manhattan", constr=FALSE, c.alg=NULL, ...)
         nn.r <- nn.r[nn.r>0]
         nn.d <- nn.d[nn.r>0]
         if(any(nn.d==0)) {
-			stop("For some donation classes there are NO donors available. Please modify the definition of the donation classes")
+			stop("For some donation classes there are NO donors available. \n Please modify the definition of the donation classes")
 		}	
 		H <- length(l.rec)
 		mtc.ids <- as.list(numeric(H))
