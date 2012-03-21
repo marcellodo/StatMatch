@@ -1,4 +1,5 @@
-0d7963e69e283f0044a5d49ce95ebb71 *DESCRIPTION
+6d6c42ad1fa28f81850a137773b6d5d4 *DESCRIPTION
+360b947eab2890c7bd056fdba889343c *NAMESPACE
 346b895e89eede92acd97348b9d80368 *NEWS
 ccbf147c1cc35c89d7a9e777fdb730ef *R/Fbwidths.by.x.R
 bdd46f0f303288491179c3a55ce47700 *R/Frechet.bounds.cat.R
@@ -14,7 +15,7 @@ d4ce77bd485a469b4ee91d086bd0b683 *R/mahalanobis.dist.R
 ad86ce85092398aa04cce1835140d4c9 *R/mixed.mtc.R
 fb7632ad5c9b9ed2ce3ffed62d10d2b2 *R/rankNND_hotdeck.R
 8df137063461c0a13d67c3e3cebb29f6 *inst/doc/Statistical_Matching_with_StatMatch.Rnw
-46549231f569cbd75a6c9f4357cb9198 *inst/doc/Statistical_Matching_with_StatMatch.pdf
+921127eb9bf10dcaa1230be5e3bb89b7 *inst/doc/Statistical_Matching_with_StatMatch.pdf
 afd54295cfd6983e09a5ac92025d070a *man/Fbwidths.by.x.Rd
 675351edeb3e7f711bbe5765d9cb2c5e *man/Frechet.bounds.cat.Rd
 fad584905a91b8ea0e6f2b169fb2d838 *man/NND.hotdeck.Rd
