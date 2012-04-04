@@ -1,3 +1,6 @@
+1.0.5	fixed some minor bugs
+1.0.4	fixed some minor bugs
+
 1.0.3	now mixed.mtc() can handle also categorical common variables
 
 		fixed a bug in comb.samples() when handling factor levels

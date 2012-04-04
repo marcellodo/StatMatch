@@ -15,12 +15,12 @@ function (data.rec, data.don, match.vars, y.rec, z.don, method="ML", rho.yz=0, m
 
 #	if(is.list(data.rec))  data.rec <- data.matrix(data.rec)
 #	if(is.list(data.don))  data.don <- data.matrix(data.don)
-    xrec <- data.rec[,match.vars]
+    xrec <- data.rec[,match.vars, drop=FALSE]
     xrec <- fact2dummy(data=xrec, all=FALSE)
     data.rec <- cbind(xrec, data.rec[, y.rec])
     colnames(data.rec) <- c(colnames(xrec), y.rec)
 
-    xdon <- data.don[,match.vars]
+    xdon <- data.don[,match.vars, drop=FALSE]
     xdon <- fact2dummy(data=xdon, all=FALSE)
     data.don <- cbind(xdon, data.don[, z.don])
     colnames(data.don) <- c(colnames(xdon), z.don)
