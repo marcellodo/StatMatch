@@ -1,3 +1,6 @@
+1.1.0   The function comb.samples() now allows to derive predicions
+		at micro level for the target variables Y and Z
+
 1.0.5	fixed some minor bugs
 1.0.4	fixed some minor bugs
 

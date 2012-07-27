@@ -1,5 +1,5 @@
 'Frechet.bounds.cat' <-
-function(tab.x, tab.xy, tab.xz, print.f="tables")
+function(tab.x, tab.xy, tab.xz, print.f="tables", tol= 0.0001)
 {
     lab.x <- names(dimnames(tab.x))
     if(all(nchar(lab.x)==0)) lab.x <- paste("x",1:length(lab.x), sep="")
@@ -33,7 +33,7 @@ function(tab.x, tab.xy, tab.xz, print.f="tables")
     z.gx <- prop.table(p.xz, ndim[-pos.z])
 
 # check marginal distribution of the X variables
-    tol <- 1e-06
+
     d1.x <- 1:length(dim(p.xy))
     m1.x <- margin.table(p.xy, d1.x[-pos.y])
     if(any(abs(m1.x-p.x)>tol) )
@@ -75,6 +75,7 @@ function(tab.x, tab.xy, tab.xz, print.f="tables")
     out.CIA <- as.list(numeric(H))
     out.low <- as.list(numeric(H))
     out.up <- as.list(numeric(H))
+    unc <- as.list(numeric(H)) 
 
     for(h in 1:H){
         yy <- say.gx[[h]][,"Freq"]
@@ -91,6 +92,7 @@ function(tab.x, tab.xy, tab.xz, print.f="tables")
         uu <- outer(yy, zz, FUN="pmin")
         out.low[[h]] <- ll*xx
         out.up[[h]] <- uu*xx
+        unc[[h]] <- sum((uu-ll) * outer(yy, zz, FUN="*") * xx)
     }
 
     aa.CIA <- array(unlist(out.CIA), dim=c(dim(out.CIA[[1]]),H) )
@@ -110,7 +112,7 @@ function(tab.x, tab.xy, tab.xz, print.f="tables")
     l.z <- l.z[-p.z]
     class(fine.CIA) <- class(fine.low) <- class(fine.up) <- "table"
     dimnames(fine.CIA) <- dimnames(fine.low) <-  dimnames(fine.up) <- c(l.y, l.z)
-    res.1 <- list(CIA=fine.CIA, low.cx=fine.low, up.cx=fine.up)
+    res.1 <- list(CIA=fine.CIA, low.cx=fine.low, up.cx=fine.up, unc=sum(unlist(unc)))
 
     if(print.f=="tables"){
         out <- c(res.0, res.1)
@@ -123,7 +125,7 @@ function(tab.x, tab.xy, tab.xz, print.f="tables")
         dataf$CIA <- c(res.1$CIA)
         dataf$up.cx <- c(res.1$up.cx)
         dataf$up.u <- c(res.0$up.u)
-        out <- dataf
+        out <- list(bounds=dataf, unc=res.1$unc)
     }
     out
 }

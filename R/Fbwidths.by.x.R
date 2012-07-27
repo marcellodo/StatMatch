@@ -32,11 +32,13 @@ function(tab.x, tab.xy, tab.xz)
 
     H <- length(appo.var)
     out.rng <- as.list(as.numeric(H))
-    av.rng <- matrix(NA, H,1)
+    av.rng <- matrix(NA, H, 4)
     for(h in 1:H){
         lab <- appo.var[[h]]
         p.x <- match(lab, lab.x)
         xx <- margin.table(prop.x, p.x)
+        av.rng[h,1] <- length(xx)
+        av.rng[h,2] <- sum(xx==0)
         
         p.xy <- match(c(lab,lab.y), lab.xy)
         xy <- margin.table(prop.xy, p.xy)
@@ -47,15 +49,19 @@ function(tab.x, tab.xy, tab.xz)
         fb <- Frechet.bounds.cat(xx, xy, xz, print.f="tables")
         appo <- data.frame(fb$low.cx)
         out.rng[[h]] <- data.frame(appo[,1:2], lower=c(fb$low.cx), upper=c(fb$up.cx), width=c(fb$up.cx-fb$low.cx))
-        av.rng[h,1] <- mean( c(fb$up.cx-fb$low.cx))
+        av.rng[h,3] <- mean( c(fb$up.cx-fb$low.cx))
+        av.rng[h,4] <- fb$unc
+   
     }
     lab.list <- paste("|", lapply(appo.var, paste, collapse="+"), sep="")
     n.vars <- lapply(appo.var, length)
-    av.rng <- data.frame(n.vars=unlist(n.vars), av.width=c(av.rng))
+    av.rng <- data.frame(x.vars=unlist(n.vars), x.cells=av.rng[,1], x.freq0=av.rng[,2], 
+                         av.width=av.rng[,3], ov.unc=av.rng[,4])
     row.names(av.rng) <- paste("|", lapply(appo.var, paste, collapse="+"), sep="")
 
-    aa <- n.x - av.rng$n.vars
-    ord.lab <- order(aa, av.rng$av, decreasing=TRUE)
+    aa <- n.x - av.rng$x.vars
+    ord.lab <- order(aa, av.rng$ov, decreasing=TRUE)
+    
     out.rng[[(H+1)]] <- av.rng[ord.lab,]
     names(out.rng) <- c(lab.list, "av.widths")
     out.rng

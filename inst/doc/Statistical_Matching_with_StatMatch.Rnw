@@ -26,7 +26,7 @@
    \large E-mail: \href{mailto:madorazi@istat.it}{madorazi@istat.it}
 }
 
-\date{\large \today}
+\date{\large October 19, 2011}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{document}
@@ -42,9 +42,7 @@
 
 \section{Introduction} \label{sec:intro}
 
-Statistical matching techniques aim at integrating two or more data sources, usually data from sample surveys carried out on the same target population.  In the basic statistical matching framework, there are two data sources $A$ and $B$ sharing a set of variables $X$ then the variable $Y$ is available only in $A$ while the variable $Z$ is observed just in $B$.  In practice the $X$ variables are common to both the data sources, while the variables $Y$ and $Z$ are not jointly observed.  The objective of statistical matching (hereafter denoted as SM) consists in integrating $A$ and $B$ in order to investigate the relationship between $Y$ and $Z$.  It is worth noting that the units in the two data sources come without an identifying code that permits to discover whether the same units has been observed in both the surveys; generally, in sample surveys, the chance the same units is included in both the surveys is close to zero.
-
-The objective of SM can be achieved through a \dQuote{micro} or a \dQuote{macro} approach (D'Orazio \emph{et al.}, 2006b).  In the micro approach SM aims at creating a \dQuote{synthetic} data source in which all the variables, $X$, $Y$ and $Z$, are available (usually $A$ filled in with the values of $Z)$.  In the macro approach the data sources are used to derive an estimate of the parameter of interest, e.g. the correlation coefficient between $Y$ and $Z$ or the contingency table $Y \times Z$.  SM can be performed in a parametric or in a nonparametric framework.  The parametric approach requires the explicit adoption of a model for $(X,Y,Z)$; obviously if the model is misspecified then the results will not be reliable.  The nonparametric approach is more flexible in handling complex situations (mixed type variables).  The two approaches can be mixed: first a parametric model is assumed and its parameters are estimated then a completed synthetic data set is derived through a nonparametric micro approach.  In this manner the advantages of both parametric and nonparametric approaches are maintained: the model is parsimonious while nonparametric techniques offer protection against model misspecification.  An interesting comparison of some mixed methods that deal with continuous $X$, $Y$ and $Z$ variables is carried out by (Moriarity and Scheuren, 2001, 2003).  A further comparison is available in (D'Orazio \emph{et al.}, 2005).  Table \ref{SMapproaches} provides a summary of the objectives and approaches to SM (D'Orazio \emph{et al.}, 2008).
+Statistical matching techniques aim at integrating two or more data sources (usually data from sample surveys) referred to the same target population.  In the basic statistical matching  framework, there are two data sources $A$ and $B$ sharing a set of variables $X$ then the variable $Y$ is available only in $A$ while the variable $Z$ is observed just in $B$.  In practice the $X$ variables are common to both the data sources, while the variables $Y$ and $Z$ are not jointly observed.  The objective of statistical matching (hereafter denoted as SM) consists in investigating the relationship between $Y$ and $Z$.  This objective can be achieved through a \dQuote{micro} or a \dQuote{macro} approach (D'Orazio \emph{et al.}, 2006b).  In the micro approach SM aims at creating a \dQuote{synthetic} data source in which all the variables, $X$, $Y$ and $Z$, are available (usually $A$ filled in with the values of $Z)$.  In the macro approach the data sources are used to derive an estimate of the parameter of interest, e.g. the correlation coefficient between $Y$ and $Z$ or the contingency table $Y \times Z$.  SM can be performed in a parametric or in a nonparametric framework.  The parametric approach requires the explicit adoption of a model for $(X,Y,Z)$; obviously if the model is misspecified then the results will not be reliable.  The nonparametric approach is more flexible in handling complex situations (mixed type variables).  The two approaches can be mixed: first a parametric model is assumed and its parameters are estimated then a completed synthetic data set is derived through a nonparametric micro approach.  In this manner the advantages of both parametric and nonparametric approaches are maintained: the model is parsimonious while nonparametric techniques offer protection against model misspecification.  An interesting comparison of some mixed methods that deal with continuous $X$, $Y$ and $Z$ variables is carried out by (Moriarity and Scheuren, 2001, 2003).  A further comparison is available in (D'Orazio \emph{et al.}, 2005).  Table \ref{SMapproaches} provides a summary of the objectives and approaches to SM (D'Orazio \emph{et al.}, 2008).
 
 \begin{table}
 \begin{center}
@@ -62,7 +60,7 @@ The objective of SM can be achieved through a \dQuote{micro} or a \dQuote{macro}
 \end{center}
 \end{table}
 
-It is worth noting that in the traditional SM framework, when only $A$ and $B$ are available, all the SM methods (parametric, nonparametric and mixed) that use the set of common variables $X$ to match $A$ and $B$, implicitly assume the \emph{conditional independence} (CI) of $Y$ and $Z$ given $X$:
+It is worth noting that in the traditional SM framework when only $A$ and $B$ are available, all the SM methods (parametric, nonparametric and mixed) that use the set of common variables $X$ to match $A$ and $B$, implicitly assume the \emph{conditional independence} (CI) of $Y$ and $Z$ given $X$:
 
 $$ 
 f\left( x,y,z \right)=f \left( y|x \right) \times f\left( z|x \right) \times f\left( x \right)
@@ -80,35 +78,35 @@ $$
 
 The higher is the correlation between $X$ and $Y$ and between $X$ and $Z$, the shorter will be the interval and consequently the lower will be the uncertainty.  In practical applications, by substituting the unknown correlation coefficient with the corresponding estimates it is possible to derive a \dQuote{range} of admissible values of the unknown $\rho_{YZ}$.  The topic of the uncertainty will be covered in the Section \ref{sec:unc}.
 
-Section \ref{sec:SMapplication} will be discuss some practical aspects concerning the preliminary steps necessary to apply SM techniques, with a particular emphasis on the choice of the marching variables;  moreover some example data will be introduced in Section \ref{sec:data}.  In Section \ref{sec:npmicro} some approaches to SM at micro level based on nonparametric methods will be shown. Section \ref{sec:mix} is devoted to the mixed approaches to SM when dealing with continuous variables.  Section \ref{sec:comp_survey} will discuss approaches to SM when dealing with data arising from complex sample surveys from finite populations.
+Section \ref{sec:SMapplication} will be discuss some practical aspects concerning the preliminary steps before applying SM techniques, with a particular emphasis on the choice of the marching variables;  moreover some example data will be introduced.  In Section \ref{sec:npmicro} some approaches to SM at micro level based on nonparametric methods will be shown. Section \ref{sec:mix} is devoted to the mixed approaches to SM when dealing with continuous variables.  Section \ref{sec:comp_survey} will discuss approaches to SM when dealing with data arising from complex sample surveys from finite populations.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Application of SM
 
 \section{Practical steps in an application of statistical matching} \label{sec:SMapplication}
 
-Before applying SM methods in order to integrate two or more data sources some decisions and preprocessing steps are required (Scanu, 2008).  In practice, given two data sources $A$ and $B$ the following steps are necessary:
+Before applying SM methods in order to integrate two or more data sources some decisions and preprocessing steps are required (see Scanu, 2008).  In practice, given two data sources $A$ and $B$ the following steps are necessary:
 
 \begin{itemize}
-\setlength{\itemsep}{0pt}
 	\item Choice of the target variables $Y$ and $Z$, i.e. of the variables observed distinctly in two sample surveys.
-	\item Identification of all the common variables $X$ shared by $A$ and $B$.  In this step some harmonization procedures may be required because of different definitions and/or classifications.  Obviously, if two similar variables can not be harmonized they have to be discarded.  The common variables should not present missing values and the observed values should be accurate (low or absent measurement error).  It is worth noting that the common variables in the two data sources should have the same marginal/joint distribution, if $A$ and $B$ are representative samples of the same population.
+	\item Identification of all the common variables $X$ shared by $A$ and $B$.  In this step some harmonization procedures may be required because of different definitions and/or classifications.  Obviously, if two similar variables can not be harmonized they have to be discarded.  The common variables should not present missing values and the observed values should be accurate (low or absent measurement error).  It is worth noting that the common variable in the two data sources should have the same marginal/joint distribution, if $A$ and $B$ are representative samples of the same population.
 	\item Potentially all the $X$ variables can be used as matching variables but actually, not all them are used in the SM.  Section \ref{sec:mtc_vars} will provide more details concerning this topic.
 	\item The choice of the matching variables is strictly related to the choice concerning the matching framework, i.e. micro or macro objective, parametric, nonparametric or a mixed approach etc.
 	\item Once decided the framework, a SM technique is used to match the samples.
 	\item Finally the results of the matching, whereas possible, should be evaluated.
+	
 \end{itemize}
 
 %%%%%%%%%%%%%%%%%
 % Example data
 
 \subsection{Example data} \label{sec:data}
-The next Sections will provide a series of examples of application of some SM techniques in the \proglang{R} environment (R Development Core Team, 2011) by using the functions provided by the package \pkg{StatMatch} (D'Orazio, 2011).  These examples will refer to data derived from the data set \code{eusilcS} contained in the package \pkg{simPopulation} (Alfons and Kraft, 2011).  This is an artificial data set generated from real Austrian EU-SILC (European Union Statistics on Income and Living Conditions) survey data containing $11\,725$ observations on 18 variables (see \code{eusilcS} help pages for details):
+The next Sections will provide a series of examples of application of some SM techniques in the \proglang{R} environment (R Development Core Team, 2011) by using the functions provided by the package \pkg{StatMatch} (D'Orazio, 2011).  These examples will refer to artificial data derived from the data set \code{eusilcS} contained in the package \pkg{simPopulation} (Alfons and Kraft,2011).  This is an artificial data set generated from real Austrian EU-SILC (European Union Statistics on Income and Living Conditions) data containing $11\,725$ observations on 18 variables (see \code{eusilcS} help pages for details):
 
 % change some options
 <<echo=FALSE, results=hide>>=
-#options(useFancyQuotes="UTF-8")
-options(useFancyQuotes=FALSE)
+options(useFancyQuotes="UTF-8")
+#options(useFancyQuotes=FALSE)
 options(width=65)
 options(warn=-1)
 @
@@ -120,7 +118,7 @@ data(eusilcS)
 str(eusilcS)
 @
 
-In order to use these data to show how SM works, some manipulations are needed to discard not relevant units (obs. with \code{age<16}, whose income and personal economic status are missing), to categorize some variables, etc.
+In order to use these data to show how SM works, some manipulations are needed to discard units not relevant (obs. with \code{age<16}, whose income and personal economic status are missing), to categorize some variables, etc.
 
 <<>>=
 # discard units with age<16
@@ -173,9 +171,9 @@ don.B$wwB <- don.B$rb050/sum(don.B$rb050)*N
 
 \subsection{The choice of the matching variables} \label{sec:mtc_vars}
 
-In SM $A$ and $B$, may share many common variables.  In practice, not all the common variables are used in SM but just the most relevant ones.  The selection of the common variables to be used in SM, usually called \emph{matching variables}, should be performed through opportune statistical methods (descriptive, inferential, etc.) and by consulting subject matter experts.
+In SM $A$ and $B$, may share many common variables.  In practice, not all the common variables are used in SM but just the most relevant ones.  The selection of the common variables to be used when performing SM, usually called \emph{matching variables}, should be performed through opportune statistical methods (descriptive, inferential, etc.) and by consulting subject matter experts.
 
-From a statistical point of view, the choice of the marching variables $X_M$ $(X_M \subseteq X)$ should be carried out in a \dQuote{multivariate sense} in order to identify the subset of the $X_M$ variables connected at the same time with $Y$ and $Z$ (Cohen, 1991); unfortunately this would require the availability of an auxiliary data source in which all the variables $(X,Y,Z)$ are observed.  In the basic SM framework the data in $A$ permit to explore the relationship between $Y$ and $X$, while the relationship between $Z$ and $X$ can be investigated in the file $B$.  Then the results of the two separate analyses have to be combined in some manner; usually the subset of the matching variables is obtained as $X_M = X_Y \cup X_Z $ , being $X_Y$  the subset of the common variables that better explains $Y$ $(X_Y \subseteq X)$, while $X_Z$ is the subset of the common variables that better explain $Z$ $(X_Z \subseteq X)$.
+From a statistical point of view, the choice of the marching variables $X_M$ $(X_M \subseteq X)$ should be carried out in a \dQuote{multivariate sense} in order to identify the subset of the $X_M$ variables connected at the same time with $Y$ and $Z$ (Cohen, 1991); unfortunately this would require the availability of an auxiliary data source in which all the variables $(X,Y,Z)$ are observed.  In the basic SM framework the data in $A$ permit to explore the relationship between $Y$ and $X$, while the relationship between $Z$ and $X$ can be investigated in the file $B$.  Then the results of the two separate analyses have to be combined in some manner; usually the subset of the matching variables is obtained as $X_M = X_Y \cup X_Z $ , being $X_Y$ $(X_Y \subseteq X)$ the subset of the common variables that better explains $Y$, while $X_Z$ is the subset of the common variables that better explain $Z$ $(X_Z \subseteq X)$.
 
 The simplest procedure to identify $X_Y$ consists in fitting regression models to data available in $A$.  The same procedure is carried out with data in $B$ in order to identify the subset of the common variables $X_Z$ that better explains $Z$.
 
@@ -200,11 +198,11 @@ summary(new.work.glm)
 X.Y.glm <- c("age","rb090", "pb220a")
 @
 
-According to the automatic selection procedure it comes out that $X_Y$ is composed by the three variables \code{"age"}, \code{"rb090"} and \code{"pb220a"}.
+According to the automatic selection procedure it comes out that $X_Y$ is composed by three variables.
 
-In complex situations when a nonlinear relationship is supposed to exist, the selection of the subset $X_Y$ can be demanded to nonparametric procedures such as \emph{Classification And Regression Trees} (Breiman \emph{et al.}, 1984).  Instead of fitting a single tree it may be better to fit a \emph{random forest} (Breiman, 2001) by using the functions available in the package \pkg{randomForest} (Liaw and Wiener, 2002).  This technique provides a measure of importance for the predictors (that has to be used with caution).  Alternatively \emph{conditional inference trees} (Hothorn \emph{et al.}, 2006) can be fitted; in this case the tree fitting is based on hypothesis testing and by considering explicitly the association between responses and covariates.  In \proglang{R} these procedures are made available by the functions in the package \pkg{party} (Hothorn \emph{et al.}, 2006).
+In complex situations when a nonlinear relationship is supposed to exist, the selection of the subset $X_Y$ can be demanded to nonparametric procedures such as \emph{Classification And Regression Trees} (Breiman \emph{et al.}, 1984).  Instead of fitting a single tree it may be better to fit a \emph{random forest} (Breiman, 2001).  The random forest can be fitted by using the function \code{randomForest} available in the package \pkg{randomForest} (Liaw and Wiener, 2002).  This technique provides a measure of importance for the predictors (that has to be used with caution).  Alternatively conditional inference trees (Hothorn \emph{et al.}, 2006) can be fitted; in this case the tree fitting is based on hypothesis testing and by considering explicitly the association between responses and covariates.  In \proglang{R} these procedures are made available by the functions in the package \pkg{party} (Hothorn \emph{et al.}, 2006).
 
-The same analysis carried out in $A$ should be carried out in $B$.  In the example data, the target variable $Z$ in $B$ is the \code{netIncome} (better to consider its log).
+The same analysis carried out in $A$ should be carried out in $B$.  In the example data, where the target variable $Z$ in $B$ is the \code{netIncome} (better to consider its log).
 
 <<>>=
 summary(don.B$netIncome)
@@ -237,10 +235,10 @@ If a smaller subset of the matching variables is necessary, then by considering 
 intersect(X.Y.glm, X.Z.lm)
 @
 
-The approach to SM based on the study of uncertainty offers the possibility of choosing the matching variables in a better way: by selecting just those common variables with the highest contribution to the reduction of the uncertainty.  The function \code{Fbwidths.by.x} in \pkg{StatMatch} permits to explore the reduction of uncertainty when all the variables $(X,Y,Z)$ are categorical.  In particular, in the basic SM framework it is possible to show that 
+The approach to SM based on the study of uncertainty offers the possibility of choosing the matching variable in a better way: by selecting just those common variables with the highest contribution to the reduction of the uncertainty.  The function \code{Fbwidths.by.x} in \pkg{StatMatch} permits to explore the reduction of uncertainty when all the variables $(X,Y,Z)$ are categorical.  In particular, in the basic SM framework it is possible to show that 
 
 $$
-P^{(low)}_{j,k} \leq P(Y=j,Z=k) \leq P^{(up)}_{j,k},
+P^{(low)}_{j,k} \leq P(Y=j,Z=k) \leq P^{(up)}_{j,k}, \ \ j=1,2,\ldots,J; \ \ k=1,2,\ldots,K
 $$
 
 \noindent being
@@ -252,7 +250,7 @@ P^{(up)}_{j,k} &=& \sum_{i}  P(X=i) \min \left\{P(Y=j|X=i); P(Z=k|X=i)\right\} \
 
 \noindent for $j=1,\ldots, J$ and $k=1,\ldots, K$, being $J$ and $K$ the categories of $Y$ and $Z$ respectively.
 
-The function \code{Fbwidths.by.x} estimates $\left[ P^{(low)}_{j,k},P^{(up)}_{j,k} \right]$ for each cell in the contingency table $Y \times Z$ in correspondence of all the possible combinations of the $X$ variables; then the reduction of uncertainty is measured naively by considering the average widths of the intervals:
+The function \code{Fbwidths.by.x} estimates $(P^{(low)}_{j,k},P^{(up)}_{j,k})$ for each cell in the contingency table $Y \times Z$ in correspondence of all the possible combinations of the $X$ variables; then the reduction of uncertainty is measured naively by considering the average widths of the intervals:
 
 $$
 \bar{d} = \frac{1}{J \times K} \sum_{j=1}^{J} \sum_{k=1}^{K} ( \hat{P}^{(up)}_{j,k} - \hat{P}^{(low)}_{j,k} )
@@ -271,16 +269,15 @@ out.fbw$av.widths
 
 The results show that there is a marked reduction of the average width when passing from three to four common variables; the model with the matching variables \code{"db040"}, \code{"hsize6"}, \code{"c.age"} and \code{"rb090"} seems a good compromise among reduction of uncertainty and the necessity of not having too many matching variables.  If there is the need of having less matching variables, in this example one should consider just two variables: \code{"c.age"} and \code{"rb090"}; in fact, the models with three matching variables do not provide a great decrease of average uncertainty with respect to the ones with just two.
 
-The choice of the matching variables is a crucial phase in most of the SM applications.  Choosing too many variables increases the complexity of the problem and may affect negatively the results of SM.  In particular, in the micro approach it may introduce additional undesired variability and bias in estimating the joint (marginal) distribution of $X_M$ and $Z$.
+The choice of the matching variables is a crucial aspect.  In most of the SM applications choosing too many variables increases the complexity of the problem and may affect negatively the results of SM.  In particular, in the micro approach this may introduce additional undesired variability and bias as far as the joint (marginal) distribution of $X_M$ and $Z$ is concerned.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Nonparametric micro techniques
 
 \section{Nonparametric micro techniques} \label{sec:npmicro}
 
-Nonparametric approach is very popular in SM when the objective is micro, i.e. the creation of a synthetic data set.  Most of the nonparametric micro approaches consist in filling in the data set chosen as the \emph{recipient} with the values of the variable which is available only in the other data set, the \emph{donor} one.  In this approach it is important to decide which data set plays the role of the recipient.  Usually this is the data set which should be used ad the basis for further statistical analysis; a natural choice would appear that of using the larger ones because it would provide more accurate results.  Unfortunately, such a way of working may provide inaccurate SM results, especially when the sizes of the two data sources are very different.  The reason is quite simple, the larger is the recipient with respect to the donor, the more times a unit in the latter could be selected as a donor; in this manner, there is a high risk that the distribution of the imputed variable does not reflect the original one (estimated form the donor data set).
-
-In the following it will be assumed that $A$ is the recipient while $B$ is the donor, being $n_A \leq n_B$ ($n_A$ and $n_B$ are the sample sizes of $A$ and $B$ respectively).  Hence the objective of SM will be that of filling in $A$ with values of $Z$ (variable available only in $B$).
+Nonparametric approach is very popular in SM when the objective is micro, i.e. the creation of a synthetic data set.  Most of the nonparametric micro approaches consists in filling in the data set chosen as the \emph{recipient} with the values of the variable which is available only in the other data set, the \emph{donor} one.  In this approach it is important to decide which data set plays the role of the recipient.  Usually this is the data set which should be used ad the basis for further statistical analysis, and a natural choice seems that of using the larger ones because it would provide more accurate results.  Unfortunately, such a way of working may provide inaccurate SM results, especially when the sizes of the two data sources are very different.  The reason is quite simple, the larger is the recipient with respect to the donor, the more times a unit in the latter could be selected as a donor; 
+In this manner, there is a high risk that the distribution of the imputed variable does not reflect the original one (estimated form the donor data set).  In the following it will be assumed that $A$ is the recipient while $B$ is the donor, being $n_A \leq n_B$ ($n_A$ and $n_B$ are the sample sizes of $A$ and $B$ respectively).  Hence the objective of SM will be that of filling in $A$ with values of $Y$ (variable available only in $B$).
 
 In \pkg{StatMatch} the following nonparametric micro techniques are available: \emph{random hot deck}, \emph{nearest neighbor hot deck} and \emph{rank hot deck} (see Section 2.4 in D'Orazio \emph{et al.}, 2006b; Singh \emph{et al.}, 1993).
 
@@ -288,7 +285,7 @@ In \pkg{StatMatch} the following nonparametric micro techniques are available: \
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Nearest neighbor distance hot deck} \label{sec:nnd}
 
-The nearest neighbor distance hot deck techniques is implemented in the function \code{NND.hotdeck}.  This function searches in \code{data.don} the nearest neighbor of each unit in \code{data.rec} according to a distance computed on the matching variables $X_M$ specified with the argument \code{match.vars}.  By default the Manhattan (city block) distance is considered (\code{dist.fun="Manhattan"}).  In order to reduce the computation effort due to computation of distances it is preferable to define some donation classes (argument \code{don.class}): for a record in given imputation class it will be selected a donor in the same class (the distances are computed only among units belonging to the same class).  Usually, the donation classes are defined according to one or more categorical common variables (geographic area, etc.).  In the following, a simple example of usage of \code{NND.hotdeck} is reported. 
+The nearest neighbor distance hot deck techniques are implemented in the function \code{NND.hotdeck}.  This function searches in \code{data.don} the nearest neighbor of each unit in \code{data.rec} according to a distance computed on the matching variables $X_M$ specified with the argument \code{match.vars}.  By default the Manhattan (city block) distance is considered (\code{dist.fun="Manhattan"}).  In order to reduce the computation effort due to computation of distances it is preferable to define some donation classes (argument \code{don.class}): for a record in given imputation class it will be selected a donor in the same class (the distances are computed only among units belonging to the same class).  Usually, the donation classes are defined according to one or more categorical common variables (geographic area, etc.).  In the following, a simple example of usage of \code{NND.hotdeck} is reported. 
 
 <<>>=
 group.v <- c("rb090","db040")
@@ -316,7 +313,7 @@ fA.nnd.m <- create.fused(data.rec=rec.A, data.don=don.B,
 head(fA.nnd.m) #first 6 obs.
 @
 
-As far as distances are concerned (argument \code{dist.fun}), all the distance functions in the package \pkg{proxy} (Meyer and Butchta, 2011) are available.  Anyway, for some particular distances it was decided to write specific \proglang{R} functions.  In particular, when dealing with continuous matching variables it is possible to use the \emph{maximum distance }($L^{\infty}$ norm) implemented in \code{maximum.dist}; this function works on the true observed values (continuous variables) or on transformed ranked values (argument \code{rank=TRUE}) as suggested in (Kovar \emph{et al.}, 1988); the transformation (ranks divided by the number of units) removes the effect of different scales and the new values are distributed in the interval $[0,1]$.  The Mahalanobis distance can be computed by using \code{mahalanobis.dist} which allows an external estimate of the covariance matrix (argument \code{vc}).  When dealing with mixed type matching variables, the \emph{Gowers's dissimilarity} (Gower, 1981) can be computed (function \code{gower.dist}): it is an average of the distances computed on the single variables according to different rules, depending on the type of the variable.  All the distances are scaled to range from 0 to 1, hence the overall distance cat take a value in $[0,1]$.  It is worth noting that when dealing with mixed types matching variables it is still possible to use the distance functions for continuous variables but \code{NND.hotdeck} transforms factors into dummies (by means of the function \code{fact2dummy}).
+As far as distances are concerned (argument \code{dist.fun}), all the distance functions in the package \pkg{proxy} (Meyer and Butchta, 2011) are available.  Anyway, for some particular distances it was decided to write specific \proglang{R} functions.  In particular, when dealing with continuous matching variables it is possible to use the \emph{maximum distance }($L^{\infty}$ norm) implemented in \code{maximum.dist}; this function works on the true observed values (continuous variables) or on transformed ranked values (argument \code{rank=TRUE}) as suggested in (Kovar \emph{et al.}, 1988); the transformation (ranks divided by the number of units) removes the effect of different scales and the new values are uniformly distributed in the interval $[0,1]$.  The Mahalanobis distance can be computed by using \code{mahalanobis.dist} which allows an external estimate of the covariance matrix (argument \code{vc}).  When dealing with mixed type matching variables, the \emph{Gowers's dissimilarity} (Gower, 1981) can be computed (function \code{gower.dist}): it is an average of the distances computed on the single variables according to different rules, depending on the type of the variable.  All the distances are scaled to range from 0 to 1, hence the overall distance cat take a value in $[0,1]$.  It is worth noting that when dealing with mixed types matching variables it is still possible to use the distance functions for continuous variables but \code{NND.hotdeck} transforms factors into dummies (by means of the function \code{fact2dummy}).
 
 
 <<>>=
@@ -334,7 +331,7 @@ fA.nnd.g <- create.fused(data.rec=rec.A, data.don=don.B,
 @
 
 
-By default \code{NND.hotdeck} does not pose constraints on the \dQuote{usage} of donors: a record in the donor data set can be selected many times as a donor.  The multiple usage of a donor can be avoided by resorting to a \emph{constrained hot deck} (argument \code{constrained=TRUE} in \code{NND.hotdeck}); in such a case, a donor can be used just once and all the donors are selected in order to minimize the overall matching distance (assuming that $n_A \leq n_B$).  In practice, the donors are identified by solving a traveling salesperson problem; two alternative algorithms are available the classic one (argument \code{constr.alg="lpSolve"}) (Berkelaar \emph{et al.}, 2011) and the RELAX-IV algorithm (Bertsekas and Tseng, 1994) (argument \code{constr.alg="relax"}).  This latter one is much faster but there are some restrictions on its license. 
+By default \code{NND.hotdeck} does not pose constraints on the \dQuote{usage} of donors: a record in the donor data set can be selected many times as a donor.  The multiple usage of a donor can be avoided by resorting to a \emph{constrained hot deck} (argument \code{constrained=TRUE} in \code{NND.hotdeck}); in such a case, a donor can be used just once and all the donors are selected in order to minimize the overall matching distance.  In practice, the donors are identified by solving a traveling salesperson problem; two alternative algorithms are available the classic one (argument \code{constr.alg="lpSolve"}) (Berkelaar \emph{et al.}, 2011) and the RELAX-IV algorithm (Bertsekas and Tseng, 1994) (argument \code{constr.alg="relax"}).  This latter one is much faster but there are some restrictions on its license. 
 
 <<>>=
 group.v <- c("rb090","db040")
@@ -372,7 +369,7 @@ sum(out.nnd.mc$dist.rd)  #constrained
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Random hot deck} \label{sec:rand}
 
-The function \code{RANDwNND.hotdeck} carries out the random selection of each donor from a suitable subset of all the available donors.  This subset can be formed in different ways, e.g. by considering all the donors sharing the same characteristics of the recipient (defined according to some $X_M$ variables, such as geographic region, etc.) or simply the closest donors according to a particular rule.  The traditional \emph{random hot deck} within imputation classes (Singh \emph{et al.}, 1993) is performed by simply specifying the donation classes via the argument \code{don.class} (the classes are formed by crossing the categories of the categorical variables being considered).  For each record in the recipient data set in a given donation class, a donor is picked up completely at random within the same donation class.
+The function \code{RANDwNND.hotdeck} carries out the random selection of each donor from a suitable subset of all the available donors.  This subset can be formed in different ways, e.g. by considering all the donors sharing the same characteristics of the recipient (defined according to some $X_M$ variables, such as geographic region, etc.) or simply the closest donors according to a particular rule.  The traditional \emph{random hot deck} (Singh \emph{et al.}, 1993) within imputation classes is performed by simply specifying the donation classes via the argument \code{don.class} (the classes are formed by crossing the categories of the categorical variables being considered).  For each record in the recipient data set in a given donation class, a donor is picked up completely at random within the same donation class.
 
 <<>>=
 group.v <- c("db040","rb090")
@@ -383,7 +380,7 @@ fA.rnd <- create.fused(data.rec=rec.A, data.don=don.B,
                         z.vars=c("netIncome", "c.netI"))
 @
 
-As for \code{NND.hotdeck}, the function \code{RANDwNND.hotdeck} does not create the synthetic data set; the recipient-donor units' identifiers are saved in the component \code{mtc.ids} of the list returned in output by \code{RANDwNND.hotdeck}.  The number of donors available in each donation class are saved in the component \code{noad}.
+As for \code{NND.hotdeck}, the function \code{RANDwNND.hotdeck} does not create the synthetic data set; the recipient-donor units' identifiers are saved in the component \code{mtc.ids} of the list returned in output by \code{NND.hotdeck}.  The number of donors available in each donation class are saved in the component \code{noad}.
 
 It is worth noting that the donors can also be selected with probability proportional to a weight (specified with the argument \code{weight.don}); an example will be provided in Section \ref{sec:comp_survey}. 
 
@@ -403,7 +400,7 @@ fA.knnd <- create.fused(data.rec=rec.A, data.don=don.B,
                         z.vars=c("netIncome", "c.netI"))
 @
 
-When distances are computed on the matching variables, then the output of \code{RANDwNND.hotdeck} provides some information concerning the distances of the possible available donors for each recipient observation in the data.frame.
+When distances are computed on some matching variables, then the output of \code{RANDwNND.hotdeck} provides some information concerning the distances of the possible available donors for each recipient observation.
 
 <<>>=
 head(rnd.2$sum.dist)
@@ -428,7 +425,7 @@ When selecting a donor among those available in the subset identified by \code{c
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Rank hot deck} \label{sec:rank}
 
-The \emph{rank hot deck distance} method has been introduced by Singh \emph{et al.} (1993).  It searches for the donor at a minimum distance from the given recipient record but, in this case, the distance is computed on the percentage points of the empirical cumulative distribution function of the unique (continuous) common variable $X_M$ being considered.  The empirical cumulative distribution function is estimated by:
+The \emph{rank hot deck distance} method has been introduced by (Singh \emph{et al.}, 1993).  It searches for the donor at a minimum distance from the given recipient record but, in this case, the distance is computed on the percentage points of the empirical cumulative distribution function of the unique (continuous) common variable $X_M$ being considered.  The empirical cumulative distribution function is estimated by:
 
 $$
 \hat{F}(x_k) = \frac{1}{n} \sum_{i=1}^{n} I\left(x_i\leq x_k\right) 
@@ -474,6 +471,7 @@ All the functions in \pkg{StatMatch} that implement the hot deck imputation tech
 # introduce missing values in iris
 set.seed(1324)
 miss <- rbinom(150, 1, 0.30) #generates randomly missing
+data(iris, package="datasets")
 iris.miss <- iris
 iris.miss$Petal.Length[miss==1] <- NA
 summary(iris.miss$Petal.L)
@@ -493,7 +491,7 @@ nnd <- NND.hotdeck(data.rec=rec, data.don=don,
                          dist.fun="Manhattan")
 @
 
-At this point the function \code{create.fused} is used to fill in the target variable (\code{"Petal.Length"} in the example) in the recipient data set.  Then the filled recipient and the donor one can be concatenated to obtain the origin dataset with imputed values.
+At this point the function \code{create.fused} is used to impute the target variable (\code{"Petal.Length"} in the example) then the filled recipient and the donor one can be re-aggregated to obtain the origin dataset with imputed values.
 
 <<>>=
 # fills rec
@@ -512,12 +510,12 @@ tapply(imp.iris$Petal.Length, imp.iris$imp.PL, summary)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Mixed methods} \label{sec:mix}
 
-A SM mixed method consists of two steps: (1) a model is fitted and all its parameters are estimated, then (2) a nonparametric approach is used to create the synthetic data set.  The model is more parsimonious while the nonparametric approach offers \dQuote{protection} against model misspecification.  The proposed mixed approaches for SM are based essentially on \emph{predictive mean matching} imputation methods (see D'Orazio \emph{et al.} 2006b, Section 2.5 and 3.6).  The function \code{mixed.mtc} in \pkg{StatMatch} implements two similar mixed methods that deal with variables $(X_M, Y, Z)$ following the the multivariate normal distribution.  The main difference consists in the estimation of the parameters of the two regressions $Y$ vs. $X_M$  and $Z$ vs. $X_M$.  By default the parameters are estimated through maximum likelihood (argument \code{method="ML"}); in alternative a method proposed by Moriarity and Scheuren (2001, 2003) (argument \code{method="MS"}) is available.  D'Orazio \emph{et al.} (2005) compared these methods in an extensive simulation study: in general ML tends to perform better, moreover it permits to avoid some incoherencies in the estimation of the parameters that are possible with the Moriarity and Scheuren approach.
+A SM mixed method consists of two steps: (1) a model is fitted and all its parameters are estimated, then (2) a nonparametric approach is used to create the synthetic data set.  The model is more parsimonious while the nonparametric approach offers \dQuote{protection} against model misspecification.  The proposed mixed approaches for SM are based essentially on \emph{predictive mean matching} imputation methods (see D'Orazio \emph{et al.} 2006b, Section 2.5 and 3.6).  The function \code{mixed.mtc} in \pkg{StatMatch} implements two similar mixed methods that deal with variables $(X_M, Y, Z)$ following the the multivariate normal distribution.  The main difference consists in the estimation of the parameters of the two regressions $Y$ vs. $X_M$  and $Z$ vs. $X_M$.  By default the parameters are estimated through maximum likelihood (argument \code{method="ML"}); in alternative a method proposed by Moriarity and Scheuren (2001, 2003) (argument \code{method="MS"}) is available.  D'Orazio \emph{et al.} (2005) compared these methods in an extensive simulation study: in general ML tends to perform better, moreover it permits to avoid some incoherencies in the estimation of the parameters that can happen with the Moriarity and Scheuren approach.
 
 At the end of the first step, after the estimation of the parameters of the two regression models, the data set $A$ is filled in with the \dQuote{intermediate} values $\tilde{z}_a=\hat{z}_a+e_a$ $(a=1,\ldots,n_A)$ obtained by adding a random residual term $e_a$ to the predicted values $\hat{z}_a$.  The same happens in $B$ which is filled in with the values $\tilde{y}_b=\hat{y}_b+e_b$ 
 $(b=1,\ldots, n_B)$.  Finally, in the step (2) each record in $A$ is filled in with the value of $Z$ observed on the donor found in $B$ according to a constrained distance hot deck; the Mahalanobis distance is computed by considering the intermediate and live values: couples $\left( y_a,\tilde{z}_a \right)$ in $A$ and $\left( \tilde{y}_b, z_b \right)$ in $B$.
 
-Such a two steps procedure offers various advantages: it offers protection against model misspecification and also reduces the risk of bias in the marginal distribution of the imputed variable because the distances are computed on intermediate and truly observed values of the target variables, $Y$ and $Z$, instead of the matching variables $X_M$.  In fact when computing the distances by considering all the matching variables, variables with low predictive power on the target variable may influence negatively the distances.
+Such a two steps procedure offers various advantages: it offers protection against model misspecification and also reduces the risk of bias in the marginal distribution of the imputed variable because the distances are computed on intermediate and truly observed values of the target value instead of the matching variables $X_M$.  In fact when computing the distances by considering all the matching variables, variables with low predictive power on the target variable may influence negatively the distances.
 
 In the following example the \code{iris} data set is used just to show how \code{mixed.mtc} works.
 
@@ -572,13 +570,11 @@ mix.3$rho.yz
 
 \section{Statistical matching of data from complex sample surveys} \label{sec:comp_survey}
 
-The SM techniques presented in the previous Sections implicitly or explicitly assume that the observed values in $A$ and $B$ are i.i.d. Unfortunately, when dealing with samples selected from a finite population by means of complex sampling designs (with stratification, clustering, etc.) it is difficult to maintain the i.i.d. assumption (it would mean that the sampling design can be ignored) and the sampling design and the weights assigned to the units (usually design weights corrected for unit nonresponse, frame errors, etc.) have to be considered when making inferences (see S\"arndal \emph{et al.}, 1992, Section 13.6).
+The SM techniques presented in the previous Sections implicitly or explicitly assume that the observed values in $A$ and $B$ are i.i.d. Unfortunately, when dealing with samples selected from a finite population by means of complex sampling designs (with stratification, clustering, etc.) it is difficult to maintain the i.i.d. assumption (it would mean that the sampling design can be ignored) and the sampling design and the weights assigned to the units (usually design weights corrected for unit nonresponse, frame errors, etc.) have to be considered when making inferences (see S\"arndal \emph{et al.}, 1992, Section 13.6). 
 
-When matching data from complex samples surveys, two different alternatives ways can be followed: \emph{naive} approaches which essentially consist in using SM methods developed for i.i.d. samples or \emph{ad hoc} approaches that explicitly take into account the sampling design and the corresponding sampling weights.  In this latter case, three different SM methods are available: Renssen's approach based on weights' \emph{calibrations} (Renssen, 1998); Rubin's \emph{file concatenation} (Rubin, 1986) and the approach based on the \emph{empirical likelihood} proposed by Wu (2004).  A comparison among these approaches can be found in D'Orazio (2010).
+\subsection{Naive micro approaches} \label{sec:comp_survey_naive}
 
-\subsection{Naive approaches} \label{sec:comp_survey_naive}
-
-Most of these approaches consists in applying SM nonparametric micro methods (nearest neighbour distance, random or rank hotdeck) without considering the design nor the units weights.  Once obtained the synthetic dataset (recipient filled in with the missing variables) the successive statistical analyses are carried out by considering the sampling design underlying the recipient data set and the corresponding survey weights.  In the following a simple SM example based on nearest neighbor hotdeck is reported.
+A naive approach to SM data from complex sample surveys consists in applying SM nonparametric micro methods (NND, random or rank hotdeck) without considering the design nor the units weights.  Once obtained the synthetic dataset (recipient filled in with the missing variables) the successive statistical analyses are carried out by considering the sampling design underlying the recipient data set and the corresponding survey weights.  In the following a simple example of nearest neighbor hotdeck is reported.
 
 <<>>=
 # summary info on the weights
@@ -613,11 +609,9 @@ round(tt*100, 2)
 1/2*colSums(abs(tt-tt[,1]))
 @
 
-As far as imputation of missing values is concerned, a way of taking into account the sampling design can consist in forming the donation classes by using the design variables (stratification and/or clustering variables) jointly with the most relevant common variables (Andridge and Little, 2010).  Unfortunately this operation can increase the complexity of SM or may be unfeasible because the design variables may not be available (or partly available).  In particular, when the two sample surveys have quite different designs it is common that the design variables characterizing one survey are not available in the other one and vice versa. 
+As far as imputation of missing values is concerned, a way of taking into account the sampling design can consist in forming the donation classes by using the design variables (stratification and/or clustering variables) jointly with the most relevant common variables (Andridge and Little, 2010).  Unfortunately in SM this can increase the complexity or may be unfeasible because the design variables may not be available or may be partly available.  Moreover, the two sample surveys may have quite different designs and the design variables used in one survey maybe not available in the other one and vice versa. 
 
-When imputing missing values in a survey, another possibility consists in using sampling weights (design weights) to form the donation classes (Andridge and Little, 2010).  But again, in SM applications the problem can be slightly more complex even because the sets of weights can be quite different from one survey to the other (usually the available weights are the design weights corrected to compensate for unit nonresponse, to satisfy some given constraints etc.).  The same Authors (Andridge and Little, 2010) indicate that in the imputation framework, the selection of the donors can be carried out with probability proportional to weights associated to the donors (\emph{weighted random hot deck}).  Andridge and Little (2009) found that such a usage of the the sample weights can give poor results.
-
-The properties of the weighted random hot deck in the SM applications have not been investigated, nevertheless the function \code{RANDwNDD.hotdeck} permits to select the donors with probability proportional to weights specified via the \code{weight.don} argument.
+When imputing missing values in a survey, another possibility, consists in using sampling weights (design weights) to form the donation classes (Andridge and Little, 2010).  But again, in SM applications the problem can be slightly more complex even because the sets of weights can be quite different from one survey to the other (usually the available weights are the design weights corrected to compensate for unit nonresponse, to satisfy some given constraints etc.).  The same Authors (Andridge and Little, 2010) indicate that when imputing the missing values, the selection of the donors can be carried out with probability proportional to weights associated to the donors (\emph{weighted random hot deck}).  Unfortunately, Andridge and Little (2009) found that such a usage of the the sample weights can give poor results.  The properties of the weighted random hot deck in the SM applications have not been investigated, nevertheless the function \code{RANDwNDD.hotdeck} permits to select the donors with probability proportional to weights specified via the \code{weight.don} argument.
 
 <<>>=
 
@@ -642,7 +636,7 @@ round(tt*100, 2)
 1/2*colSums(abs(tt-tt[,1]))
 @
 
-Perhaps, a better usage of the units weights is achieved in the rank hot deck SM where the the weights, $w_i$, of the units in $A$ and in $B$ can be used in estimating the percentage points of the the empirical cumulative distribution function by means of the expression:
+Perhaps, a better usage of the units weights is achieved in the rank hot deck SM where the the weights of the units $w_i$ can be used  in estimating the percentage points of the the empirical cumulative distribution function:
 
 $$
 \hat{F}(x_k) = \frac{\sum_{i=1}^n w_i I\left(x_i \leq x_k \right)}{\sum_{i=1}^n w_i}
@@ -678,9 +672,11 @@ round(tt*100, 2)
 @
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Renssen's statistical matching through weights calibrations} \label{sec:ren}
+\subsection{Statistical matching method that account explicitly for the sampling weights} \label{sec:ren}
 
-This approach consists in a series of calibration steps of the survey weights of $A$ and $B$ in order to achieve consistency between estimates (mainly totals) computed separately from them.     Calibration is a technique very common in sample surveys for deriving new survey weights, as close as possible to the starting ones, which fulfill a series of constraints concerning totals for a set of auxiliary variables (for further details on calibration see S\"arndal, 2005).  The Renssen's approach works well when dealing with categorical variables or in a mixed case in which the number of continuous variables is very limited.  In the following it will be assumed that all the variables $(X_M,Y,Z)$ are categorical.  The procedure and the functions developed in \pkg{StatMatch} permit to handle one or more continuous variables (better just one) in the subset of the matching variables $X_M$, while $Y$ and $Z$ are assumed to be categorical (when this is not the case it is necessary to categorize the continuous variables).
+In literature there are few SM methods that explicitly take into account the sampling design and the corresponding sampling weights: Renssen's approach based on weights' \emph{calibrations} (Renssen, 1998); Rubin's \emph{file concatenation} (Rubin, 1986) and the approach based on the empirical likelihood proposed by Wu (2004).  A comparison among these approaches can be found in D'Orazio (2010).
+
+The package \pkg{StatMatch} provides only functions to apply the procedures suggested by Renssen (1998).  This approach consists in a series of calibration steps of the survey weights of $A$ and $B$ in order to achieve consistency between estimates (mainly totals) computed separately from them.     Calibration is a technique very common in sample surveys for deriving new survey weights, as close as possible to the starting ones, which fulfill a series of constraints concerning totals for a set of auxiliary variables (for further details on calibration see S\"arndal, 2005).  The Renssen's approach works well when dealing with categorical variables or in a mixed case in which the number of continuous variables is very limited.  In the following it will be assumed that all the variables $(X_M,Y,Z)$ are categorical.  The procedure and the functions developed in \pkg{StatMatch} permit to have one or more continuous variables (better just one) in the subset of the matching variables $X_M$, while $Y$ and $Z$ are assumed to be categorical.  Obviously when this is not the case in order to apply the following procedure it is necessary to categorize the variables.
 
 The first step in the Renssen's procedure consists in calibrating weights in $A$ and in $B$ such that the new weights when applied to the set of the matching variables $X_M$ allow to reproduce some known (or estimated) population totals.  In \pkg{StatMatch} the harmonization step can be performed by using \code{harmonize.x}.  This function performs weights calibration (or post-stratification) by means of functions available in the \proglang{R} package \pkg{survey} (Lumley, 2011).  When the population totals are already known then they have to be passed to \code{harmonize.x} via the argument \code{x.tot}; on the contrary, when they are unknown (\code{x.tot=NULL}) they are estimated by a weighted average of the totals estimated on the two surveys before the harmonization step:
 
@@ -714,7 +710,7 @@ tt.B <- xtabs(out.hz$weights.B~rb090+c.age, data=don.B)
 (prop.table(tt.A)-prop.table(tt.B))*100
 @
 
-After the harmonization, the second step in the Renssen's procedure consists in estimating the two way contingency table $Y \times Z$.  In absence of auxiliary information it is estimated under the CI assumption by means of:
+After the harmonization, the second step in the Renssen's procedure consists in estimating the two way contingency table $Y \times Z$.  In absence of auxiliary information it  is estimated under the CI assumption by means of:
 
 $$
 \hat{P}^{\left( CIA\right)} \left( Y,Z \right) = \hat{P}^{(A)} \left( Y|X_M \right)  \hat{P}^{(B)} \left( Z|X_M \right) \hat{P} \left(X_M \right)
@@ -732,7 +728,7 @@ out <- comb.samples(svy.A=out.hz$cal.A, svy.B=out.hz$cal.B,
 addmargins(t(out$yz.CIA))  # table estimated under the CIA
 @
 
-When some auxiliary information represented by third data source $C$, containing all the variables $(X_M,Y,Z)$ or just $(Y,Z)$, is available Renssen's approach permits to exploit it in estimating $Y \times Z$.  Two alternative methods are available: (a) \emph{incomplete two way stratification}; and (b) \emph{synthetic two way stratification}.  In practice, both the methods estimate $Y \times Z$ from $C$ after some further calibration steps (for further details see Renssen, 1998).  The function \code{comb.samples} implements both the methods.  In practice, the synthetic two way stratification (argument \code{estimation="synthetic"}) can be applied only when $C$ contains all the variables of interest $(X_M,Y,Z)$; on the contrary, when the data source $C$ observes just $Y$ and $Z$, only the incomplete two way stratification method can be applied (argument \code{estimation="incomplete"}).  In the following a simple example is reported based on the artificial EU-SILC data introduced in Section \ref{sec:data}; here a small sample $C$ $(n_C=200)$ with all the variables of interest $(X_M,Y,Z)$ is artificially created.
+When some auxiliary information represented by third data source $C$, containing all the variables $(X_M,Y,Z)$ or just $(Y,Z)$, is available Renssen's approach permits to exploit it in estimating $Y \times Z$.  Two alternative methods are available: (a) \emph{incomplete two way stratification}; and (b) \emph{synthetic two way stratification}.  In practice, both the methods estimate $Y \times Z$ from $C$ after some further calibration steps (for further details see Renssen, 1998).  The function \code{comb.samples} implements both the methods.  In practice, the synthetic two way stratification (argument \code{estimation="synthetic"}) can be applied only when $C$ contains all the variables of interest $(X_M,Y,Z)$; on the contrary, when the data source $C$ observes just $Y$ and $Z$ only the incomplete two way stratification method can be applied (argument \code{estimation="incomplete"}).  In the following a simple example is reported based on the artificial EU-SILC data introduced in Section \ref{sec:data}; here a small sample $C$ $(n_C=200)$ with all the variables of interest $(X_M,Y,Z)$ is artificially created.
 
 <<>>=
 # generating artificial sample C
@@ -777,7 +773,7 @@ tt.C <- xtabs(new.wwC~rb090+c.age, data=aux.C)
 1/2*sum(abs(prop.table(tt.A)-prop.table(tt.C)))
 @
 
-The incomplete two way stratification method estimates the table $Y \times Z$ from $C$ by preserving the marginal distribution of $Y$ and of $Z$ estimated respectively from $A$ and from $B$ after the initial harmonization step; on the contrary, the joint distribution of the matching variables $X_M$ (which is the basis of the harmonization step) is not preserved. 
+The incomplete two way stratification method estimates the table $Y \times Z$ from $C$ by preserving the marginal distribution of $Y$ and of $Z$ estimated respectively from $A$ and from $B$ after the initial harmonization step; on the contrary, the joint distribution of the matching variables (which is the basis of the harmonization step) is not preserved. 
 
 <<>>=
 # synthetic two-way estimation
@@ -813,7 +809,7 @@ tt.C <- xtabs(new.wwC~rb090+c.age, data=aux.C)
 
 \section{Exploring uncertainty due to the statistical matching framework} \label{sec:unc}
 
-When the objective of SM consists in estimating a parameter (macro approach) it is possible to tackle the problem in an alternative way consisting in the \dQuote{exploration} of the uncertainty on the model chosen for $(X_M,Y,Z)$, due to the lack of knowledge typical of the basic SM framework (no auxiliary information is available).  This approach does not end with a unique estimate of the unknown parameter characterizing the joint p.d.f. for $(X_M,Y,Z)$; on the contrary it identifies an interval of plausible values for it.  When dealing with categorical variables, the estimation of the intervals of plausible values for the probabilities in the table $Y \times Z$ are provided by the Fr\'echet bounds:
+When the objective of SM consists in estimating a parameter (macro approach) it is possible to tackle SM in an alternative way consisting in the \dQuote{exploration} of the uncertainty on the model chosen for $(X_M,Y,Z)$, due to the lack of knowledge typical of the basic SM framework (no auxiliary information is available).  This approach does not end with a unique estimate of the unknown parameter characterizing the joint p.d.f. for $(X_M,Y,Z)$; on the contrary it identifies an interval of plausible values for it.  When dealing with categorical variables, the estimation of the intervals of plausible values for the probabilities in the table $Y \times Z$ are provided by the Fr\'echet bounds:
 
 $$
 \max\{0; P(Y=j) + P(Z=k) - 1\} \leq P(Y=j,Z=k) \leq \min \{P(Y=j); P(Z=k)\}
@@ -827,7 +823,7 @@ $$
 P^{(low)}_{j,k} \leq P(Y=j,Z=k) \leq P^{(up)}_{j,k}
 $$
 
-\noindent with
+with
 
 \begin{eqnarray}
 P^{(low)}_{j,k} &=& \sum_{i}  P(X_M=i) \max \left\{ 0; P(Y=j|X_M=i) + P(Z=k|X_M=i)-1 \right\} \nonumber\\

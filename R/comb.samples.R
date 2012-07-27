@@ -1,5 +1,5 @@
 'comb.samples' <-
-function(svy.A, svy.B, svy.C=NULL, y.lab, z.lab, form.x, estimation=NULL, ...)
+function(svy.A, svy.B, svy.C=NULL, y.lab, z.lab, form.x, estimation=NULL, micro=FALSE, ...)
 {
 
     require(survey)
@@ -42,6 +42,7 @@ function(svy.A, svy.B, svy.C=NULL, y.lab, z.lab, form.x, estimation=NULL, ...)
     XX.pool <- gamma.p*XX.wA + (1-gamma.p)*XX.wB
     YZ.CIA <- t(beta.yx.A) %*% XX.pool %*% beta.zx.B
     dimnames(YZ.CIA) <- list(y.lev, z.lev)
+    out <- list(yz.CIA=YZ.CIA, call=match.call())
     
 ###########################
 # use of auxiliary sample "svy.C"
@@ -103,7 +104,45 @@ function(svy.A, svy.B, svy.C=NULL, y.lab, z.lab, form.x, estimation=NULL, ...)
         dimnames(YZ.noCIA) <- list(y.lev, z.lev)
         out <- list(yz.CIA=YZ.CIA, cal.C=cal.C, yz.est=YZ.noCIA, call=match.call())
     }
-# output
-    else out <- list(yz.CIA=YZ.CIA, call=match.call())
+
+    if(micro){
+        pred.Y.A <- X.A %*% beta.yx.A
+        res.Y.A <- Y.A - pred.Y.A
+        pred.Z.A <- X.A %*% beta.zx.B
+        
+        pred.Z.B <- X.B %*% beta.zx.B
+        res.Z.B <- Z.B - pred.Z.B
+        pred.Y.B <- X.B %*% beta.yx.A
+        
+        if(!is.null(svy.C) & (estimation=="STWS" || estimation=="s2ws" || estimation=="synthetic") ){
+            pred.Y.C  <- X.C %*% beta.yx.A
+            res.Y.C <- Y.C - pred.Y.C
+            pred.Z.C <- X.C %*% beta.zx.B
+            res.Z.C <- Z.C - pred.Z.C
+            
+            alfa2.1 <- t(res.Y.A) %*% (res.Y.A*w.A)
+            alfa2.2 <- t(res.Y.C) %*% (res.Z.C*ww.C)
+#            alfa2 <- solve(alfa2.1) %*% alfa2.2
+            qr.alfa <- qr(alfa2.1)
+            alfa2 <- qr.coef(qr.alfa, alfa2.2)
+            alfa2[is.na(alfa2)] <- 0
+            cat(alfa2, fill=T)
+            
+            pred.Z.A <- pred.Z.A + res.Y.A %*% alfa2
+            
+            beta2.1 <- t(res.Z.B) %*% (res.Z.B*w.B)
+            beta2.2 <- t(res.Z.C) %*% (res.Y.C*ww.C)
+#            beta2 <- solve(beta2.1) %*% beta2.2
+            qr.beta <- qr(beta2.1)
+            beta2 <- qr.coef(qr.beta, beta2.2)
+            beta2[is.na(beta2)] <- 0
+            cat(beta2, fill=T)
+            pred.Y.B <- pred.Y.B + res.Z.B %*% beta2
+                
+        }
+        pred <- list(Z.A=pred.Z.A, Y.B=pred.Y.B)    
+        out <- c(out, pred)
+    }
+    
     out
 }

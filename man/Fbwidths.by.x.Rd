@@ -4,7 +4,7 @@
 \title{Computes the Frechet bounds of cells in a contingency table by considering all the possible subsets of the common variables.}
 
 \description{
-  This function permits to compute the bounds for cell probabilities in the contingency table Y vs. Z starting from the marginal tables (\bold{X} vs. Y), (\bold{X} vs. Z) and the joint distribution of the \bold{X} variables, by considering all the possible subsets of the \bold{X} variables.  In this manner it is possible to identify which subset of the \bold{X} variables produces the major reduction of the uncertainty measured in terms of the width of the bounds.
+This function permits to compute the bounds for cell probabilities in the contingency table Y vs. Z starting from the marginal tables (\bold{X} vs. Y), (\bold{X} vs. Z) and the joint distribution of the \bold{X} variables, by considering all the possible subsets of the \bold{X} variables.  In this manner it is possible to identify which subset of the \bold{X} variables produces the major reduction of the overall uncertainty.
 }
 
 \usage{
@@ -36,9 +36,15 @@ A single categorical Z variable is allowed.  One or more categorical variables c
 
 \details{
 This function permits to compute the Frechet bounds for the frequencies in the contingency table of Y vs. Z, starting from the conditional distributions P(Y|\bold{X}) and P(Z|\bold{X}) (for details see \cr
-\code{\link[StatMatch]{Frechet.bounds.cat}}), by considering all the possible subsets of the \bold{X} variables.  In this manner it is possible to identify the subset of the \bold{X} variables, with highest association with both Y and Z, that permits to reduce the uncertainty concerning the distribution of Y vs. Z.  The reduction of the uncertainty is measured in terms of the average of the widths of the bounds for the cells in the table of Y vs. Z:
+\code{\link[StatMatch]{Frechet.bounds.cat}}), by considering all the possible subsets of the \bold{X} variables.  In this manner it is possible to identify the subset of the \bold{X} variables, with highest association with both Y and Z, that permits to reduce the uncertainty concerning the distribution of Y vs. Z.  The overall uncertainty is measured by considering the suggestion in Conti \emph{et al.} (2012):
 
-\deqn{ \bar{d} = \frac{1}{J \times K} \sum_{j,k} ( p^{up}_{j,k} - p^{low}_{j,k} )}{d=(1/(J*K))*sum_(i,k)(up(p(y=j,z=k))-low(p(y=j,z=k)))}
+\deqn{ \Delta = sum_{i,j,k} ( p^{(up)}_{Y=j,Z=k} - p^{(low)}_{Y=j,Z=k} ) p_{Y=j|X=i} p_{Z=k|X=i} p_{X=i}  
+}{ D = sum_(i,j,k) ( p^(up)_(Y=j,Z=k) - p^(low)_(Y=j,Z=k) ) p_(Y=j|X=i) p_(Z=k|X=i) p_(X=i) }
+
+
+in addition, the average of the widths of the bounds for the cells in the table of Y vs. Z it is also reported:
+
+\deqn{ \bar{d} = \frac{1}{J \times K} \sum_{j,k} ( p^{(up)}_{Y=j,Z=k} - p^{(low)}_{Y=j,Z=k} )}{d=(1/(J*K))*sum_(j,k)(p^(up)_(Y=j,Z=k) - p^(low)_(Y=j,Z=k))}
 
 For details see \code{\link[StatMatch]{Frechet.bounds.cat}}.
 
@@ -47,13 +53,15 @@ For details see \code{\link[StatMatch]{Frechet.bounds.cat}}.
 
 \value{
 
-A list with the estimated estimated bounds for the cells in the table of Y vs. Z for each possible subset of the \bold{X} variables.  The final component of the list summarizes the average width of the bounds for each subset of the \bold{X} variables.
+A list with the estimated estimated bounds for the cells in the table of Y vs. Z for each possible subset of the \bold{X} variables.  The final component of the list , \code{av.widths}, is a data.frame that summarizes the findings for each subset of the \bold{X} variables and a measure of the overall uncertainty is reported. In particular the data frame reports the no. of X variables, the number of cells in the joint distribution of the X variables, the number of cells in joint distribution of the X variables the with relative frequency equal to 0, the average widths of the uncertainty intervals and finally the overall uncertainty.
 
 }
 
 \references{
 
 Ballin, M., D'Orazio, M., Di Zio, M., Scanu, M. and Torelli, N. (2009) \dQuote{Statistical Matching of Two Surveys with a Common Subset}. \emph{Working Paper}, \bold{124}. Dip. Scienze Economiche e Statistiche, Univ. di Trieste, Trieste. 
+
+Conti P.L, Marella, D., Scanu, M. (2012) \dQuote{Uncertainty Analysis in Statistical Matching}. \emph{Journal of Official Statistics}, \bold{28}, pp. 69--88.
 
 D'Orazio, M., Di Zio, M. and Scanu, M. (2006). \emph{Statistical Matching: Theory and Practice.} Wiley, Chichester.
 
@@ -94,7 +102,7 @@ bounds.yz$av.widths
 #
 # to view a plot of the av.widths run also the
 #following code
-#barplot(bounds.yz$av.widths$av.width,
+#barplot(bounds.yz$av.widths$ov.unc,
 #         names.arg=row.names(bounds.yz$av.widths), las=2,
 #         cex.names=0.75)
 
