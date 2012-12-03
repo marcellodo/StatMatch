@@ -112,7 +112,8 @@ function(tab.x, tab.xy, tab.xz, print.f="tables", tol= 0.0001)
     l.z <- l.z[-p.z]
     class(fine.CIA) <- class(fine.low) <- class(fine.up) <- "table"
     dimnames(fine.CIA) <- dimnames(fine.low) <-  dimnames(fine.up) <- c(l.y, l.z)
-    res.1 <- list(CIA=fine.CIA, low.cx=fine.low, up.cx=fine.up, unc=sum(unlist(unc)))
+    vet.unc <- c(av.u=mean(c(upper-low)), av.cx=mean(c(fine.up-fine.low)), overall=sum(unlist(unc)))
+    res.1 <- list(CIA=fine.CIA, low.cx=fine.low, up.cx=fine.up, uncertainty=vet.unc)
 
     if(print.f=="tables"){
         out <- c(res.0, res.1)
@@ -125,7 +126,7 @@ function(tab.x, tab.xy, tab.xz, print.f="tables", tol= 0.0001)
         dataf$CIA <- c(res.1$CIA)
         dataf$up.cx <- c(res.1$up.cx)
         dataf$up.u <- c(res.0$up.u)
-        out <- list(bounds=dataf, unc=res.1$unc)
+        out <- list(bounds=dataf, uncertainty=res.1$unc)
     }
     out
 }

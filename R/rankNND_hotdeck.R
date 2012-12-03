@@ -1,5 +1,5 @@
 `rankNND.hotdeck` <-
-function (data.rec, data.don, var.rec, var.don=var.rec, don.class=NULL, weight.rec=NULL, weight.don=NULL)
+function (data.rec, data.don, var.rec, var.don=var.rec, don.class=NULL, weight.rec=NULL, weight.don=NULL, constrained=FALSE, constr.alg="Hungarian")
 {
     if(is.na(match(var.rec, colnames(data.rec)))) stop("The variable var.rec is not available in data.rec")
     if(is.na(match(var.don, colnames(data.don)))) stop("The variable var.don is not available in data.don")
@@ -9,8 +9,11 @@ function (data.rec, data.don, var.rec, var.don=var.rec, don.class=NULL, weight.r
     if(!is.null(weight.don) &&  is.na(match(weight.don, colnames(data.don)))) {
         stop("The variable weight.don is not available in data.don")
     }
-
-	if(!is.null(dim(data.rec))){
+    
+    if(constrained && (constr.alg=="Hungarian" || constr.alg=="hungarian")) require(clue)
+    if(constrained && (constr.alg=="lpSolve" || constr.alg=="lpsolve")) require(lpSolve)
+    
+    if(!is.null(dim(data.rec))){
 		nr <- nrow(data.rec)
 		r.lab <- row.names(data.rec)
 	}
@@ -45,7 +48,7 @@ function (data.rec, data.don, var.rec, var.don=var.rec, don.class=NULL, weight.r
     }
 
 ############################################################
-rankNND.hd <- function (x.rec, x.don, w.rec=NULL, w.don=NULL)
+rankNND.hd <- function (x.rec, x.don, w.rec=NULL, w.don=NULL, constr=FALSE, c.alg=NULL)
 { 
     nr <- length(x.rec)
 	nd <- length(x.don)
@@ -64,21 +67,61 @@ rankNND.hd <- function (x.rec, x.don, w.rec=NULL, w.don=NULL)
 	mdist <- abs(outer(X=cdf.rec, Y=cdf.don, FUN="-"))
  	dimnames(mdist) <- list(1:nr, 1:nd)
 
-# distance among empirical cum
-
-    dist.rd <- numeric(nr)
-	nad <- rep(NA, nr)
-	don.pos <- numeric(nr)
-	for(i in 1:nr){
+# unconstrained matching    
+    if(!constr){
+        dist.rd <- numeric(nr)
+	    nad <- rep(NA, nr)
+	    don.pos <- numeric(nr)
+	    for(i in 1:nr){
 			vd <- mdist[i,]
-			min.d <- min(vd) # smallest distance recipient-donor
+            min.d <- min(vd) # smallest distance recipient-donor
 			dist.rd[i] <- min.d
 			appo <- c(1:nd)[vd==min.d]
 			nad[i] <- length(appo) # number of availabe donors
             if(length(appo)==1) don.pos[i] <- appo
 			else don.pos[i] <- sample(appo, 1)
-	}
+	    }
+    }
 
+# CONSTRAINED nearest neighbour matching.
+# the functions in library lpSolve are used
+    
+    if(constr && (c.alg=="lpSolve" || c.alg=="lpsolve")){
+        if(nr==nd) appo <- lp.assign(cost.mat=mdist)
+        else if(nr<nd){
+            r.sig <- rep("==", nr)
+            r.rhs <- rep(1, nr)
+            c.sig <- rep("<=", nd)
+            c.rhs <- rep(1, nd)
+            appo <- lp.transport(cost.mat=mdist, row.signs=r.sig, row.rhs=r.rhs, col.signs=c.sig, col.rhs=c.rhs)
+        }   
+        else if(nr > nd){
+            warning("There more recipients than donors!")
+            cat("some donors will be used more than once", fill=TRUE)
+            r.sig <- rep("==", nr)
+            r.rhs <- rep(1, nr)
+            c.sig <- rep(">=", nd)
+            c.rhs <- rep(1, nd)
+            appo <- lp.transport(cost.mat=mdist, row.signs=r.sig, row.rhs=r.rhs, col.signs=c.sig, col.rhs=c.rhs)
+        }
+        sol <- appo$solution
+        ss <- c(t(sol))
+        cc <- c(t(col(sol)))
+        dist.rd <- mdist[cbind(1:nr, cc[as.logical(ss)] )]
+        don.pos <- (1:nd)[c(cc[as.logical(ss)])]
+        nad=NULL
+    }
+    
+    # the function solve_LSAP() in package clue is used
+    if(constr && (c.alg=="Hungarian" || c.alg=="hungarian")){
+        if(nr > nd) stop("It is required that no. of donors is greater \n or equal than the no. of recipients")
+        sol <- solve_LSAP(x=mdist, maximum=FALSE)
+        don.pos <- as.integer(sol)
+        dist.rd <- mdist[cbind(1:nr, don.pos)]
+        nad=NULL
+    }
+    
+    
 # output
     list(don.pos=don.pos, dist.rd=dist.rd, noad=nad, call=match.call())
 }
@@ -87,7 +130,8 @@ rankNND.hd <- function (x.rec, x.don, w.rec=NULL, w.don=NULL)
 
 	if(is.null(don.class)){ 
 		out <- rankNND.hd(x.rec=data.rec[,var.rec], x.don=data.don[,var.don],
-                            w.rec=data.rec[,weight.rec], w.don=data.don[,weight.don])
+                            w.rec=data.rec[,weight.rec], w.don=data.don[,weight.don],
+		                    constr=constrained, c.alg=constr.alg)
         mtc.lab <- cbind(r.lab, d.lab[out$don.pos])
 		mmm <- substring(mtc.lab, 5)
 		if(is.null(rownames(data.rec)) && is.null(rownames(data.don)))  mtc.ids <- matrix(as.numeric(mmm), ncol=2, byrow=TRUE)
@@ -98,38 +142,46 @@ rankNND.hd <- function (x.rec, x.don, w.rec=NULL, w.don=NULL)
 	}
 	else{
 		if(length(don.class)==1){
-			l.rec <- split(data.rec[ ,c(var.rec, weight.rec)], f=data.rec[ ,don.class])
-			l.don <- split(data.don[ ,c(var.don, weight.don)], f=data.don[ ,don.class])
+			l.rec <- split(data.rec[ ,c(var.rec, weight.rec)], f=data.rec[ ,don.class], drop=TRUE)
+			l.don <- split(data.don[ ,c(var.don, weight.don)], f=data.don[ ,don.class], drop=TRUE)
 		}
 		else{
-			l.rec <- split(data.rec[ ,c(var.rec, weight.rec)], f=as.list(data.rec[ ,don.class]))
-			l.don <- split(data.don[ ,c(var.don, weight.don)], f=as.list(data.don[ ,don.class]))
+			l.rec <- split(data.rec[ ,c(var.rec, weight.rec)], f=as.list(data.rec[ ,don.class]), drop=TRUE)
+			l.don <- split(data.don[ ,c(var.don, weight.don)], f=as.list(data.don[ ,don.class]), drop=TRUE)
 		}
-		if(length(l.rec)!=length(l.don)){
-			cat("The no. of donation classes in recipient data is not equal to \n the no. of donation classes in donor data", fill=TRUE)
-			stop("Possible reason: the variables used to classify units are not \n defined as factors or are factors with different levels")
-		}
-		if(!identical(names(l.rec), names(l.don)))
-			cat("Warning: the donation classes seem built using \n different factors with differnt levels")
+#		if(length(l.rec)!=length(l.don)){
+#			cat("The no. of donation classes in recipient data is not equal to \n the no. of donation classes in donor data", fill=TRUE)
+#			stop("Possible reason: the variables used to classify units are not \n defined as factors or are factors with different levels")
+#		}
+#		if(!identical(names(l.rec), names(l.don)))
+#			cat("Warning: the donation classes seem built using \n different factors with differnt levels")
 
+		tst <- which( !(names(l.rec) %in% names(l.don)) )
+		if(length(tst)) {
+		    list.no.donor <- names(l.rec)[tst]
+		    stop("For some cell in recipient data, there is no potential donor \n The list can be found in list.no.donor")
+		}
+		
         nn.r <- unlist(lapply(l.rec, nrow))
         nn.d <- unlist(lapply(l.don, nrow))
 
-        l.rec <- l.rec[nn.r>0]
-        l.don <- l.don[nn.r>0]
-        nn.r <- nn.r[nn.r>0]
-        nn.d <- nn.d[nn.r>0]
-        if(any(nn.d==0)) {
-			stop("For some donation classes there are NO donors available. \n Please modify the definition of the donation classes")
-		}	
+#        l.rec <- l.rec[nn.r>0]
+#        l.don <- l.don[nn.r>0]
+#        nn.r <- nn.r[nn.r>0]
+#        nn.d <- nn.d[nn.r>0]
+#        if(any(nn.d==0)) {
+#			stop("For some donation classes there are NO donors available. \n Please modify the definition of the donation classes")
+#		}	
 		H <- length(l.rec)
 		mtc.ids <- as.list(numeric(H))
 		dist.rd <- as.list(numeric(H))
 	    noad <- as.list(numeric(H))
 		for(h in 1:H){
-    		out <- rankNND.hd(x.rec=l.rec[[h]][,var.rec], x.don=l.don[[h]][,var.don],
-                            w.rec=l.rec[[h]][,weight.rec], w.don=l.don[[h]][,weight.don])
-            mtc.ids[[h]] <- cbind(rownames(l.rec[[h]]), rownames(l.don[[h]])[out$don.pos])
+		    lab.h <- names(l.rec)[h]
+    		out <- rankNND.hd(x.rec=l.rec[[lab.h]][,var.rec], x.don=l.don[[lab.h]][,var.don],
+                              w.rec=l.rec[[lab.h]][,weight.rec], w.don=l.don[[lab.h]][,weight.don],
+    		                  constr=constrained, c.alg=constr.alg)
+            mtc.ids[[h]] <- cbind(rownames(l.rec[[lab.h]]), rownames(l.don[[lab.h]])[out$don.pos])
 			dist.rd[[h]] <- out$dist.rd
 			noad[[h]] <- out$noad
 		}
@@ -140,7 +192,8 @@ rankNND.hd <- function (x.rec, x.don, w.rec=NULL, w.don=NULL)
 		if(is.null(rownames(data.rec)) && is.null(rownames(data.don)))  mtc.ids <- matrix(as.numeric(mmm), ncol=2, byrow=TRUE)
 		dimnames(mtc.ids) <- list(NULL, c("rec.id", "don.id"))
 		dist.rd <- unlist(dist.rd)
-		noad <- unlist(noad)
+		if(!constrained) noad <- unlist(noad)
+        else noad <- NULL
 	}
 	end.out <- list(mtc.ids=mtc.ids, dist.rd=dist.rd, noad=noad, call=match.call())
 	end.out

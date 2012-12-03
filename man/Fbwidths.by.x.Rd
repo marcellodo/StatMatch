@@ -4,7 +4,7 @@
 \title{Computes the Frechet bounds of cells in a contingency table by considering all the possible subsets of the common variables.}
 
 \description{
-This function permits to compute the bounds for cell probabilities in the contingency table Y vs. Z starting from the marginal tables (\bold{X} vs. Y), (\bold{X} vs. Z) and the joint distribution of the \bold{X} variables, by considering all the possible subsets of the \bold{X} variables.  In this manner it is possible to identify which subset of the \bold{X} variables produces the major reduction of the overall uncertainty.
+This function permits to compute the bounds for cell probabilities in the contingency table Y vs. Z starting from the marginal tables (\bold{X} vs. Y), (\bold{X} vs. Z) and the joint distribution of the \bold{X} variables, by considering all the possible subsets of the \bold{X} variables.  In this manner it is possible to identify which subset of the \bold{X} variables produces the major reduction of the uncertainty.
 }
 
 \usage{
@@ -38,11 +38,11 @@ A single categorical Z variable is allowed.  One or more categorical variables c
 This function permits to compute the Frechet bounds for the frequencies in the contingency table of Y vs. Z, starting from the conditional distributions P(Y|\bold{X}) and P(Z|\bold{X}) (for details see \cr
 \code{\link[StatMatch]{Frechet.bounds.cat}}), by considering all the possible subsets of the \bold{X} variables.  In this manner it is possible to identify the subset of the \bold{X} variables, with highest association with both Y and Z, that permits to reduce the uncertainty concerning the distribution of Y vs. Z.  The overall uncertainty is measured by considering the suggestion in Conti \emph{et al.} (2012):
 
-\deqn{ \Delta = sum_{i,j,k} ( p^{(up)}_{Y=j,Z=k} - p^{(low)}_{Y=j,Z=k} ) p_{Y=j|X=i} p_{Z=k|X=i} p_{X=i}  
-}{ D = sum_(i,j,k) ( p^(up)_(Y=j,Z=k) - p^(low)_(Y=j,Z=k) ) p_(Y=j|X=i) p_(Z=k|X=i) p_(X=i) }
+\deqn{ \hat{\Delta} = \sum_{i,j,k} ( p^{(up)}_{Y=j,Z=k} - p^{(low)}_{Y=j,Z=k} ) \times p_{Y=j|X=i} \times p_{Z=k|X=i} \times p_{X=i}  
+}{ D = sum_(i,j,k) ( p^(up)_(Y=j,Z=k) - p^(low)_(Y=j,Z=k) ) * p_(Y=j|X=i) * p_(Z=k|X=i) * p_(X=i) }
 
 
-in addition, the average of the widths of the bounds for the cells in the table of Y vs. Z it is also reported:
+In addition, the average of the widths of the bounds for the cells in the table of Y vs. Z it is also reported:
 
 \deqn{ \bar{d} = \frac{1}{J \times K} \sum_{j,k} ( p^{(up)}_{Y=j,Z=k} - p^{(low)}_{Y=j,Z=k} )}{d=(1/(J*K))*sum_(j,k)(p^(up)_(Y=j,Z=k) - p^(low)_(Y=j,Z=k))}
 
@@ -53,7 +53,7 @@ For details see \code{\link[StatMatch]{Frechet.bounds.cat}}.
 
 \value{
 
-A list with the estimated estimated bounds for the cells in the table of Y vs. Z for each possible subset of the \bold{X} variables.  The final component of the list , \code{av.widths}, is a data.frame that summarizes the findings for each subset of the \bold{X} variables and a measure of the overall uncertainty is reported. In particular the data frame reports the no. of X variables, the number of cells in the joint distribution of the X variables, the number of cells in joint distribution of the X variables the with relative frequency equal to 0, the average widths of the uncertainty intervals and finally the overall uncertainty.
+A list with the estimated estimated bounds for the cells in the table of Y vs. Z for each possible subset of the \bold{X} variables.  The final component  \code{sum.unc} is a data.frame that summarizes the findings for each subset of the \bold{X} variables and measures of the uncertainty are reported. In particular the data frame reports the no. of X variables (\code{"x.vars"}), the number of cells in the joint distribution of the X variables (\code{"x.cells"}), the number of cells in joint distribution of the X variables with frequency equal to 0 (\code{"x.freq0"}), the average widths of the uncertainty intervals (\code{"av.widths"}) and finally the estimated overall uncertainty (\code{"ov.unc"}) (estimated Delta).
 
 }
 
@@ -98,13 +98,15 @@ freq.xz <- xtabs(~Eth+Sex+Age+c.Days, data=quine.B)
 # apply Fbwidths.by.x()
 bounds.yz <- Fbwidths.by.x(tab.x=freq.x, tab.xy=freq.xy,
         tab.xz=freq.xz)
-bounds.yz$av.widths
-#
-# to view a plot of the av.widths run also the
-#following code
-#barplot(bounds.yz$av.widths$ov.unc,
-#         names.arg=row.names(bounds.yz$av.widths), las=2,
-#         cex.names=0.75)
+
+bounds.yz$sum.unc
+
+# ordered according to "ov.unc"
+bounds.yz$sum.unc[order(bounds.yz$sum.unc$ov.unc),]
+
+# ordered according to average widths of intervals
+bounds.yz$sum.unc[order(bounds.yz$sum.unc$av.width),]
+
 
 }
 

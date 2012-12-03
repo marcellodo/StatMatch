@@ -1,12 +1,12 @@
 Package: StatMatch
 Type: Package
 Title: Statistical Matching
-Version: 1.1.0
-Date: 2012-07-23
+Version: 1.2.0
+Date: 2012-12-03
 Author: Marcello D'Orazio
 Maintainer: Marcello D'Orazio <madorazi@istat.it>
-Depends: R (>= 2.7.0), proxy, lpSolve, survey
-Suggests: optmatch, SDaA, simPopulation, MASS
+Depends: R (>= 2.7.0), proxy, clue, survey
+Suggests: lpSolve, SDaA, simPopulation, MASS, Hmisc
 Description: The package StatMatch provides some R functions to perform
         statistical matching, i.e. the integration of two data sources
         referred to the same target population which share a number of
@@ -15,6 +15,6 @@ Description: The package StatMatch provides some R functions to perform
         methods. Methods to perform statistical matching when dealing
         with data from complex sample surveys are available too.
 License: EUPL
-Packaged: 2012-07-26 21:13:13 UTC; Marcello
+Packaged: 2012-12-03 15:39:53 UTC; madorazi
 Repository: CRAN
-Date/Publication: 2012-07-27 07:10:25
+Date/Publication: 2012-12-03 16:00:06

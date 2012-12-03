@@ -1,10 +1,10 @@
 % --- Source file:  ---
 \name{harmonize.x}
 \alias{harmonize.x}
-\title{Harmonizes the marginal (joint) distribution of a set of variables observed independently in two sample surveys on the same target population}
+\title{Harmonizes the marginal (joint) distribution of a set of variables observed independently in two sample surveys referred to the same target population}
 
 \description{
-This function permits to harmonize the marginal or the joint distribution of a set of variables observed independently in two sample surveys carried out on the same target population.  This harmonization is carried out by using the calibration of the survey weights of the sample units in both the surveys according to the procedure introduced by Renssen (1998).
+This function permits to harmonize the marginal or the joint distribution of a set of variables observed independently in two sample surveys carried out on the same target population.  This harmonization is carried out by using the calibration of the survey weights of the sample units in both the surveys according to the procedure suggested by Renssen (1998).
 }
 
 \usage{
@@ -15,11 +15,11 @@ harmonize.x(svy.A, svy.B, form.x, x.tot=NULL,
 \arguments{
 
 \item{svy.A}{
-A \code{svydesign} \R object that stores the data collected in the the survey A and all the information concerning the sampling design.  This type of object can be created by using the function \code{\link[survey]{svydesign}} in the package \pkg{survey} by Lumley.
+A \code{svydesign} \R object that stores the data collected in the the survey A and all the information concerning the sampling design.  This object can be created by using the function \code{\link[survey]{svydesign}} in the package \pkg{survey}.
 }
 
 \item{svy.B}{
-A \code{svydesign} \R object that stores the data collected in the the survey B and all the information concerning the sampling design.  This type of object can be created by using the function \code{\link[survey]{svydesign}} in the package \pkg{survey} by Lumley.}
+A \code{svydesign} \R object that stores the data collected in the the survey B and all the information concerning the sampling design.  This object can be created by using the function \code{\link[survey]{svydesign}} in the package \pkg{survey}.}
 
 \item{form.x}{
 A \R formula specifying which of the variables, common to both the surveys, have to be considered, and how have to be considered.  For instance \cr
@@ -31,8 +31,7 @@ Due to weights calibration features, it is preferable to work with categorical \
 }
 
 \item{x.tot}{
-A vector or table with known population totals for the \bold{X} variables.  A vector is required when \code{cal.method="linear"} or \code{cal.method="raking"}.  The names and the length of the vector depends on the way it is specified the argument \code{form.x} (see \code{\link[stats]{model.matrix}}).  On the contrary a contingency table is required when \code{cal.method="poststratify"} (for details see \cr
-\code{\link[survey]{postStratify}}).
+A vector or table with known population totals for the \bold{X} variables.  A vector is required when \code{cal.method="linear"} or \code{cal.method="raking"}.  The names and the length of the vector depends on the way it is specified the argument \code{form.x} (see \code{\link[stats]{model.matrix}}).  A contingency table is required when \cr \code{cal.method="poststratify"} (for details see \code{\link[survey]{postStratify}}).
 
 When \code{x.tot} is not provided (i.e. \code{x.tot=NULL}) then the vector of totals is estimated as a weighted average of the totals estimated on the two surveys.  The weight assigned to the totals estimated from A is \eqn{\lambda = n_A/(n_A+n_B)}{lambda= n_A/(n_A+n_B)};  \eqn{1-\lambda}{1-lambda} is the weight assigned to \bold{X} totals estimated from survey B (\eqn{n_A}{n_A} and \eqn{n_B}{n_B} are the number of units in A and B respectively).
 }
@@ -40,12 +39,12 @@ When \code{x.tot} is not provided (i.e. \code{x.tot=NULL}) then the vector of to
 \item{cal.method}{
 A string that specifies how the calibration of the weights in \code{svy.A} and \code{svy.B} has to be carried out.  By default \code{cal.method="linear"} linear calibration is performed.  In particular, the calibration is carried out by mean of the function \code{\link[survey]{calibrate}} in the package \pkg{survey}.
 
-Alternatively, it is possible to rake the origin survey weights by specifying \code{cal.method="raking"}.  Finally, it is possible to perform a simple post--stratification by setting \code{cal.method="poststratify"}.  Note that in this case the weights adjustments are carried out by considering the function \cr
+Alternatively, it is possible to rake the origin survey weights by specifying \code{cal.method="raking"}.  Finally, it is possible to perform a simple post-stratification by setting \code{cal.method="poststratify"}.  Note that in this case the weights adjustments are carried out by considering the function \cr
 \code{\link[survey]{postStratify}} in the package \pkg{survey}.
 }
 \item{...}{
 
-Further arguments that may be necessary for calibration or post--stratification.  In particular, when \code{cal.method="linear"} there is the chance of having negative weights.  This drawback can be avoided by requiring that the final weights lie in a given interval specified via \code{bounds} argument (an argument of \code{\link[survey]{calibrate}}).  In sample surveys  one expects that weights are greater than or equal to 1, i.e. \code{bounds=c(1, Inf)}.
+Further arguments that may be necessary for calibration or post-stratification.  In particular, when \code{cal.method="linear"} there is the chance of having negative weights.  This drawback can be avoided by requiring that the final weights lie in a given interval specified via \code{bounds} argument (an argument of \code{\link[survey]{calibrate}}).  In sample surveys  one expects that weights are greater than or equal to 1, i.e. \code{bounds=c(1, Inf)}.
 
 The number of iterations used in calibration can be modified too by using the argument \code{maxit} (by default \code{maxit=50}).
 
@@ -56,13 +55,13 @@ See \code{\link[survey]{calibrate}} for further details.
 }
 
 \details{
-This function harmonizes the totals of the \bold{X} variables, observed in both survey A and survey B, to be equal to given known totals specified via \code{x.tot}.  When these totals are not known (\code{x.tot=NULL})  they are estimated by combining the estimates derived from the two separate surveys.  The harmonization is carried out according to a procedure introduced by Renssen (1998) based on calibration of survey weights (for major details on calibration see Sarndal and Lundstrom, 2005).  The procedure is particularly suited to deal with categorical \bold{X} variables, in this case it permits to harmonize the joint or the marginal distribution of the categorical variables being considered. Note that an incomplete crossing of the \bold{X} variables can be considered: i.e. harmonisation wrt to the joint distribution of \eqn{X_1 \times X_2}{X_1 x X_2} and the marginal distribution of \eqn{X_3}{x_3}).
+This function harmonizes the totals of the \bold{X} variables, observed in both survey A and survey B, to be equal to given known totals specified via \code{x.tot}.  When these totals are not known (\code{x.tot=NULL})  they are estimated by combining the estimates derived from the two separate surveys.  The harmonization is carried out according to a procedure suggested by Renssen (1998) based on calibration of survey weights (for major details on calibration see Sarndal and Lundstrom, 2005).  The procedure is particularly suited to deal with categorical \bold{X} variables, in this case it permits to harmonize the joint or the marginal distribution of the categorical variables being considered. Note that an incomplete crossing of the \bold{X} variables can be considered: i.e. harmonisation wrt to the joint distribution of \eqn{X_1 \times X_2}{X_1 x X_2} and the marginal distribution of \eqn{X_3}{x_3}).
 
 The calibration procedure may not produce the final result due to convergence problems.  In this case an error message appears.  In order to reach convergence it may be necessary to launch the procedure with less constraints (i.e a reduced number of population totals) by joining adjacent categories or by discarding some variables.  
 
 In some limited cases it could be possible to consider both categorical and continuous variables.  In this situation it may happen that calibration is not successful.  In order to reach convergence it may be necessary to categorize the continuous \bold{X} variables.
 
-Post--stratification is a special case of calibration; all the weights of the units in a given post--stratum are modified so the reproduce the known total for that post--stratum.  Post--stratification avoids problems of convergence but, on the other hand it may produce final weights with a higher variability than those derived from the calibration.
+Post-stratification is a special case of calibration; all the weights of the units in a given post-stratum are modified so the reproduce the known total for that post-stratum.  Post-stratification avoids problems of convergence but, on the other hand it may produce final weights with a higher variability than those derived from the calibration.
 
 }
 

@@ -9,7 +9,7 @@
 
 \usage{
 mixed.mtc(data.rec, data.don, match.vars, y.rec, z.don, method="ML",
-           rho.yz=0, micro=FALSE, constr.alg="lpSolve") 
+           rho.yz=0, micro=FALSE, constr.alg="Hungarian") 
 }
 
 \arguments{
@@ -49,12 +49,8 @@ Logical.  When \code{micro=FALSE} (default) only the parameter estimates are ret
 }
 
 \item{constr.alg}{
-A string that has to be specified when \code{micro=TRUE}, in order to solve the transportation problem involved by the constrained distance hot deck method.  Two choices are available: \dQuote{lpSolve} and \dQuote{relax}.  In the first case, 
-
-\code{constr.alg="lpSolve"}, the transportation problem is solved by means of the function \code{\link[lpSolve]{lp.transport}} available in the package \pkg{lpSolve}.  When 
-
-\code{constr.alg="relax"} the transportation problem is solved using RELAX--IV algorithm from Bertsekas and Tseng (1994), implemented in function \cr \code{\link[optmatch]{pairmatch}} available in the package \pkg{optmatch}.  Note that \cr 
-\code{constr.alg="relax"} is faster and requires less computational effort, but the usage of this algorithm is allowed only for research purposes (for details see function \code{relaxinfo()} in the package \pkg{optmatch}).
+A string that has to be specified when \code{micro=TRUE}, in order to solve the transportation problem involved by the constrained distance hot deck method.  Two choices are available: \dQuote{lpSolve} and \dQuote{Hungarian}.  In the first case, \cr
+\code{constr.alg="lpSolve"}, the transportation problem is solved by means of the function \code{\link[lpSolve]{lp.transport}} available in the package \pkg{lpSolve}.  When \cr \code{constr.alg="Hungarian"} (default) the transportation problem is solved using the Hungarian method implemented in the function \code{\link[clue]{solve_LSAP}} available in the package \pkg{clue} (Hornik, 2012).  Note that Hungarian algorithm is more efficient and requires less processing time.
 }
 
 }
@@ -62,20 +58,20 @@ A string that has to be specified when \code{micro=TRUE}, in order to solve the 
 \details{
 This function implements some mixed methods to perform statistical matching. A mixed method consists of two steps: 
 
-(i) adoption of a parametric model for the joint distribution of \eqn{ \left( \mathbf{X},Y,Z \right) }{(\bold{X},Y,Z)} and estimation of its parameters;
+(1) adoption of a parametric model for the joint distribution of \eqn{ \left( \mathbf{X},Y,Z \right) }{(\bold{X},Y,Z)} and estimation of its parameters;
 
-(ii) derivation of a complete \dQuote{synthetic} data set (recipient data set filled in with values for the Z variable) using a nonparametric approach.
+(2) derivation of a complete \dQuote{synthetic} data set (recipient data set filled in with values for the Z variable) using a nonparametric approach.
 
 
-In this case, as far as (i) is concerned, it is assumed that  \eqn{ \left( \mathbf{X},Y,Z \right) }{(\bold{X},Y,Z)} follows a multivariate normal distribution.  Please note that if some of \bold{X} are categorical, then they are recoded into dummies before starting with the estimation.  In such a case the assumption of multivariate normal distribution maybe questionable.  
+In this case, as far as (1) is concerned, it is assumed that  \eqn{ \left( \mathbf{X},Y,Z \right) }{(\bold{X},Y,Z)} follows a multivariate normal distribution.  Please note that if some of the \bold{X} are categorical, then they are recoded into dummies before starting with the estimation.  In such a case the assumption of multivariate normal distribution may be questionable.  
 
 The whole procedure is based on the imputation method known as \emph{predictive mean matching}.  The procedure consists of three steps: 
 
 
-step 1) -- Regression step: the two linear regression models Y vs. \bold{X} and Z vs. \bold{X} are considered and their parameters are estimated. 
+\bold{step 1a)} \emph{Regression step}: the two linear regression models Y vs. \bold{X} and Z vs. \bold{X} are considered and their parameters are estimated. 
 
 
-step 2) -- Computation of intermediate values.  For the units in \code{data.rec} the following intermediate values are derived:
+\bold{step 1b)} \emph{Computation of intermediate values}.  For the units in \code{data.rec} the following intermediate values are derived:
 
 \deqn{ \tilde{z}_{a} = \hat{\alpha}_{Z} + \hat{\beta}_{Z\bf{X}} \mathbf{x}_a + e_a }{z_a = alpha_Z + beta_ZX * x_a + e_a }
 
@@ -88,16 +84,17 @@ Similarly, for the units in \code{data.don} the following intermediate values ar
 for each \eqn{b=1,\ldots,n_{B}}{1,...,n_B}, being \eqn{n_B}{n_B} the number of units in \code{data.don} (rows of \code{data.don}). \eqn{e_b}{e_b} is a random draw from the multivariate normal distribution with zero mean and estimated residual variance \eqn{\hat{\sigma}_{Y|\bf{X}}}{sigma_YX}.
 
 
-step 3) -- Matching step.  For each observation (row) in \code{data.rec} a donor is chosen in \code{data.don} through a nearest neighbor constrained distance hot deck procedure.  The distances are computed between \eqn{\left( y_a, \tilde{z}_a \right)}{(y_a, z^_a)} and \eqn{\left( \tilde{y}_b, z_b \right)}{(y^_b, z_b)} using Mahalanobis distance.
+\bold{step 2)} \emph{Matching step}.  For each observation (row) in \code{data.rec} a donor is chosen in \code{data.don} through a nearest neighbor constrained distance hot deck procedure.  The distances are computed between \eqn{\left( y_a, \tilde{z}_a \right)}{(y_a, z^_a)} and \eqn{\left( \tilde{y}_b, z_b \right)}{(y^_b, z_b)} using Mahalanobis distance.
 
 
 For further details see Sections 2.5.1 and 3.6.1 in D'Orazio \emph{et al.} (2006).
 
-In step 1) the parameters of the regression model can be estimated by means of the Maximum Likelihood method (\code{method="ML"}) (see D'Orazio \emph{et al.}, 2006, pp. 19--23,73--75) or, using the Moriarity and Scheuren (2001 and 2003) approach (\code{method="MS"}) (see also D'Orazio \emph{et al.}, 2006, pp. 75--76).  The two estimation methods are compared in D'Orazio \emph{et al.} (2005). 
+In step 1a) the parameters of the regression model can be estimated by means of the Maximum Likelihood method (\code{method="ML"}) (see D'Orazio \emph{et al.}, 2006, pp. 19--23,73--75) or, using the Moriarity and Scheuren (2001 and 2003) approach (\code{method="MS"}) (see also D'Orazio \emph{et al.}, 2006, pp. 75--76).  The two estimation methods are compared in D'Orazio \emph{et al.} (2005). 
 
 When \code{method="MS"}, if the value specified for the argument \code{rho.yz} is not compatible with the other correlation coefficients estimated from the data, then it is substituted with the closest value compatible with the other estimated coefficients.
  
-When \code{micro=FALSE} only the estimation of the parameters is performed (step 1).  Otherwise, (\code{micro=TRUE}) the whole procedure is carried out.
+When \code{micro=FALSE} only the estimation of the parameters is performed (step 1a).  Otherwise, \cr 
+(\code{micro=TRUE}) the whole procedure is carried out.
 
 } 
 
@@ -156,13 +153,12 @@ How the function has been called.
 
 \references{
 
-Bertsekas, D.P. and Tseng, P. (1994). \dQuote{RELAX--IV: A Faster Version of the RELAX Code
-for Solving Minimum Cost Flow Problems}. \emph{Technical Report}, LIDS-P-2276, Massachusetts Institute of Technology, Cambridge. \url{http://web.mit.edu/dimitrib/www/RELAX4_doc.pdf} 
-
 D'Orazio, M., Di Zio, M. and Scanu, M. (2005). \dQuote{A comparison among different estimators of regression parameters on statistically matched files through an extensive simulation study}, \emph{Contributi}, \bold{2005/10}, Istituto Nazionale di Statistica, Rome.
 \url{http://www.istat.it/dati/pubbsci/contributi/Contributi/contr_2005/2005_10.pdf}
 
 D'Orazio, M., Di Zio, M. and Scanu, M. (2006). \emph{Statistical Matching: Theory and Practice.} Wiley, Chichester.
+
+Hornik K. (2012).  clue: Cluster ensembles.  R package version 0.3-45.  \url{http://CRAN.R-project.org/package=clue}.
 
 Moriarity, C., and Scheuren, F. (2001). \dQuote{Statistical matching: a paradigm for assessing the uncertainty in the procedure}. \emph{Journal of Official Statistics}, \bold{17}, 407--422.
 \url{http://www.jos.nu/Articles/abstract.asp?article=173407}
@@ -230,7 +226,7 @@ mtc.3$cor
 
 mtc.4 <- mixed.mtc(data.rec=ir.A, data.don=ir.B, match.vars=xx.mtc,
                     y.rec="Sepal.Length", z.don="Sepal.Width",
-                    rho.yz=0.5, micro=TRUE, constr.alg="lpSolve")
+                    rho.yz=0.5, micro=TRUE, constr.alg="Hungarian")
 
 # first rows of data.rec filled in with z
 head(mtc.4$filled.rec)

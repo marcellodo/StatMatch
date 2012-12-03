@@ -224,34 +224,40 @@ pps.draw <- function(n, w){
 	}
 	else{
 		if(length(don.class)==1){
-			l.r.lab <- split(r.lab, f=data.rec[ ,don.class])
-			l.rec <- split(data.rec, f=data.rec[ ,don.class])
-			l.d.lab <- split(d.lab, f=data.don[ ,don.class])
-			l.don <- split(data.don, f=data.don[ ,don.class])
+			l.r.lab <- split(r.lab, f=data.rec[ ,don.class], drop=TRUE)
+			l.rec <- split(data.rec, f=data.rec[ ,don.class], drop=TRUE)
+			l.d.lab <- split(d.lab, f=data.don[ ,don.class], drop=TRUE)
+			l.don <- split(data.don, f=data.don[ ,don.class], drop=TRUE)
 		}
 		else{
-			l.r.lab <- split(r.lab, f=as.list(data.rec[ ,don.class]))
-			l.rec <- split(data.rec, f=as.list(data.rec[ ,don.class]))
-			l.d.lab <- split(d.lab, f=as.list(data.don[ ,don.class]))
-			l.don <- split(data.don, f=as.list(data.don[ ,don.class]))
+			l.r.lab <- split(r.lab, f=as.list(data.rec[ ,don.class]), drop=TRUE)
+			l.rec <- split(data.rec, f=as.list(data.rec[ ,don.class]), drop=TRUE)
+			l.d.lab <- split(d.lab, f=as.list(data.don[ ,don.class]), drop=TRUE)
+			l.don <- split(data.don, f=as.list(data.don[ ,don.class]), drop=TRUE)
 		}
-		if(length(l.rec)!=length(l.don)){
-			cat("The no. of donation classes in recipient data is not equal \n to the no. of donation classes in donor data", fill=TRUE)
-			stop("Possible reason: the variables used to classify units are not \n defined as factors or are factors with different levels")
+		tst <- which( !(names(l.rec) %in% names(l.don)) )
+		if(length(tst)) {
+		    list.no.donor <- names(l.rec)[tst]
+		    stop("For some cell in recipient data, there is no potential donor \n The list can be found in list.no.donor")
 		}
-		if(!identical(names(l.rec), names(l.don)))
-			cat("Warning: the donation classes seem built \n using different factors with differnt levels")
+		
+#        if(length(l.rec)!=length(l.don)){
+#			cat("The no. of donation classes in recipient data is not equal \n to the no. of donation classes in donor data", fill=TRUE)
+#			stop("Possible reason: the variables used to classify units are not \n defined as factors or are factors with different levels")
+#		}
+#		if(!identical(names(l.rec), names(l.don)))
+#			cat("Warning: the donation classes seem built \n using different factors with differnt levels")
 			
 		nn.r <- unlist(lapply(l.r.lab, length))
 		nn.d <- unlist(lapply(l.d.lab, length))
 				
-		if(sum((nn.r>0) & (nn.d==0))>0) {
-			stop("In some donation classes there are NO available donors. \n Please modify the definition of the donation classes")
-		}	
-		l.r.lab <- l.r.lab[nn.r>0]
-		l.d.lab <- l.d.lab[nn.r>0]
-		l.rec <- l.rec[nn.r>0]
-		l.don <- l.don[nn.r>0]
+#		if(sum((nn.r>0) & (nn.d==0))>0) {
+#			stop("In some donation classes there are NO available donors. \n Please modify the definition of the donation classes")
+#		}	
+#		l.r.lab <- l.r.lab[nn.r>0]
+#		l.d.lab <- l.d.lab[nn.r>0]
+#		l.rec <- l.rec[nn.r>0]
+#		l.don <- l.don[nn.r>0]
 				
 		H <- length(l.rec)
 		mtc.ids <- as.list(numeric(H))
@@ -259,23 +265,24 @@ pps.draw <- function(n, w){
 		noad <- as.list(numeric(H))
 		
 		for(h in 1:H){
+            lab.h <- names(l.rec)[h]
 			if(is.null(match.vars)){
                 if(is.null(weight.don)){
-				    don.lab <- sample(l.d.lab[[h]], nn.r[[h]], replace=TRUE)
+				    don.lab <- sample(l.d.lab[[lab.h]], nn.r[[lab.h]], replace=TRUE)
                 }
                 else{
-                    pos <- pps.draw(n=nn.r[[h]], w=l.don[[h]][,weight.don])
-                    don.lab <- l.d.lab[[h]][pos]
+                    pos <- pps.draw(n=nn.r[[lab.h]], w=l.don[[lab.h]][,weight.don])
+                    don.lab <- l.d.lab[[lab.h]][pos]
                 }
-			    mtc.ids[[h]] <- cbind(rec.id=l.r.lab[[h]], don.id=don.lab)
+			    mtc.ids[[h]] <- cbind(rec.id=l.r.lab[[lab.h]], don.id=don.lab)
     		    sum.dist[[h]] <- NA
-			    noad[[h]] <- rep(nn.d[[h]], nn.r[[h]])
+			    noad[[h]] <- rep(nn.d[[lab.h]], nn.r[[lab.h]])
 			}
 			else{
-    			REC <- l.rec[[h]][,match.vars, drop=FALSE]
-				DON <- l.don[[h]][,match.vars, drop=FALSE]
+    			REC <- l.rec[[lab.h]][,match.vars, drop=FALSE]
+				DON <- l.don[[lab.h]][,match.vars, drop=FALSE]
 				if(is.null(weight.don)) out <- RANDwNND.hd(rec=REC, don=DON, dfun=dist.fun, w.don=NULL, cut.don=cut.don, k=k, ...)
-				else out <- RANDwNND.hd(rec=REC, don=DON, dfun=dist.fun, w.don=l.don[[h]][,weight.don], cut.don=cut.don, k=k, ...)
+				else out <- RANDwNND.hd(rec=REC, don=DON, dfun=dist.fun, w.don=l.don[[lab.h]][,weight.don], cut.don=cut.don, k=k, ...)
 				mtc.ids[[h]] <- out$mtc.ids
 				sum.dist[[h]] <- out$sum.dist
 				noad[[h]] <- out$noad

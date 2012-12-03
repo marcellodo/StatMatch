@@ -33,7 +33,7 @@ A single categorical Z variable is allowed.  One or more categorical variables c
 }
 
 \item{print.f}{
-A string specifying the data structure of the cells' estimates. When \cr \code{print.f="tables"} (default) all the cells' estimates will be saved as tables in a list.  On the contrary, if \code{print.f="data.frame"}, they will be saved as columns of a data.frame.
+A string: when \code{print.f="tables"} (default) all the cells' estimates will be saved as tables in a list.  On the contrary, if \code{print.f="data.frame"}, they will be saved as columns of a data.frame.
 }
 
 \item{tol}{
@@ -51,8 +51,8 @@ This function permits to compute the Frechet bounds for the relative frequencies
 
 
 The relative frequencies \eqn{p_{X=i}=n_i/n}{p(X=i)=n_i/n} are computed from the frequencies in \code{tab.x}; \cr
-the relative frequencies \eqn{p_{Y=j|X=i}=n_{ij}/n_{i \bullet}}{p(Y=j|X=i)=n_ij/n_i.} are computed from the \code{tab.xy}, \cr
-finally, \eqn{p_{Z=k|X=i}=n_{ik}/n_{k \bullet}}{p(Z=k|X=i)=n_ik/n_i.} are derived from \code{tab.xy}.
+the relative frequencies \eqn{p_{Y=j|X=i}=n_{ij}/n_{i+}}{p(Y=j|X=i)=n_ij/n_i.} are computed from the \code{tab.xy}, \cr
+finally, \eqn{p_{Z=k|X=i}=n_{ik}/n_{k+}}{p(Z=k|X=i)=n_ik/n_i.} are derived from \code{tab.xy}.
 
 It is assumed that the marginal distribution of the \bold{X} variables is the same in all the input tables: \code{tab.x}, \code{tab.xy} and \code{tab.xz}.  If this is not true a warning message will appear.
 
@@ -89,8 +89,8 @@ The estimated lower bounds for the relative frequencies in the table Y vs. Z whe
 The estimated upper bounds for the relative frequencies in the table Y vs. Z when conditioning on the \bold{X} variables.
 }
 
-\item{unc}{
-The overall uncertainty associated to input data, estimated according to the suggestion in Conti \emph{et al.} (2012) (see \code{\link[StatMatch]{Fbwidths.by.x}} for major details).
+\item{uncertainty}{
+The uncertainty associated to input data, summarized in terms average width of uncertainty bounds with and without conditioning on the \bold{X} variables estimated, overall uncertainty estimated according to the suggestion in Conti \emph{et al.} (2012) (see \code{\link[StatMatch]{Fbwidths.by.x}} for major details).
 }
 
 
@@ -99,8 +99,9 @@ When \code{print.f="data.frame"} the output list contains just two components:
 \item{bounds}{
 A data.frame whose columns reports the estimated uncertainty bounds.
 }
-\item{unc}{
-The overall uncertainty associated to input data, estimated according to the suggestion in Conti \emph{et al.} (2012) (see \code{\link[StatMatch]{Fbwidths.by.x}} for major details).
+
+\item{uncertainty}{
+The uncertainty associated to input data, summarized in terms average width of uncertainty bounds with and without conditioning on the \bold{X} variables estimated, overall uncertainty estimated according to the suggestion in Conti \emph{et al.} (2012) (see \code{\link[StatMatch]{Fbwidths.by.x}} for major details).
 }
 
 }
@@ -125,11 +126,12 @@ D'Orazio, M., Di Zio, M. and Scanu, M. (2006). \emph{Statistical Matching: Theor
 }
 
 \examples{
+
 data(quine, package="MASS") #loads quine from MASS
 str(quine)
 
 # split quine in two subsets
-set.seed(765)
+set.seed(7654)
 lab.A <- sample(nrow(quine), 70, replace=TRUE)
 quine.A <- quine[lab.A, 1:3]
 quine.B <- quine[-lab.A, 2:4]
@@ -144,31 +146,42 @@ bounds.yz <- Frechet.bounds.cat(tab.x=freq.x, tab.xy=freq.xy,
         tab.xz=freq.xz, print.f="data.frame")
 bounds.yz
 
+#compare marg. distribution of Xs in A and B
+comp.prop(p1=margin.table(freq.xy,c(1,2)), p2=margin.table(freq.xz,c(1,2)), 
+          n1=nrow(quine.A), n2=nrow(quine.B))
+
 # harmonize distr. of Sex vs. Age before applying
 # Frechet.bounds.cat()
 
-quine.A$f <- 70/nrow(quine) # sampling fraction
-quine.B$f <- (nrow(quine)-70)/nrow(quine)
+N <- nrow(quine)
+quine.A$pop <- N
+quine.A$f <- N/70 # reciprocal sampling fraction
+quine.B$pop <- N
+quine.B$f <- N/(N-70)
 
 # derive the table of Sex vs. Age related to the whole data set
-tot.sex.age <- xtabs(~Sex+Age, data=quine)
+tot.sex.age <- colSums(model.matrix(~Sex*Age-1, data=quine))
 tot.sex.age
 
 # use hamonize.x() to harmonize the Sex vs. Age between
 # quine.A and quine.B
 
 # create svydesign objects
-svy.qA <- svydesign(~1, fpc=~f, data=quine.A)
-svy.qB <- svydesign(~1, fpc=~f, data=quine.B)
+require(survey)
+svy.qA <- svydesign(~1, weights=~f, fpc=~pop, data=quine.A)
+svy.qB <- svydesign(~1, weights=~f, fpc=~pop, data=quine.B)
 
-# apply harmonize.x using poststratification
-out.hz <- harmonize.x(svy.A=svy.qA, svy.B=svy.qB, form.x=~Sex+Age,
-          cal.method="poststratify")
+# apply harmonize.x 
+out.hz <- harmonize.x(svy.A=svy.qA, svy.B=svy.qB, form.x=~Sex*Age-1, x.tot=tot.sex.age)
 
 # compute the new tables required by Frechet.bounds.cat()
 freq.x <- xtabs(out.hz$weights.A~Sex+Age, data=quine.A)
 freq.xy <- xtabs(out.hz$weights.A~Sex+Age+Eth, data=quine.A)
 freq.xz <- xtabs(out.hz$weights.B~Sex+Age+Lrn, data=quine.B)
+
+#compare marg. distribution of Xs in A and B
+comp.prop(p1=margin.table(freq.xy,c(1,2)), p2=margin.table(freq.xz,c(1,2)), 
+          n1=nrow(quine.A), n2=nrow(quine.B))
 
 # apply Frechet.bounds.cat()
 bounds.yz <- Frechet.bounds.cat(tab.x=freq.x, tab.xy=freq.xy,

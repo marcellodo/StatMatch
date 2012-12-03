@@ -1,7 +1,28 @@
+1.2.0	new function comp.prop() for comuting similarities/dissimilarities
+		between marginal/joint distributions of one or more categorical variables
+		
+		new function pw.assoc() to compute pairwise association measures among 
+		categorical response variable and a series of categorical predictors 
+        
+		rankNND.hotdeck() can perform constrained matching too
+		
+		rankNND.hotdeck(), NND.hotdeck() and mixed.mtc() solve constrained problems 
+		more efficiently  and faster by using solve_LSAP() in packege "clue" 
+		or (slower) by means of functions in the package "lpSolve".  
+		It is no more possible to solve constrained  problems by means 
+		of functions in package "optmatch"
+		
+		NDD.hotdeck(), RDDwNND.hotdeck() and rankNND.hotdeck() are more
+		efficent in handling donation classes (thanks to Alexis Eidelman
+		for suggestion).
+		
+		fixed a bug in mahalanobis.dist (thanks to Bruno C. Vidigal)
+ 
 1.1.0   The function comb.samples() now allows to derive predicions
 		at micro level for the target variables Y and Z
 
 1.0.5	fixed some minor bugs
+
 1.0.4	fixed some minor bugs
 
 1.0.3	now mixed.mtc() can handle also categorical common variables

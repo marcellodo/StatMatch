@@ -10,19 +10,19 @@
 \usage{
 NND.hotdeck(data.rec, data.don, match.vars, 
              don.class=NULL, dist.fun="Manhattan",
-             constrained=FALSE, constr.alg=NULL, ...) 
+             constrained=FALSE, constr.alg="Hungarian", ...) 
 }
 
 \arguments{
 
 \item{data.rec}{
-  	A matrix or data frame that plays the role of \emph{recipient}.  This data frame must contain the variables (columns) that should be used, directly or indirectly, in the computation of distances between its observations (rows) and those of \code{data.don}. 
+  	A matrix or data frame that plays the role of \emph{recipient}.  This data frame must contain the variables (columns) that should be used, directly or indirectly, in the matching application (specified via \code{match.vars} and eventually \code{don.class}). 
 
 Missing values (\code{NA}) are allowed.
 }
 
 \item{data.don}{
-   A matrix or data frame that plays the role of \emph{donor}.  The variables (columns) involved, directly or indirectly, in the computation of distance must be the same and of the same type as those in \code{data.rec}.   
+   A matrix or data frame that plays the role of \emph{donor}.  The variables (columns) involved, directly or indirectly, in the computation of distance must be the same and of the same type as those in \code{data.rec} (specified via \code{match.vars} and eventually \code{don.class}).   
 }
 
 \item{match.vars}{
@@ -32,13 +32,13 @@ A character vector with the names of the matching variables (the columns in both
 \item{don.class}{
 A character vector with the names of the variables (columns in both the data frames) that have to be used to identify the donation classes.  In this case the computation of distances is limited to those units of \code{data.rec} and \code{data.doc} that belong to the same donation class.  The case of empty donation classes should be avoided.  It would be preferable that variables used to form donation classes are defined as \code{factor}.
 
-When not specified (default) no donation classes are used.  This may result in a heavy computational effort.
+When not specified (default) no donation classes are used.  This should require more memory to store the distance matrix and a higher computational effort.
 }
 
 \item{dist.fun}{
 A string with the name of the distance function that has to be used.  The following distances are allowed: \dQuote{Manhattan} (aka \dQuote{City block}; default), \dQuote{Euclidean}, \dQuote{Mahalanobis},\dQuote{exact} or \dQuote{exact matching}, \dQuote{Gower}, \dQuote{minimax} or one of the distance functions available in the package \pkg{proxy}.  Note that the distance is computed using the function  \code{\link[proxy]{dist}} of the package \pkg{proxy} with the exception of the \dQuote{Gower} (see function \code{\link[StatMatch]{gower.dist}} for details), \dQuote{Mahalanobis} (function \code{\link[StatMatch]{mahalanobis.dist}}) and \dQuote{minimax} (see \code{\link[StatMatch]{maximum.dist}}) cases.
 
-When \code{dist.fun="Manhattan"}, \code{"Euclidean"}, \code{"Mahalanobis"} or \code{"minimax"} all the non numeric variables in \code{data.rec} and \code{data.don} will be converted to numeric.  On the contrary, when \code{dist.fun="exact"} or \dQuote{exact matching}, all the variables in \code{data.rec} and \code{data.don} will be converted to character and, as far as the distance computation is concerned, they will be treated as categorical nominal variables, i.e. distance is 0 if a couple of units shows the same response category and 1 otherwise. 
+When \code{dist.fun="Manhattan"}, \code{"Euclidean"}, \code{"Mahalanobis"} or \code{"minimax"} all the non numeric variables in \code{data.rec} and \code{data.don} will be converted to numeric.  On the contrary, when \code{dist.fun="exact"} or \code{dist.fun="exact matching"}, all the variables in \code{data.rec} and \code{data.don} will be converted to character and, as far as the distance computation is concerned, they will be treated as categorical nominal variables, i.e. distance is 0 if a couple of units present the same response category and 1 otherwise. 
 
 }
 
@@ -47,18 +47,17 @@ Logical.  When \code{constrained=FALSE} (default) each record in \code{data.don}
 }
 
 \item{constr.alg}{
-A string that has to be specified when \code{constrained=TRUE}.  Two choices are available: \dQuote{lpSolve} and \dQuote{relax}.  In the first case, \code{constr.alg="lpSolve"}, the transportation problem is solved by means of the function \code{\link[lpSolve]{lp.transport}} available in the package \pkg{lpSolve}.  When \code{constr.alg="relax"} the transportation problem is solved using RELAX--IV algorithm from Bertsekas and Tseng (1994), implemented in function \code{\link[optmatch]{pairmatch}} available in the package \pkg{optmatch}.  Note that \code{constr.alg="relax"} is faster  but the usage of the algorithm is allowed only for research purposes (for details see function \code{relaxinfo()} in the package \pkg{optmatch}).
+A string that has to be specified when \code{constrained=TRUE}.  Two choices are available: \dQuote{lpSolve} and \dQuote{hungarian}.  In the first case, \code{constr.alg="lpSolve"}, the transportation problem is solved by means of the function \code{\link[lpSolve]{lp.transport}} available in the package \pkg{lpSolve}.  When \code{constr.alg="hungarian"} (default) the transportation problem is solved using the Hungarian method, implemented in function \code{\link[clue]{solve_LSAP}} available in the package \pkg{clue}.  Note that Hungarian algorithm is faster and more efficient if compared to \code{constr.alg="lpSolve"} .
 }
 
 \item{...}{ 
 Additional arguments that may be required by \code{\link[StatMatch]{gower.dist}}, or by \cr 
 \code{\link[StatMatch]{maximum.dist}}, or by \code{\link[proxy]{dist}}.
-
 }
 }
   
 \details{
-This function finds a donor record in \code{data.don} for each record in the recipient data frame \code{data.rec}.  In the unconstrained case, it searches for the closest donor record in \code{data.don} for each record in the recipient data set, according to the chosen distance function.  When for a given recipient record there are more donors available at the minimum distance, one of them is picked at random.
+This function finds a donor record in \code{data.don} for each record in \code{data.rec}.  In the unconstrained case, it searches for the closest donor record in \code{data.don} for each record in the recipient data set, according to the chosen distance function.  When for a given recipient record there are more donors available at the minimum distance, one of them is picked at random.
 
 In the constrained case the set of donors is chosen in order to minimize the overall matching distance.  In this case the number of units (rows) in the donor data set has to be larger or equal to the number of units of the recipient data set.  When the donation classes are used, this condition must be satisfied in each donation class.  For further details on nearest neighbor distance hot deck refer to Chapter 2 in D'Orazio \emph{et al.} (2006).
 
@@ -89,10 +88,9 @@ How the function has been called.
 
 \references{
 
-Bertsekas, D.P. and Tseng, P. (1994). \dQuote{RELAX--IV: A Faster Version of the RELAX Code
-for Solving Minimum Cost Flow Problems}. \emph{Technical Report}, LIDS-P-2276, Massachusetts Institute of Technology, Cambridge. \url{http://web.mit.edu/dimitrib/www/RELAX4_doc.pdf} 
-
 D'Orazio, M., Di Zio, M. and Scanu, M. (2006). \emph{Statistical Matching: Theory and Practice.} Wiley, Chichester.
+
+Hornik K. (2012).  clue: Cluster ensembles.  R package version 0.3-45.  \url{http://CRAN.R-project.org/package=clue}.
 
 Rodgers, W.L. (1984). \dQuote{An evaluation of statistical matching}. \emph{Journal of Business and Economic Statistics}, \bold{2}, 91--102.
 
@@ -154,12 +152,13 @@ out.NND.3 <- NND.hotdeck(data.rec=iris.rec, data.don=iris.don,
 
 # find the donors using "Species" to form donation classes
 # and "Sepal.Length" and "Sepal.Width" to compute distance;
-# constrained case, "RELAX" algorithm
+# constrained case, "Hungarian" algorithm
 
-library(optmatch)
+library(clue)
 out.NND.4 <- NND.hotdeck(data.rec=iris.rec, data.don=iris.don,
-               match.vars=c("Sepal.Length", "Sepal.Width"),
-               don.class="Species", constr=TRUE, constr.alg="relax")
+                         match.vars=c("Sepal.Length", "Sepal.Width"),
+                         don.class="Species", constrained=TRUE, 
+                         constr.alg="Hungarian")
 
 
 # find the donors using "Species" to form donation classes
@@ -169,8 +168,9 @@ out.NND.4 <- NND.hotdeck(data.rec=iris.rec, data.don=iris.don,
 
 library(lpSolve)
 out.NND.5 <- NND.hotdeck(data.rec=iris.rec, data.don=iris.don,
-              match.vars=c("Sepal.Length", "Sepal.Width"),
-              don.class="Species", constr=TRUE, constr.alg="lpSolve")
+                         match.vars=c("Sepal.Length", "Sepal.Width"),
+                         don.class="Species", constrained=TRUE, 
+                         constr.alg="lpSolve")
 
 
 # Example of Imputation of missing values.

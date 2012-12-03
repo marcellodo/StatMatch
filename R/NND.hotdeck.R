@@ -1,12 +1,9 @@
 `NND.hotdeck` <-
-function (data.rec, data.don, match.vars, don.class=NULL, dist.fun="Manhattan", constrained=FALSE, constr.alg=NULL, ...)
+function (data.rec, data.don, match.vars, don.class=NULL, dist.fun="Manhattan", constrained=FALSE, constr.alg="Hungarian", ...)
 {
-	if(constrained && constr.alg=="relax"){
-		require(optmatch)
-	}
-	if(constrained && (constr.alg=="lpSolve" || constr.alg=="lpsolve")){
-		require(lpSolve)
-	}
+    if(constrained && (constr.alg=="Hungarian" || constr.alg=="hungarian")) require(clue)
+    if(constrained && (constr.alg=="lpSolve" || constr.alg=="lpsolve")) require(lpSolve)
+    
 	p <- length(match.vars)
 	if(!is.null(dim(data.rec))){
 		nr <- nrow(data.rec)
@@ -122,48 +119,38 @@ NND.hd <- function (rec, don, dfun="Manhattan", constr=FALSE, c.alg=NULL, ...)
 # the functions in library lpSolve are used
 
 	if(constr && (c.alg=="lpSolve" || c.alg=="lpsolve")){
-		if(nr==nd) appo <- lp.assign(cost.mat=mdist)
-		else if(nr<nd){
-                r.sig <- rep("==", nr)
-                r.rhs <- rep(1, nr)
-                c.sig <- rep("<=", nd)
-                c.rhs <- rep(1, nd)
-                appo <- lp.transport(cost.mat=mdist, row.signs=r.sig, row.rhs=r.rhs, col.signs=c.sig, col.rhs=c.rhs)
-		}   
-		else if(nr > nd){
-			warning("There more recipients than donors!")
-			cat("some donors will be used more than once", fill=TRUE)
-			r.sig <- rep("==", nr)
-			r.rhs <- rep(1, nr)
-			c.sig <- rep(">=", nd)
-			c.rhs <- rep(1, nd)
-			appo <- lp.transport(cost.mat=mdist, row.signs=r.sig, row.rhs=r.rhs, col.signs=c.sig, col.rhs=c.rhs)
-		}
-		sol <- appo$solution
-		ss <- c(t(sol))
-		cc <- c(t(col(sol)))
-		dist.rd <- mdist[cbind(1:nr, cc[as.logical(ss)] )]
-		rec.lab <- r.lab
-		don.lab <- d.lab[c(cc[as.logical(ss)])]
+	    if(nr==nd) appo <- lp.assign(cost.mat=mdist)
+	    else if(nr<nd){
+            r.sig <- rep("==", nr)
+            r.rhs <- rep(1, nr)
+            c.sig <- rep("<=", nd)
+            c.rhs <- rep(1, nd)
+            appo <- lp.transport(cost.mat=mdist, row.signs=r.sig, row.rhs=r.rhs, col.signs=c.sig, col.rhs=c.rhs)
+	    }   
+	    else if(nr > nd){
+		    warning("There more recipients than donors!")
+		    cat("some donors will be used more than once", fill=TRUE)
+		    r.sig <- rep("==", nr)
+		    r.rhs <- rep(1, nr)
+		    c.sig <- rep(">=", nd)
+		    c.rhs <- rep(1, nd)
+		    appo <- lp.transport(cost.mat=mdist, row.signs=r.sig, row.rhs=r.rhs, col.signs=c.sig, col.rhs=c.rhs)
+	    }
+	    sol <- appo$solution
+	    ss <- c(t(sol))
+	    cc <- c(t(col(sol)))
+	    dist.rd <- mdist[cbind(1:nr, cc[as.logical(ss)] )]
+	    rec.lab <- r.lab
+	    don.lab <- d.lab[c(cc[as.logical(ss)])]
 	}
 
-# the function pairmatch() in library optMatch are used
-	if(constr && c.alg=="relax"){
-		if(nr > nd) stop("The pairmatch() function in package 'optmatch' requires the no. \n of donors to be greater or equal than the no. of recipients")
-		out.pr <- pairmatch(mdist)
-		labs <- names(out.pr)
-		tt <- labs %in% r.lab
-		df1 <- data.frame(id.rec=labs[tt], mm=out.pr[tt], stringsAsFactors=FALSE)
-		df2 <- data.frame(id.don=labs[!tt], mm=out.pr[!tt], stringsAsFactors=FALSE)
-		df <- merge(df1, df2, by="mm")
-        rmd <- mdist[df$id.rec, , drop=FALSE]
-		rmd <- rmd[ ,df$id.don, drop=FALSE]
-        dist.rd <- diag(rmd[1:nr, 1:nr])
-		aa <- data.frame(id.rec=r.lab, pos=1:nr, stringsAsFactors=FALSE)
-		bb <- merge(aa, df, by="id.rec")
-		don.lab <- bb[order(bb$pos) , "id.don"]
-		rec.lab <- r.lab
-		dist.rd <- dist.rd[order(bb$pos)]
+# the function solve_LSAP() in package clue is used
+	if(constr && (c.alg=="Hungarian" || c.alg=="hungarian")){
+	    if(nr > nd) stop("It is required that no. of donors is greater \n or equal than the no. of recipients")
+		sol <- solve_LSAP(x=mdist, maximum=FALSE)
+	    rec.lab <- r.lab
+	    don.lab <- d.lab[as.integer(sol)]
+		dist.rd <- mdist[cbind(rec.lab, don.lab)]
 	}
 # output
     mtc.ids <- cbind(rec.id=rec.lab, don.id=don.lab)
@@ -185,41 +172,49 @@ NND.hd <- function (rec, don, dfun="Manhattan", constr=FALSE, c.alg=NULL, ...)
 	}
 	else{
 		if(length(don.class)==1){
-			l.rec <- split(data.rec[ ,match.vars, drop=FALSE], f=data.rec[ ,don.class])
-			l.don <- split(data.don[ ,match.vars, drop=FALSE], f=data.don[ ,don.class])
+			l.rec <- split(data.rec[ ,match.vars, drop=FALSE], f=data.rec[ ,don.class], drop=TRUE)
+			l.don <- split(data.don[ ,match.vars, drop=FALSE], f=data.don[ ,don.class], drop=TRUE)
 		}
 		else{
-			l.rec <- split(data.rec[ ,match.vars, drop=FALSE], f=as.list(data.rec[ ,don.class]))
-			l.don <- split(data.don[ ,match.vars, drop=FALSE], f=as.list(data.don[ ,don.class]))
+			l.rec <- split(data.rec[ ,match.vars, drop=FALSE], f=as.list(data.rec[ ,don.class]), drop=TRUE)
+			l.don <- split(data.don[ ,match.vars, drop=FALSE], f=as.list(data.don[ ,don.class]), drop=TRUE)
 		}
-		if(length(l.rec)!=length(l.don)){
-			cat("The no. of donation classes in recipient data is not equal to the no. of donation classes in donor data", fill=TRUE)
-			stop("Possible reason: the variables used to group the units are \n not defined as factors or are factors with different levels")
+#		if(length(l.rec)!=length(l.don)){
+#			cat("The no. of donation classes in recipient data is not equal to the no. of donation classes in donor data", fill=TRUE)
+#			stop("Possible reason: the variables used to group the units are \n not defined as factors or are factors with different levels")
+#		}
+#		if(!identical(names(l.rec), names(l.don)))
+#			cat("Warning: the donation classes seem built using \n different factors with differnt levels")
+#
+#        if(p==1){
+#            nn.r <- unlist(lapply(l.rec, length))
+#            nn.d <- unlist(lapply(l.don, length))
+#        }
+#		else {
+#            nn.r <- unlist(lapply(l.rec, nrow))
+#            nn.d <- unlist(lapply(l.don, nrow))
+#        }
+#        l.rec <- l.rec[nn.r>0]
+#        l.don <- l.don[nn.r>0]
+#        nn.r <- nn.r[nn.r>0]
+#        nn.d <- nn.d[nn.r>0]
+#        if(any(nn.d==0)) {
+#			stop("For some donation classes there are NO donors available. \n Please modify the definition of the donation classes")
+#		}	
+        tst <- which( !(names(l.rec) %in% names(l.don)) )
+        if(length(tst)) {
+		    list.no.donor <- names(l.rec)[tst]
+		    stop("For some cell in recipient data, there is no potential donor \n The list can be found in list.no.donor")
 		}
-		if(!identical(names(l.rec), names(l.don)))
-			cat("Warning: the donation classes seem built using \n different factors with differnt levels")
-		if(p==1){
-            nn.r <- unlist(lapply(l.rec, length))
-            nn.d <- unlist(lapply(l.don, length))
-        }
-		else {
-            nn.r <- unlist(lapply(l.rec, nrow))
-            nn.d <- unlist(lapply(l.don, nrow))
-        }
-        l.rec <- l.rec[nn.r>0]
-        l.don <- l.don[nn.r>0]
-        nn.r <- nn.r[nn.r>0]
-        nn.d <- nn.d[nn.r>0]
-        if(any(nn.d==0)) {
-			stop("For some donation classes there are NO donors available. \n Please modify the definition of the donation classes")
-		}	
-		H <- length(l.rec)
+		
+        H <- length(l.rec)
 		mtc.ids <- as.list(numeric(H))
 		dist.rd <- as.list(numeric(H))
 		if(!constrained) noad <- as.list(numeric(H))
 		for(h in 1:H){
-        out <- NND.hd(rec=l.rec[[h]], don=l.don[[h]], dfun=dist.fun, constr=constrained, c.alg=constr.alg )
-        mtc.ids[[h]] <- out$mtc.ids
+            lab.h <- names(l.rec)[h]
+            out <- NND.hd(rec=l.rec[[lab.h]], don=l.don[[lab.h]], dfun=dist.fun, constr=constrained, c.alg=constr.alg)
+            mtc.ids[[h]] <- out$mtc.ids
 			  dist.rd[[h]] <- out$dist.rd
 			  if(!constrained) noad[[h]] <- out$noad
 		}

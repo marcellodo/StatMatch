@@ -50,7 +50,7 @@ function(tab.x, tab.xy, tab.xz)
         appo <- data.frame(fb$low.cx)
         out.rng[[h]] <- data.frame(appo[,1:2], lower=c(fb$low.cx), upper=c(fb$up.cx), width=c(fb$up.cx-fb$low.cx))
         av.rng[h,3] <- mean( c(fb$up.cx-fb$low.cx))
-        av.rng[h,4] <- fb$unc
+        av.rng[h,4] <- fb$uncertainty["overall"]
    
     }
     lab.list <- paste("|", lapply(appo.var, paste, collapse="+"), sep="")
@@ -60,9 +60,12 @@ function(tab.x, tab.xy, tab.xz)
     row.names(av.rng) <- paste("|", lapply(appo.var, paste, collapse="+"), sep="")
 
     aa <- n.x - av.rng$x.vars
-    ord.lab <- order(aa, av.rng$ov, decreasing=TRUE)
+    ord.lab <- order(aa, av.rng$ov.unc, decreasing=TRUE)
+#    ord.all <- order(aa, av.rng$ov.unc, decreasing=TRUE)
     
     out.rng[[(H+1)]] <- av.rng[ord.lab,]
-    names(out.rng) <- c(lab.list, "av.widths")
+#    out.rng[[(H+2)]] <- av.rng[ord.all,]
+    
+    names(out.rng) <- c(lab.list, "sum.unc")
     out.rng
 }

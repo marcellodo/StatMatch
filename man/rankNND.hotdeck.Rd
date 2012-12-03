@@ -9,7 +9,8 @@
 
 \usage{
 rankNND.hotdeck(data.rec, data.don, var.rec, var.don=var.rec, 
-                 don.class=NULL,  weight.rec=NULL, weight.don=NULL) 
+                 don.class=NULL,  weight.rec=NULL, weight.don=NULL,
+                 constrained=FALSE, constr.alg="Hungarian") 
 }
 
 \arguments{
@@ -25,11 +26,11 @@ Missing values (\code{NA}) are not allowed.
 }
 
 \item{var.rec}{
-A character vector with the name of the variable that should be ranked. 
+A character vector with the name of the variable in \code{data.rec} that should be ranked. 
 }
 
 \item{var.don}{
-A character vector with the name of the variable that should be ranked.  If not specified, by default \code{var.don=var.rec}.
+A character vector with the name of the variable \code{data.don} that should be ranked.  If not specified, by default \code{var.don=var.rec}.
 }
 
 \item{don.class}{
@@ -46,24 +47,32 @@ Eventual name of the variable in \code{data.rec} that provides the weights that 
 Eventual name of the variable in \code{data.don} that provides the weights that should be used in computing the the empirical cumulative distribution function for \code{var.don} (see Details).
 }
 
+\item{constrained}{
+Logical.  When \code{constrained=FALSE} (default) each record in \code{data.don} can be used as a donor more than once.  On the contrary, when \cr \code{constrained=TRUE} each record in \code{data.don} can be used as a donor only once.  In this case, the set of donors is selected by solving a transportation problem, in order to minimize the overall matching distance.  See description of the argument \code{constr.alg} for details.
+}
+
+\item{constr.alg}{
+A string that has to be specified when \code{constrained=TRUE}.  Two choices are available: \dQuote{lpSolve} and \dQuote{Hungarian}.  In the first case, \code{constr.alg="lpSolve"}, the transportation problem is solved by means of the function \code{\link[lpSolve]{lp.transport}} available in the package \pkg{lpSolve}.  When \code{constr.alg="Hungarian"} (default) the transportation problem is solved using the Hungarian method, implemented in function \code{\link[clue]{solve_LSAP}} available in the package \pkg{clue}.  Note that \cr \code{constr.alg="Hungarian"} is faster and more efficient.
+}
+
 }
   
 \details{
 This function finds a donor record for each record in the recipient data set.  The chosen donor is the one at the closest distance in terms of empirical cumulative distribution (Singh et al., 1990).  In practice the distance is computed by considering the estimated empirical cumulative distribution for the reference variable (\code{var.rec} and \code{var.don}) in \code{data.rec} and \code{data.don}.  The empirical cumulative distribution function is estimated by:
 
-\deqn{ \hat{F}(y_k) = \frac{1}{n} \sum_{i=1}^{n} I(y_i\leq y_k) }{F(y_k) = (1/n) sum_i I(y_i <= y_k)}
+\deqn{ \hat{F}(y) = \frac{1}{n} \sum_{i=1}^{n} I(y_i\leq y) }{F(y) = (1/n) sum_i I(y_i <= y)}
 
-being \eqn{I()=1}{I()=1} if \eqn{y_i\leq y_k}{ y_i <= y_k} and 0 otherwise.
+being \eqn{I()=1}{I()=1} if \eqn{y_i\leq y}{ y_i <= y} and 0 otherwise.
 
 In the presence of weights the empirical cumulative distribution function is estimated by:
 
-\deqn{ \hat{F}(y_k) =  \frac{\sum_{i=1}^{n} w_i I(y_i\leq y_k)}{\sum_{i=1}^{n} w_i} }{F(y_k) = (sum_i w_i*I(y_i <= y_k)) /(sum_i w_i)}
+\deqn{ \hat{F}(y) =  \frac{\sum_{i=1}^{n} w_i I(y_i\leq y)}{\sum_{i=1}^{n} w_i} }{F(y) = (sum_i w_i*I(y_i <= y)) /(sum_i w_i)}
 
-When there are more donors at the same distance then one is chosen at random.
+In the unconstrained case, when there are more donors at the same distance, one of them is chosen at random.
 
 Note that when the donation classes are introduced then empirical cumulative distribution function is estimated independently in each donation classes and the search of a recipient is restricted to donors in the same donation class.
 
-A donor can be chosen more than once.
+A donor can be chosen more than once. To avoid this set \code{constrained=TRUE}. In such a case a donor can be chosen just once and the selection of the donors is carried out by solving a transportation problem with the objective of minimizing the overall matching distance (sum of the distances recipient-donor).
 } 
 
 
@@ -79,7 +88,7 @@ A vector with the distances among each recipient unit and the corresponding dono
 }
 
 \item{noad}{
-The number of available donors at the minimum distance for each recipient unit. 
+The number of available donors at the minimum distance for each recipient unit (only in unconstrained case)
 }
 
 \item{call}{
@@ -123,24 +132,44 @@ A <- agsrs[, c("region", "acres82", "acres87", "w.srs")]
 B <- agstrat[, c("region", "acres82", "acres92", "weight")]
 
 # simplest call to rankNND.hotdeck()
+# UNCONSTRAINED case
 out.1 <- rankNND.hotdeck(data.rec=A, data.don=B, var.rec="acres82")
 fused.1 <- create.fused(data.rec=A, data.don=B,
-             mtc.ids=out.1$mtc.ids, z.vars="acres92")
+                        mtc.ids=out.1$mtc.ids, z.vars="acres92")
 head(fused.1)
 
 #  call to rankNND.hotdeck() with usage of weights
+# UNCONSTRAINED case
 out.2 <- rankNND.hotdeck(data.rec=A, data.don=B, var.rec="acres82",
-            weight.rec="w.srs", weight.don="weight")
+                         weight.rec="w.srs", weight.don="weight")
 fused.2 <- create.fused(data.rec=A, data.don=B,
-             mtc.ids=out.2$mtc.ids, z.vars="acres92")
+                        mtc.ids=out.2$mtc.ids, z.vars="acres92")
 head(fused.2)
 
 #  call to rankNND.hotdeck() with usage of weights and don classes
+# UNCONSTRAINED case
 out.3 <- rankNND.hotdeck(data.rec=A, data.don=B, var.rec="acres82",
-            don.class="region", weight.rec="w.srs", weight.don="weight")
+                         don.class="region", weight.rec="w.srs", weight.don="weight")
 fused.3 <- create.fused(data.rec=A, data.don=B,
-             mtc.ids=out.3$mtc.ids, z.vars="acres92")
+                        mtc.ids=out.3$mtc.ids, z.vars="acres92")
 head(fused.3)
+
+# call to rankNND.hotdeck()
+# CONSTRAINED case
+out.1c <- rankNND.hotdeck(data.rec=A, data.don=B, var.rec="acres82",
+                         constrained=TRUE, constr.alg="Hungarian")
+fused.1c <- create.fused(data.rec=A, data.don=B,
+                        mtc.ids=out.1c$mtc.ids, z.vars="acres92")
+head(fused.1c)
+
+#  call to rankNND.hotdeck() with usage of weights
+# CONSTRAINED case
+out.2c <- rankNND.hotdeck(data.rec=A, data.don=B, var.rec="acres82",
+                          weight.rec="w.srs", weight.don="weight",
+                          constrained=TRUE, constr.alg="Hungarian")
+fused.2c <- create.fused(data.rec=A, data.don=B,
+                        mtc.ids=out.2c$mtc.ids, z.vars="acres92")
+head(fused.2c)
 
 }
 

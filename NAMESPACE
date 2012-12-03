@@ -7,6 +7,6 @@ exportPattern(".")
 # Import all packages listed as Imports or Depends
 import(
   proxy,
-  lpSolve,
+  clue,
   survey
 )

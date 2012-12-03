@@ -16,13 +16,13 @@ RANDwNND.hotdeck(data.rec, data.don, match.vars=NULL,
 \arguments{
 
 \item{data.rec}{
-  	A numeric matrix or data frame that plays the role of \emph{recipient}.  This data frame must contain the variables (columns) that should be used, directly or indirectly, in the computation of distances between its observations (rows) and those in \code{data.don}. 
+  	A numeric matrix or data frame that plays the role of \emph{recipient}.  This data frame must contain the variables (columns), specified via \code{match.vars} and \code{don.class}, that should be used in the matching. 
   	
 Missing values (\code{NA}) are allowed.
 }
 
 \item{data.don}{
-   A matrix or data frame that plays the role of \emph{donor}.  The variables (columns) involved, directly or indirectly, in the computation of distances must be the same and of the same type as those in \code{data.rec}.   
+   A matrix or data frame that plays the role of \emph{donor}.  This data frame must contain the variables (columns), specified via \code{match.vars} and \code{don.class}, that should be used in the matching. 
 }
 
 \item{match.vars}{
@@ -39,7 +39,8 @@ When not specified (default), no donation classes are used.  This may result in 
 \item{dist.fun}{
 A string with the name of the distance function that has to be used.  The following distances are allowed: \dQuote{Manhattan} (aka \dQuote{City block}; default), \dQuote{Euclidean}, \dQuote{Mahalanobis},\dQuote{exact} or \dQuote{exact matching}, \dQuote{Gower}, \dQuote{minimax} or one of the distance functions available in the package \pkg{proxy}.  Note that the distance is computed using the function  \code{\link[proxy]{dist}} of the package \pkg{proxy} with the exception of the \dQuote{Gower} (see function \code{\link[StatMatch]{gower.dist}} for details), \dQuote{Mahalanobis} (function \code{\link[StatMatch]{mahalanobis.dist}}) and \dQuote{minimax} (see \code{\link[StatMatch]{maximum.dist}}) cases.
 
-When \code{dist.fun="Manhattan"}, \code{"Euclidean"}, \code{"Mahalanobis"} or \code{"minimax"} all the non numeric variables in \code{data.rec} and \code{data.don} will be converted to numeric.  On the contrary, when \code{dist.fun="exact"} or \dQuote{exact matching}, all the variables in \code{data.rec} and \code{data.don} will be converted to character and, as far as the distance computation is concerned, they will be treated as categorical nominal variables, i.e. distance is 0 if a couple of units shows the same response category and 1 otherwise. 
+When \code{dist.fun="Manhattan"}, \code{"Euclidean"}, \code{"Mahalanobis"} or \code{"minimax"} all the non numeric variables in \code{data.rec} and \code{data.don} will be converted to numeric.  On the contrary, when \code{dist.fun="exact"} or \cr
+\code{dist.fun="exact matching"}, all the variables in \code{data.rec} and \code{data.don} will be converted to character and, as far as the distance computation is concerned, they will be treated as categorical nominal variables, i.e. distance is 0 if a couple of units shows the same response category and 1 otherwise. 
 }
 
 \item{cut.don}{
@@ -75,7 +76,7 @@ Additional arguments that may be required by \code{\link[StatMatch]{gower.dist}}
 }
   
 \details{
-This function finds a donor record for each record in the recipient data set.  The donor is chosen at random in the subset of available donors.  This procedure is known as \emph{random hot deck} (cf. Andridge and Little, 2010).  In this case, the number of closest donors retained to form the subset is determined according to criterion specified with the argument \code{cut.don}.
+This function finds a donor record for each record in the recipient data set.  The donor is chosen at random in the subset of available donors.  This procedure is known as \emph{random hot deck} (cf. Andridge and Little, 2010).  In \code{RANDwNND.hotdeck} , the number of closest donors retained to form the subset is determined according to criterion specified with the argument \code{cut.don}.
 The selection of the donor among those in the subset is carried out with equal probability (\code{weight.don=NULL}) or with probability proportional to a weight associated to the donors (specified via the \code{weight.don} argument).  This procedure is is known as \emph{weighted random hot deck} (cf. Andridge and Little, 2010).
 
 Note that the same donor can be used more than once.

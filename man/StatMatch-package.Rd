@@ -12,8 +12,8 @@ The package StatMatch provides some R functions to perform statistical matching,
 \tabular{ll}{
 Package: \tab StatMatch\cr
 Type: \tab Package\cr
-Version: \tab 1.0.3\cr
-Date: \tab 2011-10-06\cr
+Version: \tab 1.2.0\cr
+Date: \tab 2012-12-03 \cr
 License: \tab EUPL\cr
 }
 

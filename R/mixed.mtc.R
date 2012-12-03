@@ -1,9 +1,9 @@
 `mixed.mtc` <-
-function (data.rec, data.don, match.vars, y.rec, z.don, method="ML", rho.yz=0, micro=FALSE, constr.alg="lpSolve")
+function (data.rec, data.don, match.vars, y.rec, z.don, method="ML", rho.yz=0, micro=FALSE, constr.alg="Hungarian")
 {
-	if((micro & constr.alg=="lpSolve") | (micro & constr.alg=="lpsolve") ) require(lpSolve)
-	if((micro & constr.alg=="relax") ) require(optmatch)
-	
+    if(micro && (constr.alg=="Hungarian" || constr.alg=="hungarian")) require(clue)
+    if(micro && (constr.alg=="lpSolve" || constr.alg=="lpsolve")) require(lpSolve)
+    
 	nA <- nrow(data.rec)
 	nB <- nrow(data.don)
 	A.lab <- rownames(data.rec)
@@ -101,13 +101,11 @@ function (data.rec, data.don, match.vars, y.rec, z.don, method="ML", rho.yz=0, m
 		mu.y <- mean(y.A)
 		S.y <- var(y.A)
 		S.xy <- var(x.A, y.A)
-		
 
 		# estimates for Z	
 		mu.z <- mean(z.B)
 		S.z <- var(z.B)
 		S.xz <- var(x.B,z.B)
-		
 		
 		#fills in the Var-Cov matrix
 		vc[pos.x, pos.x] <- S.x
@@ -116,8 +114,8 @@ function (data.rec, data.don, match.vars, y.rec, z.don, method="ML", rho.yz=0, m
 		vc[pos.y, pos.y] <- S.y
 		vc[pos.z, pos.z] <- S.z
 
-		# estimation of S.yz
-		# step.1 checks if the input value for Cor(Y,Z), rho.yz, is admissible  
+        # estimation of S.yz
+        # step.1 checks if the input value for Cor(Y,Z), rho.yz, is admissible  
 		if(p.x==1){
        		c.xy <- c(cor(x.A, y.A))
     		c.xz <- c(cor(x.B, z.B))
@@ -138,7 +136,7 @@ function (data.rec, data.don, match.vars, y.rec, z.don, method="ML", rho.yz=0, m
             low.c <- min(cc.yz)
             up.c <- max(cc.yz)
 		}
-		# step.2 checks whether the input value rho.yz for Cor(Y,Z) is addmisible. Otherwise takes the closest admissible value.
+        # step.2 checks whether the input value rho.yz for Cor(Y,Z) is addmisible. Otherwise takes the closest admissible value.
 		cat("input value for rho.yz is", rho.yz, fill=TRUE)
 		cat("low(rho.yz)=", low.c, fill=TRUE)
 		cat("up(rho.yz)=", up.c, fill=TRUE)
@@ -204,46 +202,34 @@ function (data.rec, data.don, match.vars, y.rec, z.don, method="ML", rho.yz=0, m
 		madist <- matrix(0, nA, nB)
 		for(i in 1:nA){
 			new.A <- c(y.A[i], z.ep[i])
-			madist[i,] <- mahalanobis(new.B, new.A, irSS, inverted=TRUE)
+			madist[i,] <- sqrt(mahalanobis(new.B, new.A, irSS, inverted=TRUE))
 		}
 		dimnames(madist) <- list(A.lab, B.lab)
 		# constrained nearest neighbour matching matching is performed
-		# using functions in library lpSolve (only small problems)
-        if(constr.alg=="lpSolve"){
-            
-            if(nA==nB) appo <- lp.assign(cost.mat=madist)
-            else if(nA<nB){
-				r.sig <- rep("==", nA)
-				r.rhs <- rep(1, nA)
-				c.sig <- rep("<=", nB)
-				c.rhs <- rep(1, nB)
-				appo <- lp.transport(cost.mat=madist, row.signs=r.sig, row.rhs=r.rhs, col.signs=c.sig, col.rhs=c.rhs)
-            }   
-            sol <- appo$solution
-            ss <- c(t(sol))
-            cc <- c(t(col(sol)))
-            dist.rd <- madist[cbind(1:nA, cc[as.logical(ss)] )]
-            don.lab <- B.lab[c(cc[as.logical(ss)])]
-        }
-
-		# the function pairmatch() in library optMatch are used
-        else if(constr.alg=="relax"){
-                if(nA > nB) stop("pairmatch() function in package 'optmatch' \n
-                                  requires the no. of donors to be greater \n
-                                  or equal than the no. of recipients")
-                out.pr <- pairmatch(madist)
-                labs <- names(out.pr)
-                tt <- labs %in% A.lab
-                df1 <- data.frame(id.rec=labs[tt], mm=out.pr[tt], stringsAsFactors=FALSE)
-                df2 <- data.frame(id.don=labs[!tt], mm=out.pr[!tt], stringsAsFactors=FALSE)
-                df <- merge(df1, df2, by="mm")
-                rmd <- madist[df$id.rec, ]
-                rmd <- rmd[ ,df$id.don]
-                dist.rd <- diag(rmd[1:nA, 1:nA])
-                aa <- data.frame(id.rec=A.lab, pos=1:nA, stringsAsFactors=FALSE)
-                bb <- merge(aa, df, by="id.rec")
-                don.lab <- bb[order(bb$pos) , "id.don"]
-                dist.rd <- dist.rd[order(bb$pos)]
+		if(constr.alg=="lpSolve" || constr.alg=="lpsolve"){
+		    
+		    if(nA==nB) appo <- lp.assign(cost.mat=madist)
+		    else if(nA<nB){
+		        r.sig <- rep("==", nA)
+		        r.rhs <- rep(1, nA)
+		        c.sig <- rep("<=", nB)
+		        c.rhs <- rep(1, nB)
+		        appo <- lp.transport(cost.mat=madist, row.signs=r.sig, row.rhs=r.rhs, col.signs=c.sig, col.rhs=c.rhs)
+		    }   
+		    sol <- appo$solution
+		    ss <- c(t(sol))
+		    cc <- c(t(col(sol)))
+		    dist.rd <- madist[cbind(1:nA, cc[as.logical(ss)] )]
+		    don.lab <- B.lab[c(cc[as.logical(ss)])]
+		}
+		
+		# the function solve_LSAP in package clue is used
+		else if(constr.alg=="hungarian" || constr.alg=="Hungarian"){
+		    if(nA > nB) stop("It is required  that the no. of donors \n 
+		                      is equal or greater than the no. of recipients")
+		    sol <- solve_LSAP(x=madist, maximum=FALSE)
+		    don.lab <- B.lab[as.integer(sol)]
+		    dist.rd <- madist[cbind(A.lab, don.lab)]
         }
 		
 		rec.lab <- substring(A.lab, 3)

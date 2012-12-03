@@ -16,5 +16,5 @@ mahalanobis.dist <- function(data.x, data.y=NULL, vc=NULL){
     }
     if(is.null(data.y)) dimnames(md) <- list(rownames(data.x), rownames(data.x))
     else dimnames(md) <- list(rownames(data.x), rownames(data.y))
-    md
+    sqrt(md)
 }
