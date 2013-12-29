@@ -1,7 +1,7 @@
 `NND.hotdeck` <-
 function (data.rec, data.don, match.vars, don.class=NULL, dist.fun="Manhattan", constrained=FALSE, constr.alg="Hungarian", ...)
 {
-    if(constrained && (constr.alg=="Hungarian" || constr.alg=="hungarian")) require(clue)
+#    if(constrained && (constr.alg=="Hungarian" || constr.alg=="hungarian")) require(clue)
     if(constrained && (constr.alg=="lpSolve" || constr.alg=="lpsolve")) require(lpSolve)
     
 	p <- length(match.vars)
@@ -58,7 +58,7 @@ NND.hd <- function (rec, don, dfun="Manhattan", constr=FALSE, c.alg=NULL, ...)
 # compute matrix of distances between obs. in x.don and obs. in x.rec
 # function dist() in package "proxy" is used! 
 	if(dfun=="Euclidean" || dfun=="euclidean" || dfun=="Manhattan" || dfun=="manhattan"){
-        require(proxy)
+ #       require(proxy)
         if(is.data.frame(x.rec)) x.rec <- fact2dummy(x.rec, all=FALSE)
         if(is.data.frame(x.don)) x.don <- fact2dummy(x.don, all=FALSE)
         mdist <- dist(x=x.rec, y=x.don, method=dfun, ...)
@@ -91,7 +91,7 @@ NND.hd <- function (rec, don, dfun="Manhattan", constr=FALSE, c.alg=NULL, ...)
 		mdist[is.na(mdist)] <- 1 # NA can occur when p=1 and x.rec and x.don is of type logical
 	}
 	else{
-        require(proxy)
+ #       require(proxy)
 		mdist <- dist(x=x.rec, y=x.don, method=dfun, ...)
 	}
     dimnames(mdist) <- list(r.lab, d.lab)

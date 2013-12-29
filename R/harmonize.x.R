@@ -14,7 +14,7 @@ function(svy.A, svy.B, form.x, x.tot=NULL, cal.method="linear", ...)
     n.B <- nrow(data.B)
     w0.B <- weights(svy.B)
 
-    require(survey)
+#    require(survey)
 
 # if population totals are unknown (x.tot=NULL) a 'pooled' estimate id derived
 

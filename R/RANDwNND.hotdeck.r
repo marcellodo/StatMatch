@@ -20,10 +20,12 @@ function (data.rec, data.don, match.vars=NULL, don.class=NULL, dist.fun="Manhatt
 	if(is.null(r.lab)) r.lab <- paste("rec", 1:nr, sep="=")
 	else r.lab <- paste("rec", r.lab, sep="=")
 	row.names(data.rec) <- r.lab
-	if(is.null(d.lab)) d.lab <- paste("don", 1:nd, sep="=")
+	
+    if(is.null(d.lab)) d.lab <- paste("don", 1:nd, sep="=")
 	else d.lab <- paste("don", d.lab, sep="=")
 	row.names(data.don) <- d.lab
-	p <- length(match.vars)
+	
+    p <- length(match.vars)
     if(!is.null(match.vars)){
         if(dist.fun=="Euclidean" || dist.fun=="euclidean" || dist.fun=="Manhattan" || dist.fun=="manhattan" || dist.fun=="Mahalanobis" || dist.fun=="mahalanobis" || dist.fun=="minimax" || dist.fun=="MiniMax" || dist.fun=="Minimax"){
             cat("Warning: The ", dist.fun, " distance is being used", fill=TRUE)
@@ -48,26 +50,42 @@ RANDwNND.hd <- function (rec, don, dfun="Manhattan", cut.don="rot", k=NULL, w.do
 	if(is.null(r.lab)) r.lab <- paste("rec", 1:nr, sep="=")
 	d.lab <- rownames(x.don)
 	if(is.null(d.lab)) d.lab <-  paste("don", 1:nr, sep="=")
-
     if(is.null(w.don)) ww <- rep(1,nd)
     else ww <- w.don
 # compute matrix of distances between obs. in x.don and obs. in x.rec
 # function dist() in package "proxy" is used! 
+    if(cut.don=="rot"){
+        k <- ceiling(sqrt(nd))
+        if(k==0) stop("k=sqrt(no. of dons) is equal to 0")
+    }
+    else if(cut.don=="span"){ 
+        if(k==0 || k>1) stop("When cut.don='span' then  0 < k <= 1")
+        k <- ceiling(nd*k)
+        if(k>nd) k <- nd
+        if(k==0) stop("k=round(N. of dons * k) is equal to 0")
+    }
+    else if(cut.don=="exact"){
+        if(k==0 || k>nd) stop("When cut.don=exact, k should be such that  1 < k <= no. of dons") 
+    }
+    
     if(dfun=="Euclidean" || dfun=="Manhattan"){
-        require(proxy)
+   #     require(proxy)
         x.rec <- fact2dummy(x.rec, all=FALSE)
         x.don <- fact2dummy(x.don, all=FALSE)
         mdist <- dist(x=x.rec, y=x.don, method=dfun, ...)
+        dimnames(mdist) <- list(r.lab, d.lab)
     }
 	else if(dfun=="Mahalanobis" || dfun=="mahalanobis"){
         if(is.data.frame(x.rec)) x.rec <- fact2dummy(x.rec, all=FALSE)
         if(is.data.frame(x.don)) x.don <- fact2dummy(x.don, all=FALSE)
         mdist <- mahalanobis.dist(data.x=x.rec, data.y=x.don, ...)
+        dimnames(mdist) <- list(r.lab, d.lab)
 	}
 	else if(dfun=="minimax" || dfun=="MiniMax" || dfun=="Minimax"){
         x.rec <- fact2dummy(x.rec, all=FALSE)
         x.don <- fact2dummy(x.don, all=FALSE)
         mdist <- maximum.dist(data.x=x.rec, data.y=x.don, ...)
+        dimnames(mdist) <- list(r.lab, d.lab)
 	}
     else if(dfun=="exact" || dfun=="exact matching"){
         dxr <- dim(x.rec)
@@ -77,9 +95,10 @@ RANDwNND.hd <- function (rec, don, dfun="Manhattan", cut.don="rot", k=NULL, w.do
         x.don <- as.character(as.matrix(x.don))
         dim(x.don) <- dxd
         xx <- data.frame(rbind(x.rec, x.don))
-		    x.rec <- xx[1:nr,]
-		    x.don <- xx[-(1:nr),]
-		    mdist <- gower.dist(data.x=x.rec, data.y=x.don)
+		x.rec <- xx[1:nr,]
+		x.don <- xx[-(1:nr),]
+		mdist <- gower.dist(data.x=x.rec, data.y=x.don)
+        dimnames(mdist) <- list(r.lab, d.lab)
     }
     else if(dfun=="Gower" || dfun=="gower"){
         # if(p==1 && is.factor(x.rec)) x.rec <- list(x.rec)
@@ -87,24 +106,20 @@ RANDwNND.hd <- function (rec, don, dfun="Manhattan", cut.don="rot", k=NULL, w.do
         mdist <- gower.dist(data.x=x.rec, data.y=x.don, ...)
         mdist[is.nan(mdist)] <- 1 # NaN can occur when p=1 and x.rec and x.don is of type logical
         mdist[is.na(mdist)] <- 1 # NA can occur when p=1 and x.rec and x.don is of type logical
+        dimnames(mdist) <- list(r.lab, d.lab)
+    }
+    else if(dfun=="RANN" || dfun=="ANN"){
+ #       require(RANN)
+        if(cut.don=="min") k0 <- 10
+        else if (cut.don=="k.dist") stop("When dist.fun='RANN' it is not possible to to set \n cut.don = 'k.dist' ")
+        else k0 <- k
+        dd <- nn2(data=x.rec, query=x.don, k=k0, ...)
+        mdist <- dd$nn.dists
     }
     else {
-        require(proxy)
+  #      require(proxy)
         mdist <- dist(x=x.rec, y=x.don, method=dfun, ...)
-    }
-    dimnames(mdist) <- list(r.lab, d.lab)
-    if(cut.don=="rot"){
-        k <- ceiling(sqrt(nd))
-    	if(k==0) stop("k=sqrt(no. of dons) is equal to 0")
-    }
-    else if(cut.don=="span"){ 
-        if(k==0 || k>1) stop("When cut.don='span' then  0 < k <= 1")
-        k <- ceiling(nd*k)
-		if(k>nd) k <- nd
-		if(k==0) stop("k=round(N. of dons * k) is equal to 0")
-    }
-    else if(cut.don=="exact"){
-	    if(k==0 || k>nd) stop("When cut.don=exact, k should be such that  1 < k <= no. of dons") 
+        dimnames(mdist) <- list(r.lab, d.lab)
     }
 
     min.d <- numeric(nr)
@@ -124,51 +139,73 @@ RANDwNND.hd <- function (rec, don, dfun="Manhattan", cut.don="rot", k=NULL, w.do
 #        cat("distances:", summary(vd), fill=TRUE) #add check
         min.dist <- min(vd, na.rm=TRUE) # smallest distance recipient-donor
         min.d[i] <- min.dist
-        max.d[i] <- max(vd, na.rm=TRUE)
-		sd.d[i] <- sd(vd, na.rm=TRUE)
+        if(dfun=="RANN" || dfun=="ANN") {
+            max.d[i] <- NA
+            sd.d[i] <- NA
+        }
+        else {
+            max.d[i] <- max(vd, na.rm=TRUE)
+		    sd.d[i] <- sd(vd, na.rm=TRUE)
+        }
         if(cut.don=="min"){
             tst <- (vd==min.dist) & !is.na(vd)
             short.vd <- vd[tst]
-            appo <- d.lab[tst]
-            short.ww <- ww[tst]
+            if(dfun=="RANN" || dfun=="ANN"){
+                idx <- dd$nn.idx[i,]
+                appo <- d.lab[idx]
+                short.ww <- ww[idx]
+            }
+            else {
+                appo <- d.lab[tst]
+                short.ww <- ww[tst]
+            }
             dist.rd[i] <- min.dist
             cut.d[i] <- min.dist
 		}	
         else if(cut.don=="k.dist"){
 			if(k<min.dist) {
-				cat("Warning: the value of k,", k, fill=TRUE)
-				cat("is smaller than the minimum distance:", min.d, fill=TRUE)
+			    cat("Warning: the value of k,", k, fill=TRUE)
+			    cat("is smaller than the minimum distance:", min.d, fill=TRUE)
 			}			
             tst <- (vd<=k) & !is.na(vd)
-			appo <- d.lab[tst]
+		    appo <- d.lab[tst]
 			short.vd <- vd[tst]
             short.ww <- ww[tst]
             cut.d[i] <- k
         }
         else {
-            pos <- order(vd, na.last=NA)
-			if(length(vd)<k) kk <- length(appo)
-			else kk <- k
-            pos <- pos[1:kk]
+            if(dfun=="RANN" || dfun=="ANN"){
+                pos <- dd$nn.idx[i,]
+                appo <- d.lab[pos]
+                short.vd <- dd$nn.dists[i,]
+                short.ww <- ww[pos]
+                cut.d[i] <- dd$nn.dists[i,ncol(dd$nn.dists)]
+            }
+            else{
+                pos <- order(vd, na.last=NA)
+			    if(length(vd)<k) kk <- length(appo)
+			    else kk <- k
+                pos <- pos[1:kk]
 #            cat("k:", k, fill=TRUE) #add check
 #            cat("closest donors", pos, fill=TRUE) #add check
-            appo <- d.lab[pos]
-			short.vd <- vd[pos]
-			short.ww <- ww[pos]
-            cut.d[i] <- short.vd[kk]
+                appo <- d.lab[pos]
+			    short.vd <- vd[pos]
+			    short.ww <- ww[pos]
+                cut.d[i] <- short.vd[kk]
+            }
         }
 
         nad[i] <- length(appo) # number of availabe donors
         if(length(appo)==0) {
             nad[i] <- 0
 			don.lab[i] <- NA
-			dist.rd[i] <- NA
+		    dist.rd[i] <- NA
             cat("Warning: there are no available donors for the", r.lab[i], "recipient!", fill=TRUE)
         }       
         else if(length(appo)==1){
-			nad[i] <- 1
-			don.lab[i] <- appo 
-			dist.rd[i] <- short.vd
+			 nad[i] <- 1
+			 don.lab[i] <- appo 
+			 dist.rd[i] <- short.vd
 		}	
         else{
             nn.dd <- length(appo)
@@ -274,7 +311,7 @@ pps.draw <- function(n, w){
                     pos <- pps.draw(n=nn.r[[lab.h]], w=l.don[[lab.h]][,weight.don])
                     don.lab <- l.d.lab[[lab.h]][pos]
                 }
-			    mtc.ids[[h]] <- cbind(rec.id=l.r.lab[[lab.h]], don.id=don.lab)
+			      mtc.ids[[h]] <- cbind(rec.id=l.r.lab[[lab.h]], don.id=don.lab)
     		    sum.dist[[h]] <- NA
 			    noad[[h]] <- rep(nn.d[[lab.h]], nn.r[[lab.h]])
 			}

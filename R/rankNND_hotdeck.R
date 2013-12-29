@@ -10,7 +10,7 @@ function (data.rec, data.don, var.rec, var.don=var.rec, don.class=NULL, weight.r
         stop("The variable weight.don is not available in data.don")
     }
     
-    if(constrained && (constr.alg=="Hungarian" || constr.alg=="hungarian")) require(clue)
+ #   if(constrained && (constr.alg=="Hungarian" || constr.alg=="hungarian")) require(clue)
     if(constrained && (constr.alg=="lpSolve" || constr.alg=="lpsolve")) require(lpSolve)
     
     if(!is.null(dim(data.rec))){

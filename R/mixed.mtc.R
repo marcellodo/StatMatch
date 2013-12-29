@@ -1,7 +1,7 @@
 `mixed.mtc` <-
-function (data.rec, data.don, match.vars, y.rec, z.don, method="ML", rho.yz=0, micro=FALSE, constr.alg="Hungarian")
+function (data.rec, data.don, match.vars, y.rec, z.don, method="ML", rho.yz=NULL, micro=FALSE, constr.alg="Hungarian")
 {
-    if(micro && (constr.alg=="Hungarian" || constr.alg=="hungarian")) require(clue)
+ #   if(micro && (constr.alg=="Hungarian" || constr.alg=="hungarian")) require(clue)
     if(micro && (constr.alg=="lpSolve" || constr.alg=="lpsolve")) require(lpSolve)
     
 	nA <- nrow(data.rec)
@@ -74,7 +74,8 @@ function (data.rec, data.don, match.vars, y.rec, z.don, method="ML", rho.yz=0, m
 		S.z <- se.B^2 + S.zx %*% solve(S.x) %*%  t(S.zx)
       
 		# ML estimates for Y,Z, given the input value rho.yz for partial.cor[(Y,Z)|X]      
-		S.yzGx <- rho.yz * (se.A * se.B) # partial Cov[(Y,Z)|X]
+		if(is.null(rho.yz)) rho.yz <- 0 # CI assumption
+        S.yzGx <- rho.yz * (se.A * se.B) # partial Cov[(Y,Z)|X]
 		S.yz <- S.yzGx + S.yx %*% solve(S.x) %*% t(S.zx)
 		S.zGyx <- se.B^2 - S.yzGx %*% solve(se.A^2) %*% t(S.yzGx)
 		S.yGzx <- se.A^2 - S.yzGx %*% solve(se.B^2) %*% t(S.yzGx)
@@ -121,6 +122,7 @@ function (data.rec, data.don, match.vars, y.rec, z.don, method="ML", rho.yz=0, m
     		c.xz <- c(cor(x.B, z.B))
 			low.c <- c.xy*c.xz - sqrt( (1-c.xy^2)*(1-c.xz^2) )
 			up.c <-  c.xy*c.xz + sqrt( (1-c.xy^2)*(1-c.xz^2) )
+            rho.yz.CI <- c.xy*c.xz
 		}      
 		else{
             eps <- 0.0001
@@ -135,7 +137,9 @@ function (data.rec, data.don, match.vars, y.rec, z.don, method="ML", rho.yz=0, m
             cc.yz <- rr[vdet>=0]
             low.c <- min(cc.yz)
             up.c <- max(cc.yz)
+            rho.yz.CI <- (1/2)*(low.c + up.c)
 		}
+        if(is.null(rho.yz)) rho.yz <- rho.yz.CI
         # step.2 checks whether the input value rho.yz for Cor(Y,Z) is addmisible. Otherwise takes the closest admissible value.
 		cat("input value for rho.yz is", rho.yz, fill=TRUE)
 		cat("low(rho.yz)=", low.c, fill=TRUE)

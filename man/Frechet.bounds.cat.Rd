@@ -15,7 +15,8 @@ Frechet.bounds.cat(tab.x, tab.xy, tab.xz, print.f="tables", tol= 0.0001)
 
 \item{tab.x}{
 A \R table crossing the \bold{X} variables.  This table must be obtained by using the function \code{\link[stats]{xtabs}} or \code{\link[base]{table}},  e.g. \cr
-\code{tab.x <- xtabs(~x1+x2+x3, data=data.all)}.
+\code{tab.x <- xtabs(~x1+x2+x3, data=data.all)}. \cr
+When \code{tab.x = NULL} then \code{tab.xy} and \code{tab.xz} must be supplied.
 }
 
 \item{tab.xy}{
@@ -23,6 +24,8 @@ A \R table of \bold{X} vs. Y variable.  This table must be obtained by using the
 \code{table.xy <- xtabs(~x1+x2+x3+y, data=data.A)}.
 
 A single categorical Y variable is allowed.  One or more categorical variables can be considered as \bold{X} variables (common variables).  Obviously, the same \bold{X} variables in \code{tab.x} must be available in \code{tab.xy}.  Moreover, it is assumed that the joint distribution of the \bold{X} variables computed from \code{tab.xy} is equal to \code{tab.x}; a warning appears if this is not true (see argument \code{tol}).
+
+When \code{tab.x = NULL} then \code{tab.xy} should be a one--dimensional table providing the marginal distribution of the Y variable.
 }
 
 \item{tab.xz}{
@@ -30,6 +33,9 @@ A \R table of \bold{X} vs. Z variable.  This table must be obtained by using the
 \code{tab.xz <- xtabs(~x1+x2+x3+z, data=data.B)}.
 
 A single categorical Z variable is allowed.  One or more categorical variables can be considered as \bold{X} variables (common variables).  The same \bold{X} variables in \code{tab.x} must be available in \code{tab.xz}.  Moreover, it is assumed that the joint distribution of the \bold{X} variables computed from \code{tab.xz} is equal to \code{tab.x}; a warning appears if this is not true (see argument \code{tol}).
+
+When \code{tab.x = NULL} then \code{tab.xz} should be a one--dimensional table providing the marginal distribution of the Z variable.
+
 }
 
 \item{print.f}{
@@ -60,9 +66,15 @@ Note that the cells bounds for the relative frequencies in the contingency table
 
 \deqn{ \max\{0; p_{Y=j} + p_{Z=k} - 1\} \leq p_{Y=j,Z=k} \leq \min \{ p_{Y=j}; p_{Z=k}\}}{max(0;p(Y=j)+p(Z=k)-1) <= p(Y=j,Z=k) <= min(p(Y=j);p(Z=k))}
 
+These bounds represent the unique output when \code{tab.x = NULL}.
+
 Finally, the contingency table of Y vs. Z estimated under the Conditional Independence Assumption (CIA) is obtained by considering:
 
 \deqn{ p_{Y=j,Z=k} = p_{Y=j|X=i} \times p_{Z=k|X=i} \times p_{X=i}.}{p(Y=i,Z=k) = p(Y=j|X=i)*p(Z=k|X=i)*p(X=i)}
+
+When \code{tab.x = NULL} then it is also provided the expected table under the assumption of independence between Y and Z:
+
+\deqn{ p_{Y=j,Z=k} = p_{Y=j} \times p_{Z=k}.}{p(Y=i,Z=k) = p(Y=j)*p(Z=k)*}
 
 }
 

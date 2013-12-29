@@ -2,7 +2,7 @@
 function(svy.A, svy.B, svy.C=NULL, y.lab, z.lab, form.x, estimation=NULL, micro=FALSE, ...)
 {
 
-    require(survey)
+ #   require(survey)
     data.A <- svy.A$variables
     y.lev <- levels(data.A[, y.lab])
     levels(data.A[, y.lab]) <- 1:nlevels(data.A[, y.lab])

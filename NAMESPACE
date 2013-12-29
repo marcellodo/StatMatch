@@ -8,5 +8,6 @@ exportPattern(".")
 import(
   proxy,
   clue,
-  survey
+  survey,
+  RANN
 )

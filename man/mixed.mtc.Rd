@@ -9,7 +9,7 @@
 
 \usage{
 mixed.mtc(data.rec, data.don, match.vars, y.rec, z.don, method="ML",
-           rho.yz=0, micro=FALSE, constr.alg="Hungarian") 
+           rho.yz=NULL, micro=FALSE, constr.alg="Hungarian") 
 }
 
 \arguments{
@@ -41,7 +41,7 @@ A character vector that identifies the method that should be used to estimate th
 \item{rho.yz}{
 A numeric value representing a guess for the correlation among the Y (\code{y.rec}) and the Z variable (\code{z.don}) that are not jointly observed.  When \code{method="MS"} then the argument \code{cor.yz} must specify the value of the correlation coefficient \eqn{\rho_{YZ}}{rho_YZ}; on the contrary, when \code{method="ML"}, it must specify the \emph{partial correlation coefficient} among Y and Z given \bold{X} (\eqn{\rho_{YZ|\bf{X}}}{rho_YZ|X}). 
 
-By default (\code{rho.yz=0}).  In practice, in absence of auxiliary information concerning the correlation coefficient or the partial correlation coefficient, the statistical matching is carried out under the assumption of independence among Y and Z given \bold{X} (Conditional Independence Assumption, CIA ), i.e.  \eqn{\rho_{YZ|\bf{X}}=0}{rho_YZ|X = 0}. 
+By default (\code{rho.yz=NULL}).  In practice, in absence of auxiliary information concerning the correlation coefficient or the partial correlation coefficient, the statistical matching is carried out under the assumption of independence among Y and Z given \bold{X} (Conditional Independence Assumption, CIA ), i.e.  \eqn{\rho_{YZ|\bf{X}}=0}{rho_YZ|X = 0}. 
 }
 
 \item{micro}{

@@ -1,6 +1,45 @@
 'Frechet.bounds.cat' <-
 function(tab.x, tab.xy, tab.xz, print.f="tables", tol= 0.0001)
 {
+#############
+fb.yz <-  function(y, z, prn="tables")
+{
+  
+  lab.y <- names(y)
+  if(is.null(lab.y)) lab.y <- paste("y",1:length(y), sep="")
+  
+  lab.z <- names(z)
+  if(is.null(lab.z)) lab.z <- paste("z",1:length(z), sep="")
+  
+  p.y <- prop.table(y)
+  p.z <- prop.table(z)
+  
+  ll <- outer(p.y, p.z, FUN="+") - 1
+  m0 <- matrix(0, nrow(ll), ncol(ll))
+  low <- pmax(m0, ll)
+  upper <- outer(p.y, p.z, FUN="pmin")
+  
+  ind <-  outer(p.y, p.z, FUN="*")
+  
+  dimnames(low) <- dimnames(upper) <- dimnames(ind) <- list(lab.y, lab.z)
+  class(low) <- class(upper) <- class(ind)  <- "table"
+  res.0 <- list(low.u=low, up.u=upper, IA=ind, av.u=mean(upper-low))
+  
+  if(prn=="tables"){
+    out <- res.0
+  }
+  else if(prn=="data.frame"){
+    df <- data.frame(low)
+    colnames(df) <- c("Y", "Z", "low.u")
+    df$IA <- c(ind)
+    df$up.u <- c(upper)
+    out <- list(bounds=df, uncertainty=mean(upper-low))
+  }  
+  out
+}
+###########
+    if(is.null(tab.x)) out <- fb.yz(y=tab.xy, z=tab.xz, prn=print.f)    
+    else{
     lab.x <- names(dimnames(tab.x))
     if(all(nchar(lab.x)==0)) lab.x <- paste("x",1:length(lab.x), sep="")
     names(attr(tab.x, "dimnames")) <- lab.x
@@ -128,5 +167,7 @@ function(tab.x, tab.xy, tab.xz, print.f="tables", tol= 0.0001)
         dataf$up.u <- c(res.0$up.u)
         out <- list(bounds=dataf, uncertainty=res.1$unc)
     }
-    out
+  }
+out
+    
 }
