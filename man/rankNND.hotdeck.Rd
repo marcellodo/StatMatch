@@ -10,7 +10,8 @@
 \usage{
 rankNND.hotdeck(data.rec, data.don, var.rec, var.don=var.rec, 
                  don.class=NULL,  weight.rec=NULL, weight.don=NULL,
-                 constrained=FALSE, constr.alg="Hungarian") 
+                 constrained=FALSE, constr.alg="Hungarian",
+                 keep.t=FALSE) 
 }
 
 \arguments{
@@ -53,6 +54,10 @@ Logical.  When \code{constrained=FALSE} (default) each record in \code{data.don}
 
 \item{constr.alg}{
 A string that has to be specified when \code{constrained=TRUE}.  Two choices are available: \dQuote{lpSolve} and \dQuote{Hungarian}.  In the first case, \code{constr.alg="lpSolve"}, the transportation problem is solved by means of the function \code{\link[lpSolve]{lp.transport}} available in the package \pkg{lpSolve}.  When \code{constr.alg="Hungarian"} (default) the transportation problem is solved using the Hungarian method, implemented in function \code{\link[clue]{solve_LSAP}} available in the package \pkg{clue}.  Note that \cr \code{constr.alg="Hungarian"} is faster and more efficient.
+}
+
+\item{keep.t}{
+Logical, when donation classes are used by setting  \code{keep.t=TRUE} prints information on the donation classes being processed (by default \code{keep.t=FALSE}).
 }
 
 }
@@ -114,62 +119,34 @@ Singh, A.C., Mantel, H., Kinack, M. and Rowe, G. (1993). \dQuote{Statistical mat
 }
 
 \examples{
-require(SDaA)
-data(agpop, agsrs, agstrat, package="SDaA") #loads ag datasets from SDaA
-str(agpop)
-str(agsrs)
-str(agstrat)
 
-agsrs$w.srs <- nrow(agpop)/nrow(agsrs) # add weights
+data(samp.A, samp.B, package="StatMatch") #loads data sets
 
-# adds region to agsrs
-state.region <- data.frame(xtabs(weight~state+region, data=agstrat))
-state.region <- subset(state.region, Freq>0)
-agsrs <- merge(agsrs, state.region[,1:2], by="state", all.x=TRUE)
+# samp.A plays the role of recipient
+?samp.A
 
-# simulate statistical matching framework
-A <- agsrs[, c("region", "acres82", "acres87", "w.srs")]
-B <- agstrat[, c("region", "acres82", "acres92", "weight")]
+# samp.B plays the role of donor
+?samp.B
 
-# simplest call to rankNND.hotdeck()
+
+# rankNND.hotdeck()
+# donation classes formed using "area5"
+# ecdf conputed on "age"
 # UNCONSTRAINED case
-out.1 <- rankNND.hotdeck(data.rec=A, data.don=B, var.rec="acres82")
-fused.1 <- create.fused(data.rec=A, data.don=B,
-                        mtc.ids=out.1$mtc.ids, z.vars="acres92")
+out.1 <- rankNND.hotdeck(data.rec=samp.A, data.don=samp.B, var.rec="age",
+                         don.class="area5")
+fused.1 <- create.fused(data.rec=samp.A, data.don=samp.B,
+                        mtc.ids=out.1$mtc.ids, z.vars="labour5")
 head(fused.1)
 
-#  call to rankNND.hotdeck() with usage of weights
+#  as before but ecdf estimated  using weights
 # UNCONSTRAINED case
-out.2 <- rankNND.hotdeck(data.rec=A, data.don=B, var.rec="acres82",
-                         weight.rec="w.srs", weight.don="weight")
-fused.2 <- create.fused(data.rec=A, data.don=B,
-                        mtc.ids=out.2$mtc.ids, z.vars="acres92")
+out.2 <- rankNND.hotdeck(data.rec=samp.A, data.don=samp.B, var.rec="age",
+                         don.class="area5",
+                         weight.rec="ww", weight.don="ww")
+fused.2 <- create.fused(data.rec=samp.A, data.don=samp.B,
+                        mtc.ids=out.2$mtc.ids, z.vars="labour5")
 head(fused.2)
-
-#  call to rankNND.hotdeck() with usage of weights and don classes
-# UNCONSTRAINED case
-out.3 <- rankNND.hotdeck(data.rec=A, data.don=B, var.rec="acres82",
-                         don.class="region", weight.rec="w.srs", weight.don="weight")
-fused.3 <- create.fused(data.rec=A, data.don=B,
-                        mtc.ids=out.3$mtc.ids, z.vars="acres92")
-head(fused.3)
-
-# call to rankNND.hotdeck()
-# CONSTRAINED case
-out.1c <- rankNND.hotdeck(data.rec=A, data.don=B, var.rec="acres82",
-                         constrained=TRUE, constr.alg="Hungarian")
-fused.1c <- create.fused(data.rec=A, data.don=B,
-                        mtc.ids=out.1c$mtc.ids, z.vars="acres92")
-head(fused.1c)
-
-#  call to rankNND.hotdeck() with usage of weights
-# CONSTRAINED case
-out.2c <- rankNND.hotdeck(data.rec=A, data.don=B, var.rec="acres82",
-                          weight.rec="w.srs", weight.don="weight",
-                          constrained=TRUE, constr.alg="Hungarian")
-fused.2c <- create.fused(data.rec=A, data.don=B,
-                        mtc.ids=out.2c$mtc.ids, z.vars="acres92")
-head(fused.2c)
 
 }
 

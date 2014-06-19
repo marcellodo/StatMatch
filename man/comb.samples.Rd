@@ -32,7 +32,8 @@ A \code{svydesign} \R object that stores the data collected in the the survey C 
 
 When \code{svy.C=NULL} (default), i.e. no auxiliary information is available, the function returns an estimate of the contingency table of Y vs. Z under the Conditional Independence assumption (CIA) (see Details for major information).
 
-When \code{svy.C} is available, if \code{estimation="incomplete"} then it must contain at least \code{y.lab} and \code{z.lab} variables.  On the contrary, when \code{estimation="synthetic"} all the variables specified in \code{form.x}, \code{y.lab} and \code{z.lab} must be available in \code{svy.C}.
+When \code{svy.C} is available, if \code{estimation="incomplete"} then it must contain at least \code{y.lab} and \code{z.lab} variables.  On the contrary, when 
+\code{estimation="synthetic"} all the variables specified in \code{form.x}, \code{y.lab} and \code{z.lab} must be available in \code{svy.C}.
 
 }
 

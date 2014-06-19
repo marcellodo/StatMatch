@@ -1,5 +1,5 @@
 `rankNND.hotdeck` <-
-function (data.rec, data.don, var.rec, var.don=var.rec, don.class=NULL, weight.rec=NULL, weight.don=NULL, constrained=FALSE, constr.alg="Hungarian")
+function (data.rec, data.don, var.rec, var.don=var.rec, don.class=NULL, weight.rec=NULL, weight.don=NULL, constrained=FALSE, constr.alg="Hungarian", keep.t=FALSE)
 {
     if(is.na(match(var.rec, colnames(data.rec)))) stop("The variable var.rec is not available in data.rec")
     if(is.na(match(var.don, colnames(data.don)))) stop("The variable var.don is not available in data.don")
@@ -158,8 +158,10 @@ rankNND.hd <- function (x.rec, x.don, w.rec=NULL, w.don=NULL, constr=FALSE, c.al
 
 		tst <- which( !(names(l.rec) %in% names(l.don)) )
 		if(length(tst)) {
-		    list.no.donor <- names(l.rec)[tst]
-		    stop("For some cell in recipient data, there is no potential donor \n The list can be found in list.no.donor")
+		    cat("The following donation classes:", fill=TRUE) 
+		    cat(names(l.rec)[tst], fill=TRUE)
+		    cat("in data.don are empty, i.e. there are no donors", fill=TRUE)
+		    stop()
 		}
 		
         nn.r <- unlist(lapply(l.rec, nrow))
@@ -178,6 +180,7 @@ rankNND.hd <- function (x.rec, x.don, w.rec=NULL, w.don=NULL, constr=FALSE, c.al
 	    noad <- as.list(numeric(H))
 		for(h in 1:H){
 		    lab.h <- names(l.rec)[h]
+		    if(keep.t) cat("Selecting donors for donation class: ", lab.h, fill=TRUE)
     		out <- rankNND.hd(x.rec=l.rec[[lab.h]][,var.rec], x.don=l.don[[lab.h]][,var.don],
                               w.rec=l.rec[[lab.h]][,weight.rec], w.don=l.don[[lab.h]][,weight.don],
     		                  constr=constrained, c.alg=constr.alg)

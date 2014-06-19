@@ -1,3 +1,11 @@
+1.2.2 added 3 data sets used in the function's help pages and in the vignette
+
+		modified the RANDwNND.hotdeck function to identify the subset of the donors by
+		simple comparing the values of a single matching variable 
+
+		Minor modification of the hotdeck functions to handle and monitor the processing
+		when dealing with donation classes
+		
 1.2.1 now Frechet.bounds.cat() can be called just to compute the uncertainty bounds
 		when no X variables are available.
 		

@@ -10,7 +10,8 @@
 \usage{
 NND.hotdeck(data.rec, data.don, match.vars, 
              don.class=NULL, dist.fun="Manhattan",
-             constrained=FALSE, constr.alg="Hungarian", ...) 
+             constrained=FALSE, constr.alg="Hungarian", 
+             keep.t=FALSE, ...) 
 }
 
 \arguments{
@@ -48,6 +49,10 @@ Logical.  When \code{constrained=FALSE} (default) each record in \code{data.don}
 
 \item{constr.alg}{
 A string that has to be specified when \code{constrained=TRUE}.  Two choices are available: \dQuote{lpSolve} and \dQuote{hungarian}.  In the first case, \code{constr.alg="lpSolve"}, the transportation problem is solved by means of the function \code{\link[lpSolve]{lp.transport}} available in the package \pkg{lpSolve}.  When \code{constr.alg="hungarian"} (default) the transportation problem is solved using the Hungarian method, implemented in function \code{\link[clue]{solve_LSAP}} available in the package \pkg{clue}.  Note that Hungarian algorithm is faster and more efficient if compared to \code{constr.alg="lpSolve"} .
+}
+
+\item{keep.t}{
+Logical, when donation classes are used by setting  \code{keep.t=TRUE} prints information on the donation classes being processed (by default \code{keep.t=FALSE}).
 }
 
 \item{...}{ 
@@ -107,6 +112,7 @@ Singh, A.C., Mantel, H., Kinack, M. and Rowe, G. (1993). \dQuote{Statistical mat
 
 \examples{
 
+
 # reproduce the classical matching framework
 lab <- c(1:15, 51:65, 101:115)
 iris.rec <- iris[lab, c(1:3,5)]  # recipient data.frame 
@@ -123,13 +129,13 @@ iris.don <- iris[-lab, c(1:2,4:5)] #donor data.frame
 # unconstrained case, Euclidean distance
 
 out.NND.1 <- NND.hotdeck(data.rec=iris.rec, data.don=iris.don,
-                match.vars=c("Sepal.Length", "Sepal.Width") )
+                         match.vars=c("Sepal.Length", "Sepal.Width") )
 
 # create the synthetic data.set:
 # fill in "Petal.Width" in iris.rec
 
 fused.1 <- create.fused(data.rec=iris.rec, data.don=iris.don, 
-             mtc.ids=out.NND.1$mtc.ids, z.vars="Petal.Width") 
+                        mtc.ids=out.NND.1$mtc.ids, z.vars="Petal.Width") 
 
 
 # Find the closest donors computing distance
@@ -137,8 +143,8 @@ fused.1 <- create.fused(data.rec=iris.rec, data.don=iris.don,
 # unconstrained case, Gower's distance
 
 out.NND.2 <- NND.hotdeck(data.rec=iris.rec, data.don=iris.don,
-              match.vars=c("Sepal.Length", "Sepal.Width", "Species"), 
-              dist.fun="Gower")
+                         match.vars=c("Sepal.Length", "Sepal.Width", "Species"), 
+                         dist.fun="Gower")
 
 
 # find the closest donors using "Species" to form donation classes
@@ -146,8 +152,8 @@ out.NND.2 <- NND.hotdeck(data.rec=iris.rec, data.don=iris.don,
 # unconstrained case.
 
 out.NND.3 <- NND.hotdeck(data.rec=iris.rec, data.don=iris.don,
-              match.vars=c("Sepal.Length", "Sepal.Width"),
-              don.class="Species")
+                         match.vars=c("Sepal.Length", "Sepal.Width"),
+                         don.class="Species")
 
 
 # find the donors using "Species" to form donation classes
@@ -183,15 +189,16 @@ iris.don <- ir.mat[miss==0,]
 
 #search for NND donors
 imp.NND <- NND.hotdeck(data.rec=iris.rec, data.don=iris.don,
-               match.vars=c("Sepal.Width","Petal.Length", "Petal.Width"),
-               don.class="Species")
+                       match.vars=c("Sepal.Width","Petal.Length", "Petal.Width"),
+                       don.class="Species")
 
 # imputing missing values
 iris.rec.imp <- create.fused(data.rec=iris.rec, data.don=iris.don, 
-             mtc.ids=imp.NND$mtc.ids, z.vars="Sepal.Length") 
+                             mtc.ids=imp.NND$mtc.ids, z.vars="Sepal.Length") 
 
 # rebuild the imputed data.frame
 final <- rbind(iris.rec.imp, iris.don)
+
 
 }
 \keyword{nonparametric}

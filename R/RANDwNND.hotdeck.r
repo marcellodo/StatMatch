@@ -1,5 +1,5 @@
 `RANDwNND.hotdeck` <-
-function (data.rec, data.don, match.vars=NULL, don.class=NULL, dist.fun="Manhattan", cut.don="rot", k=NULL, weight.don=NULL, ...)
+function (data.rec, data.don, match.vars=NULL, don.class=NULL, dist.fun="Manhattan", cut.don="rot", k=NULL, weight.don=NULL, keep.t=FALSE,  ...)
 {
 	if(!is.null(dim(data.rec))){
 		nr <- nrow(data.rec)
@@ -34,6 +34,14 @@ function (data.rec, data.don, match.vars=NULL, don.class=NULL, dist.fun="Manhatt
         if(dist.fun=="exact" || dist.fun=="exact matching"){
             cat("Warning: the exact matching distance is being used", fill=TRUE)
             cat("all the matching variables in rec and don are converted to \n character variables and are treated as categorical nominal", fill=TRUE)
+        }
+        if(dist.fun=="difference" || dist.fun=="diff"){
+            if(p>1) cat("When dist.fun='difference' just a single matching 
+                        \n variable should be used", fill=TRUE)
+            if(!(cut.don %in% c("lt","<","le","<=","ge",">=","gt",">"))) {
+                cat("When dist.fun='difference' the argument cut.don should be \n
+                        a comparison operator", fill=TRUE)
+            }
         }
     }
 ################
@@ -116,6 +124,13 @@ RANDwNND.hd <- function (rec, don, dfun="Manhattan", cut.don="rot", k=NULL, w.do
         dd <- nn2(data=x.rec, query=x.don, k=k0, ...)
         mdist <- dd$nn.dists
     }
+    else if(dfun=="difference" || dfun=="diff"){
+        
+        xA <- data.matrix(x.rec)
+        xB <- data.matrix(x.don)
+        mdist <- outer(as.numeric(xA), as.numeric(xB), FUN="-")
+    }
+
     else {
   #      require(proxy)
         mdist <- dist(x=x.rec, y=x.don, method=dfun, ...)
@@ -162,6 +177,36 @@ RANDwNND.hd <- function (rec, don, dfun="Manhattan", cut.don="rot", k=NULL, w.do
             dist.rd[i] <- min.dist
             cut.d[i] <- min.dist
 		}	
+        
+        else if(cut.don=="lt" || cut.don=="<"){
+            tst <- vd<0
+            appo <- d.lab[tst]
+            short.vd <- vd[tst]
+            short.ww <- ww[tst]
+            cut.d[i] <- NA
+        }
+        else if(cut.don=="le" || cut.don=="<="){
+            tst <- vd<=0
+            appo <- d.lab[tst]
+            short.vd <- vd[tst]
+            short.ww <- ww[tst]
+            cut.d[i] <- NA
+        }
+        else if(cut.don=="ge" || cut.don==">="){
+            tst <- vd>=0
+            appo <- d.lab[tst]
+            short.vd <- vd[tst]
+            short.ww <- ww[tst]
+            cut.d[i] <- NA
+        }
+        else if(cut.don=="gt" || cut.don==">"){
+            tst <- vd>0
+            appo <- d.lab[tst]
+            short.vd <- vd[tst]
+            short.ww <- ww[tst]
+            cut.d[i] <- NA
+        }
+
         else if(cut.don=="k.dist"){
 			if(k<min.dist) {
 			    cat("Warning: the value of k,", k, fill=TRUE)
@@ -274,8 +319,10 @@ pps.draw <- function(n, w){
 		}
 		tst <- which( !(names(l.rec) %in% names(l.don)) )
 		if(length(tst)) {
-		    list.no.donor <- names(l.rec)[tst]
-		    stop("For some cell in recipient data, there is no potential donor \n The list can be found in list.no.donor")
+		    cat("The following donation classes:", fill=TRUE) 
+		    cat(names(l.rec)[tst], fill=TRUE)
+		    cat("in data.don are empty, i.e. there are no donors", fill=TRUE)
+		    stop()
 		}
 		
 #        if(length(l.rec)!=length(l.don)){
@@ -303,6 +350,7 @@ pps.draw <- function(n, w){
 		
 		for(h in 1:H){
             lab.h <- names(l.rec)[h]
+            if(keep.t) cat("Selecting donors for donation class: ", lab.h, fill=TRUE)
 			if(is.null(match.vars)){
                 if(is.null(weight.don)){
 				    don.lab <- sample(l.d.lab[[lab.h]], nn.r[[lab.h]], replace=TRUE)

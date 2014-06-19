@@ -1,5 +1,5 @@
 `NND.hotdeck` <-
-function (data.rec, data.don, match.vars, don.class=NULL, dist.fun="Manhattan", constrained=FALSE, constr.alg="Hungarian", ...)
+function (data.rec, data.don, match.vars, don.class=NULL, dist.fun="Manhattan", constrained=FALSE, constr.alg="Hungarian", keep.t=FALSE, ...)
 {
 #    if(constrained && (constr.alg=="Hungarian" || constr.alg=="hungarian")) require(clue)
     if(constrained && (constr.alg=="lpSolve" || constr.alg=="lpsolve")) require(lpSolve)
@@ -128,7 +128,7 @@ NND.hd <- function (rec, don, dfun="Manhattan", constr=FALSE, c.alg=NULL, ...)
             appo <- lp.transport(cost.mat=mdist, row.signs=r.sig, row.rhs=r.rhs, col.signs=c.sig, col.rhs=c.rhs)
 	    }   
 	    else if(nr > nd){
-		    warning("There more recipients than donors!")
+		    warning("There are more recipients than donors!")
 		    cat("some donors will be used more than once", fill=TRUE)
 		    r.sig <- rep("==", nr)
 		    r.rhs <- rep(1, nr)
@@ -203,8 +203,10 @@ NND.hd <- function (rec, don, dfun="Manhattan", constr=FALSE, c.alg=NULL, ...)
 #		}	
         tst <- which( !(names(l.rec) %in% names(l.don)) )
         if(length(tst)) {
-		    list.no.donor <- names(l.rec)[tst]
-		    stop("For some cell in recipient data, there is no potential donor \n The list can be found in list.no.donor")
+		    cat("The following donation classes:", fill=TRUE) 
+            cat(names(l.rec)[tst], fill=TRUE)
+            cat("in data.don are empty, i.e. there are no donors", fill=TRUE)
+		    stop()
 		}
 		
         H <- length(l.rec)
@@ -213,6 +215,7 @@ NND.hd <- function (rec, don, dfun="Manhattan", constr=FALSE, c.alg=NULL, ...)
 		if(!constrained) noad <- as.list(numeric(H))
 		for(h in 1:H){
             lab.h <- names(l.rec)[h]
+            if(keep.t) cat("Selecting donors for donation class: ", lab.h, fill=TRUE)
             out <- NND.hd(rec=l.rec[[lab.h]], don=l.don[[lab.h]], dfun=dist.fun, constr=constrained, c.alg=constr.alg)
             mtc.ids[[h]] <- out$mtc.ids
 			  dist.rd[[h]] <- out$dist.rd
