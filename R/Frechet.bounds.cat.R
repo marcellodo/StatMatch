@@ -87,7 +87,7 @@ fb.yz <-  function(y, z, prn="tables")
         warning("The marginal distr. of the X variables \n in tab.xy and in tab.xz are not equal")
 
 ########################################################
-# computes Fréchet bounds _without_ using X variables
+# computes Frechet bounds _without_ using X variables
 
     ll <- outer(p.y, p.z, FUN="+") - 1
     m0 <- matrix(0, nrow(ll), ncol(ll))
@@ -99,7 +99,7 @@ fb.yz <-  function(y, z, prn="tables")
     res.0 <- list(low.u=low, up.u=upper)
 
 #############################################
-# computes Fréchet bounds using X variables
+# computes Frechet bounds using X variables
 
     dm.x <- data.frame(p.x)
     sdm.x <- split(dm.x, dm.x[,lab.x])
@@ -114,7 +114,7 @@ fb.yz <-  function(y, z, prn="tables")
     out.CIA <- as.list(numeric(H))
     out.low <- as.list(numeric(H))
     out.up <- as.list(numeric(H))
-    unc <- as.list(numeric(H)) 
+#    unc <- as.list(numeric(H)) 
 
     for(h in 1:H){
         yy <- say.gx[[h]][,"Freq"]
@@ -131,7 +131,7 @@ fb.yz <-  function(y, z, prn="tables")
         uu <- outer(yy, zz, FUN="pmin")
         out.low[[h]] <- ll*xx
         out.up[[h]] <- uu*xx
-        unc[[h]] <- sum((uu-ll) * outer(yy, zz, FUN="*") * xx)
+ #       unc[[h]] <- sum((uu-ll) * outer(yy, zz, FUN="*") * xx)
     }
 
     aa.CIA <- array(unlist(out.CIA), dim=c(dim(out.CIA[[1]]),H) )
@@ -151,7 +151,8 @@ fb.yz <-  function(y, z, prn="tables")
     l.z <- l.z[-p.z]
     class(fine.CIA) <- class(fine.low) <- class(fine.up) <- "table"
     dimnames(fine.CIA) <- dimnames(fine.low) <-  dimnames(fine.up) <- c(l.y, l.z)
-    vet.unc <- c(av.u=mean(c(upper-low)), av.cx=mean(c(fine.up-fine.low)), overall=sum(unlist(unc)))
+#    vet.unc <- c(av.u=mean(c(upper-low)), av.cx=mean(c(fine.up-fine.low)), overall=sum(unlist(unc)))
+    vet.unc <- c(av.u=mean(c(upper-low)), av.cx=mean(c(fine.up-fine.low)))
     res.1 <- list(CIA=fine.CIA, low.cx=fine.low, up.cx=fine.up, uncertainty=vet.unc)
 
     if(print.f=="tables"){

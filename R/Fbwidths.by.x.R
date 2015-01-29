@@ -32,7 +32,9 @@ function(tab.x, tab.xy, tab.xz)
 
     H <- length(appo.var)
     out.rng <- as.list(as.numeric(H))
-    av.rng <- matrix(NA, H, 4)
+#    av.rng <- matrix(NA, H, 4)
+    av.rng <- matrix(NA, H, 3)
+
     for(h in 1:H){
         lab <- appo.var[[h]]
         p.x <- match(lab, lab.x)
@@ -50,17 +52,19 @@ function(tab.x, tab.xy, tab.xz)
         appo <- data.frame(fb$low.cx)
         out.rng[[h]] <- data.frame(appo[,1:2], lower=c(fb$low.cx), upper=c(fb$up.cx), width=c(fb$up.cx-fb$low.cx))
         av.rng[h,3] <- mean( c(fb$up.cx-fb$low.cx))
-        av.rng[h,4] <- fb$uncertainty["overall"]
+#        av.rng[h,4] <- fb$uncertainty["overall"]
    
     }
     lab.list <- paste("|", lapply(appo.var, paste, collapse="+"), sep="")
     n.vars <- lapply(appo.var, length)
+#    av.rng <- data.frame(x.vars=unlist(n.vars), x.cells=av.rng[,1], x.freq0=av.rng[,2], 
+#                         av.width=av.rng[,3], ov.unc=av.rng[,4])
     av.rng <- data.frame(x.vars=unlist(n.vars), x.cells=av.rng[,1], x.freq0=av.rng[,2], 
-                         av.width=av.rng[,3], ov.unc=av.rng[,4])
-    row.names(av.rng) <- paste("|", lapply(appo.var, paste, collapse="+"), sep="")
+                          av.width=av.rng[,3])
+row.names(av.rng) <- paste("|", lapply(appo.var, paste, collapse="+"), sep="")
 
     aa <- n.x - av.rng$x.vars
-    ord.lab <- order(aa, av.rng$ov.unc, decreasing=TRUE)
+    ord.lab <- order(aa, av.rng$av.width, decreasing=TRUE)
 #    ord.all <- order(aa, av.rng$ov.unc, decreasing=TRUE)
     
     out.rng[[(H+1)]] <- av.rng[ord.lab,]

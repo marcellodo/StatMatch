@@ -2,7 +2,7 @@
 function (data.rec, data.don, match.vars, don.class=NULL, dist.fun="Manhattan", constrained=FALSE, constr.alg="Hungarian", keep.t=FALSE, ...)
 {
 #    if(constrained && (constr.alg=="Hungarian" || constr.alg=="hungarian")) require(clue)
-    if(constrained && (constr.alg=="lpSolve" || constr.alg=="lpsolve")) require(lpSolve)
+    #if(constrained && (constr.alg=="lpSolve" || constr.alg=="lpsolve")) require(lpSolve)
     
 	p <- length(match.vars)
 	if(!is.null(dim(data.rec))){

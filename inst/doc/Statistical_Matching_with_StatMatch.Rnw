@@ -183,17 +183,19 @@ P^{(up)}_{j,k} &=& \sum_{i}  P_{X_D=i} \times  \min \left\{P_{Y=j|X_D=i}; P_{Z=k
 
 \noindent for $j=1,\ldots, J$ and $k=1,\ldots, K$, being $J$ and $K$ the categories of $Y$ and $Z$ respectively.
 
-The function \code{Fbwidths.by.x} estimates $(P^{(low)}_{j,k},P^{(up)}_{j,k})$ for each cell in the contingency table $Y \times Z$ in correspondence of all the possible combinations of the $X$ variables; then the reduction of uncertainty is measured according to the proposal of Conti \emph{et al.} (2012):
-
-$$
-\hat{\Delta} = \sum_{i,j,k} \left( \hat{P}^{(up)}_{j,k} - \hat{P}^{(low)}_{j,k} \right) \times \hat{P}_{Y=j|X_D=i} \times \hat{P}_{Z=k|X_D=i} \times \hat{P}_{X_D=i}
-$$
-
-An alternative naive measure refers to the average widths of the intervals:
+The function \code{Fbwidths.by.x} estimates $(P^{(low)}_{j,k},P^{(up)}_{j,k})$ for each cell in the contingency table $Y \times Z$ in correspondence of all the possible combinations of the $X$ variables; then the reduction of uncertainty is measured naively by the average widths of the intervals:
 
 $$
 \bar{d} = \frac{1}{J \times K} \sum_{j,k} ( \hat{P}^{(up)}_{j,k} - \hat{P}^{(low)}_{j,k} )
 $$
+
+
+%according to the proposal of Conti \emph{et al.} (2012):
+
+%$$
+%\hat{\Delta} = \sum_{i,j,k} \left( \hat{P}^{(up)}_{j,k} - \hat{P}^{(low)}_{j,k} \right) \times \hat{P}_{Y=j|X_D=i} \times \hat{P}_{Z=k|X_D=i} \times \hat{P}_{X_D=i}
+%$$
+
 
 <<>>=
 # choiche of the matching variables based on uncertainty
@@ -785,7 +787,8 @@ out.fb <- Frechet.bounds.cat(tab.x=t.xA, tab.xy=t.xy, tab.xz=t.xz,
 out.fb
 @
 
-The final component of the output list provided by \code{Frechet.bounds.cat} summarizes the uncertainty by means of the average width of the unconditioned bounds, the average width of the bounds obtained by conditioning on $X_D$ and the overall uncertainty measured as suggested by Conti \emph{et al.} (2012) (see Section \ref{sec:mtc_vars}).  Please note the it would be preferable to derive the uncertainty bounds after the harmonization of the joint distribution of the $X_D$ variables in the source data sets.
+The final component of the output list provided by \code{Frechet.bounds.cat} summarizes the uncertainty by means of the average width of the unconditioned bounds and the average width of the bounds obtained by conditioning on $X_D$ %and the overall uncertainty measured as suggested by Conti \emph{et al.} (2012) (see Section \ref{sec:mtc_vars}).
+Please note the it would be preferable to derive the uncertainty bounds after the harmonization of the joint distribution of the $X_D$ variables in the source data sets.
 
 When dealing with continuous variables, if it is assumed that their joint distribution is multivariate normal, the uncertainty bounds for the correlation coefficient $\rho_{YZ}$ can be obtained by using the function \code{mixed.mtc} with argument \code{method="MS"}.  The following example assumes multivariate normal distribution holding for joint distribution for age, gender (the matching variables), the log-transformed personal net income (log of \code{"netIncome"} which plays the role of $Y$) and the aggregated personal economic status (binary variable \code{"work"} which plays the role of $Z$).
 
@@ -832,7 +835,7 @@ When a single $X$ variable it is considered the bounds can be obtained explicitl
 
 \item[] Cohen M.L. (1991) \dQuote{Statistical matching and microsimulation models}, in Citro and Hanushek (eds) \emph{Improving Information for Social Policy Decisions: The Uses of Microsimulation Modeling. Vol II Technical papers}. Washington D.C.
 
-\item[] Conti, P.L., Marella, D., and Scanu, M. (2012) \dQuote{Uncertainty Analysis in Statistical Matching}, \emph{Journal of Official Statistics}, \textbf{28}, 69--88.
+%\item[] Conti, P.L., Marella, D., and Scanu, M. (2012) \dQuote{Uncertainty Analysis in Statistical Matching}, \emph{Journal of Official Statistics}, \textbf{28}, 69--88.
 
 \item[] D'Orazio M. (2010) \dQuote{Statistical matching when dealing with data from complex survey sampling}, in \emph{Report of WP1. State of the art on statistical methodologies for data integration}, ESSnet project on Data Integration, 33--37, \url{http://www.essnet-portal.eu/sites/default/files/131/ESSnetDI_WP1_v1.32.pdf}
 

@@ -102,7 +102,7 @@ The estimated upper bounds for the relative frequencies in the table Y vs. Z whe
 }
 
 \item{uncertainty}{
-The uncertainty associated to input data, summarized in terms average width of uncertainty bounds with and without conditioning on the \bold{X} variables estimated, overall uncertainty estimated according to the suggestion in Conti \emph{et al.} (2012) (see \code{\link[StatMatch]{Fbwidths.by.x}} for major details).
+The uncertainty associated to input data, summarized in terms of average width of uncertainty bounds with and without conditioning on the \bold{X} variables % estimated, overall uncertainty estimated according to the suggestion in Conti \emph{et al.} (2012) (see \code{\link[StatMatch]{Fbwidths.by.x}} for major details).%
 }
 
 
@@ -113,7 +113,7 @@ A data.frame whose columns reports the estimated uncertainty bounds.
 }
 
 \item{uncertainty}{
-The uncertainty associated to input data, summarized in terms average width of uncertainty bounds with and without conditioning on the \bold{X} variables estimated, overall uncertainty estimated according to the suggestion in Conti \emph{et al.} (2012) (see \code{\link[StatMatch]{Fbwidths.by.x}} for major details).
+The uncertainty associated to input data, summarized in terms of average width of uncertainty bounds with and without conditioning on the \bold{X} variables %estimated, overall uncertainty estimated according to the suggestion in Conti \emph{et al.} (2012) (see \code{\link[StatMatch]{Fbwidths.by.x}} for major details).
 }
 
 }
@@ -122,7 +122,7 @@ The uncertainty associated to input data, summarized in terms average width of u
 
 Ballin, M., D'Orazio, M., Di Zio, M., Scanu, M. and Torelli, N. (2009) \dQuote{Statistical Matching of Two Surveys with a Common Subset}. \emph{Working Paper}, \bold{124}. Dip. Scienze Economiche e Statistiche, Univ. di Trieste, Trieste. 
 
-Conti P.L, Marella, D., Scanu, M. (2012) \dQuote{Uncertainty Analysis in Statistical Matching}. \emph{Journal of Official Statistics}, \bold{28}, pp. 69--88.
+%Conti P.L, Marella, D., Scanu, M. (2012) \dQuote{Uncertainty Analysis in Statistical Matching}. \emph{Journal of Official Statistics}, \bold{28}, pp. 69--88.
 
 D'Orazio, M., Di Zio, M. and Scanu, M. (2006). \emph{Statistical Matching: Theory and Practice.} Wiley, Chichester.
 

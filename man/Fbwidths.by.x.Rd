@@ -36,13 +36,15 @@ A single categorical Z variable is allowed.  One or more categorical variables c
 
 \details{
 This function permits to compute the Frechet bounds for the frequencies in the contingency table of Y vs. Z, starting from the conditional distributions P(Y|\bold{X}) and P(Z|\bold{X}) (for details see \cr
-\code{\link[StatMatch]{Frechet.bounds.cat}}), by considering all the possible subsets of the \bold{X} variables.  In this manner it is possible to identify the subset of the \bold{X} variables, with highest association with both Y and Z, that permits to reduce the uncertainty concerning the distribution of Y vs. Z.  The overall uncertainty is measured by considering the suggestion in Conti \emph{et al.} (2012):
+\code{\link[StatMatch]{Frechet.bounds.cat}}), by considering all the possible subsets of the \bold{X} variables.  In this manner it is possible to identify the subset of the \bold{X} variables, with highest association with both Y and Z, that permits to reduce the uncertainty concerning the distribution of Y vs. Z. 
 
-\deqn{ \hat{\Delta} = \sum_{i,j,k} ( p^{(up)}_{Y=j,Z=k} - p^{(low)}_{Y=j,Z=k} ) \times p_{Y=j|X=i} \times p_{Z=k|X=i} \times p_{X=i}  
-}{ D = sum_(i,j,k) ( p^(up)_(Y=j,Z=k) - p^(low)_(Y=j,Z=k) ) * p_(Y=j|X=i) * p_(Z=k|X=i) * p_(X=i) }
+%The overall uncertainty is measured by considering the suggestion in Conti \emph{et al.} (2012):
+
+%\deqn{ \hat{\Delta} = \sum_{i,j,k} ( p^{(up)}_{Y=j,Z=k} - p^{(low)}_{Y=j,Z=k} ) \times p_{Y=j|X=i} \times p_{Z=k|X=i} \times p_{X=i}  
+%}{ D = sum_(i,j,k) ( p^(up)_(Y=j,Z=k) - p^(low)_(Y=j,Z=k) ) * p_(Y=j|X=i) * p_(Z=k|X=i) * p_(X=i) }
 
 
-In addition, the average of the widths of the bounds for the cells in the table of Y vs. Z it is also reported:
+The uncertainty is measured by the average of the widths of the bounds for the cells in the table of Y vs. Z it is also reported:
 
 \deqn{ \bar{d} = \frac{1}{J \times K} \sum_{j,k} ( p^{(up)}_{Y=j,Z=k} - p^{(low)}_{Y=j,Z=k} )}{d=(1/(J*K))*sum_(j,k)(p^(up)_(Y=j,Z=k) - p^(low)_(Y=j,Z=k))}
 
@@ -53,7 +55,7 @@ For details see \code{\link[StatMatch]{Frechet.bounds.cat}}.
 
 \value{
 
-A list with the estimated estimated bounds for the cells in the table of Y vs. Z for each possible subset of the \bold{X} variables.  The final component  \code{sum.unc} is a data.frame that summarizes the findings for each subset of the \bold{X} variables and measures of the uncertainty are reported. In particular the data frame reports the no. of X variables (\code{"x.vars"}), the number of cells in the joint distribution of the X variables (\code{"x.cells"}), the number of cells in joint distribution of the X variables with frequency equal to 0 (\code{"x.freq0"}), the average widths of the uncertainty intervals (\code{"av.widths"}) and finally the estimated overall uncertainty (\code{"ov.unc"}) (estimated Delta).
+A list with the estimated estimated bounds for the cells in the table of Y vs. Z for each possible subset of the \bold{X} variables.  The final component  \code{sum.unc} is a data.frame that summarizes the findings for each subset of the \bold{X} variables and measures of the uncertainty are reported. In particular the data frame reports the no. of X variables (\code{"x.vars"}), the number of cells in the joint distribution of the X variables (\code{"x.cells"}), the number of cells in joint distribution of the X variables with frequency equal to 0 (\code{"x.freq0"}), the average widths of the uncertainty intervals (\code{"av.widths"}). %and finally the estimated overall uncertainty (\code{"ov.unc"}) (estimated Delta).
 
 }
 
@@ -61,7 +63,7 @@ A list with the estimated estimated bounds for the cells in the table of Y vs. Z
 
 Ballin, M., D'Orazio, M., Di Zio, M., Scanu, M. and Torelli, N. (2009) \dQuote{Statistical Matching of Two Surveys with a Common Subset}. \emph{Working Paper}, \bold{124}. Dip. Scienze Economiche e Statistiche, Univ. di Trieste, Trieste. 
 
-Conti P.L, Marella, D., Scanu, M. (2012) \dQuote{Uncertainty Analysis in Statistical Matching}. \emph{Journal of Official Statistics}, \bold{28}, pp. 69--88.
+%Conti P.L, Marella, D., Scanu, M. (2012) \dQuote{Uncertainty Analysis in Statistical Matching}. \emph{Journal of Official Statistics}, \bold{28}, pp. 69--88.
 
 D'Orazio, M., Di Zio, M. and Scanu, M. (2006). \emph{Statistical Matching: Theory and Practice.} Wiley, Chichester.
 
@@ -100,13 +102,6 @@ bounds.yz <- Fbwidths.by.x(tab.x=freq.x, tab.xy=freq.xy,
         tab.xz=freq.xz)
 
 bounds.yz$sum.unc
-
-# ordered according to "ov.unc"
-bounds.yz$sum.unc[order(bounds.yz$sum.unc$ov.unc),]
-
-# ordered according to average widths of intervals
-bounds.yz$sum.unc[order(bounds.yz$sum.unc$av.width),]
-
 
 }
 

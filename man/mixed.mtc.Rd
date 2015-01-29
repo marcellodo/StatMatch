@@ -154,7 +154,6 @@ How the function has been called.
 \references{
 
 D'Orazio, M., Di Zio, M. and Scanu, M. (2005). \dQuote{A comparison among different estimators of regression parameters on statistically matched files through an extensive simulation study}, \emph{Contributi}, \bold{2005/10}, Istituto Nazionale di Statistica, Rome.
-\url{http://www.istat.it/dati/pubbsci/contributi/Contributi/contr_2005/2005_10.pdf}
 
 D'Orazio, M., Di Zio, M. and Scanu, M. (2006). \emph{Statistical Matching: Theory and Practice.} Wiley, Chichester.
 

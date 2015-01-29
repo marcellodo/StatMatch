@@ -1,3 +1,5 @@
+1.2.3 corrected a bug in RANDwNND.hotdeck. Thanks to Kirill Muller
+
 1.2.2 added 3 data sets used in the function's help pages and in the vignette
 
 		modified the RANDwNND.hotdeck function to identify the subset of the donors by

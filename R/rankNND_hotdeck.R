@@ -11,7 +11,7 @@ function (data.rec, data.don, var.rec, var.don=var.rec, don.class=NULL, weight.r
     }
     
  #   if(constrained && (constr.alg=="Hungarian" || constr.alg=="hungarian")) require(clue)
-    if(constrained && (constr.alg=="lpSolve" || constr.alg=="lpsolve")) require(lpSolve)
+ #   if(constrained && (constr.alg=="lpSolve" || constr.alg=="lpsolve")) require(lpSolve)
     
     if(!is.null(dim(data.rec))){
 		nr <- nrow(data.rec)

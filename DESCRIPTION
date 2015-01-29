@@ -1,15 +1,15 @@
 Package: StatMatch
 Type: Package
-Title: Statistical Matching (aka data fusion)
-Version: 1.2.2
-Date: 2014-06-19
+Title: Statistical Matching
+Version: 1.2.3
+Date: 2015-01-28
 Author: Marcello D'Orazio
 Maintainer: Marcello D'Orazio <madorazi@istat.it>
-Depends: R (>= 2.7.0), proxy, clue, survey, RANN
-Suggests: lpSolve, MASS, Hmisc
-Description: The package StatMatch provides some R functions to perform statistical matching (aka data fusion), i.e. the integration of two data sources referred to the same target population which share a number of common variables. Some functions can also be used to impute missing values in data sets through hot deck imputation methods. Methods to perform statistical matching when dealing  with data from complex sample surveys are available too.
+Depends: R (>= 2.7.0), proxy, clue, survey, RANN, lpSolve
+Suggests: MASS, Hmisc
+Description: Integration of two data sources referred to the same target population which share a number of common variables (aka data fusion). Some functions can also be used to impute missing values in data sets through hot deck imputation methods. Methods to perform statistical matching when dealing  with data from complex sample surveys are available too.
 License: GPL (>= 2)
-Packaged: 2014-06-19 06:00:30 UTC; UTENTE
+Packaged: 2015-01-29 16:23:10 UTC; UTENTE
 NeedsCompilation: no
 Repository: CRAN
-Date/Publication: 2014-06-19 08:29:26
+Date/Publication: 2015-01-29 18:07:42

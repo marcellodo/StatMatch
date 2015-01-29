@@ -121,7 +121,7 @@ RANDwNND.hd <- function (rec, don, dfun="Manhattan", cut.don="rot", k=NULL, w.do
         if(cut.don=="min") k0 <- 10
         else if (cut.don=="k.dist") stop("When dist.fun='RANN' it is not possible to to set \n cut.don = 'k.dist' ")
         else k0 <- k
-        dd <- nn2(data=x.rec, query=x.don, k=k0, ...)
+        dd <- nn2(data=x.don, query=x.rec, k=k0, ...)
         mdist <- dd$nn.dists
     }
     else if(dfun=="difference" || dfun=="diff"){
@@ -359,7 +359,7 @@ pps.draw <- function(n, w){
                     pos <- pps.draw(n=nn.r[[lab.h]], w=l.don[[lab.h]][,weight.don])
                     don.lab <- l.d.lab[[lab.h]][pos]
                 }
-			      mtc.ids[[h]] <- cbind(rec.id=l.r.lab[[lab.h]], don.id=don.lab)
+			    mtc.ids[[h]] <- cbind(rec.id=l.r.lab[[lab.h]], don.id=don.lab)
     		    sum.dist[[h]] <- NA
 			    noad[[h]] <- rep(nn.d[[lab.h]], nn.r[[lab.h]])
 			}

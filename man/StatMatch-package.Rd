@@ -6,7 +6,7 @@
 Statistical Matching or Data Fusion
 }
 \description{
-The package StatMatch provides some R functions to perform statistical matching (aka data fusion), i.e. the integration of two data sources.  Some functions can also be used to impute missing values in data sets through hot deck imputation methods.
+Functions to perform statistical matching (aka data fusion), i.e. the integration of two data sources.  Some functions can also be used to impute missing values in data sets through hot deck imputation methods.
 
 }
 \details{

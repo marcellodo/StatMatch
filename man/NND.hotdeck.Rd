@@ -166,19 +166,6 @@ out.NND.4 <- NND.hotdeck(data.rec=iris.rec, data.don=iris.don,
                          don.class="Species", constrained=TRUE, 
                          constr.alg="Hungarian")
 
-
-# find the donors using "Species" to form donation classes
-# and "Sepal.Length" and "Sepal.Width" to compute distance;
-# constrained case, transportation problem solved by functions 
-# in package "lpSolve"
-
-library(lpSolve)
-out.NND.5 <- NND.hotdeck(data.rec=iris.rec, data.don=iris.don,
-                         match.vars=c("Sepal.Length", "Sepal.Width"),
-                         don.class="Species", constrained=TRUE, 
-                         constr.alg="lpSolve")
-
-
 # Example of Imputation of missing values.
 # Introducing missing values in iris
 ir.mat <- iris

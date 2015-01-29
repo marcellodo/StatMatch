@@ -2,7 +2,7 @@
 function (data.rec, data.don, match.vars, y.rec, z.don, method="ML", rho.yz=NULL, micro=FALSE, constr.alg="Hungarian")
 {
  #   if(micro && (constr.alg=="Hungarian" || constr.alg=="hungarian")) require(clue)
-    if(micro && (constr.alg=="lpSolve" || constr.alg=="lpsolve")) require(lpSolve)
+#    if(micro && (constr.alg=="lpSolve" || constr.alg=="lpsolve")) require(lpSolve)
     
 	nA <- nrow(data.rec)
 	nB <- nrow(data.don)
