@@ -8,7 +8,7 @@ This function permits to derive the bounds for cell probabilities of the table Y
 }
 
 \usage{
-Frechet.bounds.cat(tab.x, tab.xy, tab.xz, print.f="tables", tol= 0.0001) 
+Frechet.bounds.cat(tab.x, tab.xy, tab.xz, print.f="tables", tol= 0.001) 
 }
 
 \arguments{
@@ -16,7 +16,7 @@ Frechet.bounds.cat(tab.x, tab.xy, tab.xz, print.f="tables", tol= 0.0001)
 \item{tab.x}{
 A \R table crossing the \bold{X} variables.  This table must be obtained by using the function \code{\link[stats]{xtabs}} or \code{\link[base]{table}},  e.g. \cr
 \code{tab.x <- xtabs(~x1+x2+x3, data=data.all)}. \cr
-When \code{tab.x = NULL} then \code{tab.xy} and \code{tab.xz} must be supplied.
+When \code{tab.x = NULL} then only \code{tab.xy} and \code{tab.xz} must be supplied.
 }
 
 \item{tab.xy}{
@@ -43,7 +43,7 @@ A string: when \code{print.f="tables"} (default) all the cells' estimates will b
 }
 
 \item{tol}{
-Tolerance used in comparing joint distributions as far as \bold{X} variables are considered (default \code{tol= 0.0001}); the joint distribution of the \bold{X} variables computed from \code{tab.xy} and \code{tab.xz} should be equal to that in \code{tab.x}.
+Tolerance used in comparing joint distributions as far as \bold{X} variables are considered (default \code{tol= 0.001}); the joint distribution of the \bold{X} variables computed from \code{tab.xy} and \code{tab.xz} should be equal to that in \code{tab.x}.
 }
 
 }
@@ -75,6 +75,8 @@ Finally, the contingency table of Y vs. Z estimated under the Conditional Indepe
 When \code{tab.x = NULL} then it is also provided the expected table under the assumption of independence between Y and Z:
 
 \deqn{ p_{Y=j,Z=k} = p_{Y=j} \times p_{Z=k}.}{p(Y=i,Z=k) = p(Y=j)*p(Z=k)*}
+
+Note that in the presence of too many cells with 0s in the input contingency tables is an indication of sparseness; this is an unappealing situation when estimating the cells' relative frequencies needed to derive the bounds; in such cases the corresponding results may be unreliable. A possible alternative way of working consists in estimating the required parameters by considering a pseudo-Bayes estimator (see \code{\link[StatMatch]{pBayes}}); in practice the input \code{tab.x}, \code{tab.xy} and \code{tab.xz} should be the ones provided by the \code{\link[StatMatch]{pBayes}} function.
 
 }
 

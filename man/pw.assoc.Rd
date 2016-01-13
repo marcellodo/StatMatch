@@ -59,7 +59,7 @@ Theil's Uncertainty coefficient:
 It takes values in the interval [0,1] and measure the reduction of uncertainty in the row variable due to knowing the column variable.
 
 
-It is worth noting that \eqn{\lambda}{lambda}, \eqn{\tau}{lambda} and U are asymmetric measures of the proportional reduction of the variance of the row column when passing from its marginal distribution to its conditional distribution given the column variable obtained  starting from the general expression (cf. Agresti, 2002, p. 56):
+It is worth noting that \eqn{\lambda}{lambda}, \eqn{\tau}{tau} and U are asymmetric measures of the proportional reduction of the variance of the row column when passing from its marginal distribution to its conditional distribution given the column variable obtained  starting from the general expression (cf. Agresti, 2002, p. 56):
 
 \deqn{ \frac{V(R) - E[V(R|C)]}{V(R)}}{ (V(R) - E[V(R|C)])/V(R) }
 
@@ -68,7 +68,7 @@ They differ in the way of measuring variance, in fact it does not exist a genera
 }
 
 \value{
-A \code{list} object with for components. 
+A \code{list} object with four components. 
 
 \item{V}{A vector with the estimated Cramer's V for each couple response-predictor.}
 

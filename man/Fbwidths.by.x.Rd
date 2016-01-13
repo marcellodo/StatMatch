@@ -8,7 +8,7 @@ This function permits to compute the bounds for cell probabilities in the contin
 }
 
 \usage{
-Fbwidths.by.x(tab.x, tab.xy, tab.xz)
+Fbwidths.by.x(tab.x, tab.xy, tab.xz, compress.sum=FALSE)
 }
 
 \arguments{
@@ -22,7 +22,7 @@ A \R table crossing the \bold{X} variables.  This table must be obtained by usin
 A \R table of \bold{X} vs. Y variable.  This table must be obtained by using the function \code{\link[stats]{xtabs}} or \code{\link[base]{table}}, e.g. \cr
 \code{table.xy <- xtabs(~x1+x2+x3+y, data=data.A)}.
 
-A single categorical Y variables is allowed.  One or more categorical variables can be considered as \bold{X} variables (common variables).  Obviously, the same \bold{X} variables in \code{tab.x} must be available in \code{tab.xy}.  Moreover, it is assumed that the joint distribution of the \bold{X} variables computed from \code{tab.xy} is equal to \code{tab.x}; a warning is produced if this is not true.
+A single categorical Y variables is allowed.  One or more categorical variables can be considered as \bold{X} variables (common variables).  The same \bold{X} variables in \code{tab.x} must be available in \code{tab.xy}.  Moreover, it is assumed that the joint distribution of the \bold{X} variables computed from \code{tab.xy} is equal to \code{tab.x}; a warning is produced if this is not true.
 }
 
 \item{tab.xz}{
@@ -31,6 +31,11 @@ A \R table of \bold{X} vs. Z variable.  This table must be obtained by using the
 
 A single categorical Z variable is allowed.  One or more categorical variables can be considered as \bold{X} variables (common variables).  The same \bold{X} variables in \code{tab.x} must be available in \code{tab.xz}.  Moreover, it is assumed that the joint distribution of the \bold{X} variables computed from \code{tab.xz} is equal to \code{tab.x}; a warning is produced if this is not true.
 }
+
+\item{compress.sum}{
+Logical (default \code{FALSE)}. If \code{TRUE} reduces the information saved in \code{sum.unc}. See Value for further information.
+}
+
 
 }
 
@@ -44,7 +49,7 @@ This function permits to compute the Frechet bounds for the frequencies in the c
 %}{ D = sum_(i,j,k) ( p^(up)_(Y=j,Z=k) - p^(low)_(Y=j,Z=k) ) * p_(Y=j|X=i) * p_(Z=k|X=i) * p_(X=i) }
 
 
-The uncertainty is measured by the average of the widths of the bounds for the cells in the table of Y vs. Z it is also reported:
+The uncertainty is measured by the average of the widths of the bounds for the cells in the table Y vs. Z:
 
 \deqn{ \bar{d} = \frac{1}{J \times K} \sum_{j,k} ( p^{(up)}_{Y=j,Z=k} - p^{(low)}_{Y=j,Z=k} )}{d=(1/(J*K))*sum_(j,k)(p^(up)_(Y=j,Z=k) - p^(low)_(Y=j,Z=k))}
 
@@ -55,7 +60,13 @@ For details see \code{\link[StatMatch]{Frechet.bounds.cat}}.
 
 \value{
 
-A list with the estimated estimated bounds for the cells in the table of Y vs. Z for each possible subset of the \bold{X} variables.  The final component  \code{sum.unc} is a data.frame that summarizes the findings for each subset of the \bold{X} variables and measures of the uncertainty are reported. In particular the data frame reports the no. of X variables (\code{"x.vars"}), the number of cells in the joint distribution of the X variables (\code{"x.cells"}), the number of cells in joint distribution of the X variables with frequency equal to 0 (\code{"x.freq0"}), the average widths of the uncertainty intervals (\code{"av.widths"}). %and finally the estimated overall uncertainty (\code{"ov.unc"}) (estimated Delta).
+A list with the estimated bounds for the cells in the table of Y vs. Z for each possible subset of the \bold{X} variables.  The final component  \code{sum.unc} is a data.frame that summarizes the main findings. In particular it reports the number of \bold{X} variables (\code{"x.vars"}), the number of cells in the each of the input tables and the corresponding number of cells with frequency equal to 0 (columns ending with \code{freq0} ). Then it is provided the average width of the uncertainty intervals (\code{"av.width"}) and its relative value (\code{"rel.av.width"}) when compared with the average widths of the uncertainty intervals when no \bold{X} variables are considered (i.e. \code{unconditioned} \code{"av.width"}, reported in the first row of the data.frame).
+
+When \code{compress.sum = TRUE} the data.frame \code{sum.unc} will show a combination of the \bold{X} variables only if it determines a reduction of the (\code{"av.width"}) when compared to the preceding one.
+
+Note that in the presence of too many cells with 0s in the input contingency tables is an indication of sparseness; this is an unappealing situation when estimating the cells' relative frequencies needed to derive the bounds; in such cases the corresponding results may be unreliable. A possible alternative way of working consists in estimating the required parameters by considering a pseudo-Bayes estimator (see \code{\link[StatMatch]{pBayes}}); in practice the input \code{tab.x}, \code{tab.xy} and \code{tab.xz} should be the ones provided by the \code{\link[StatMatch]{pBayes}} function.
+
+
 
 }
 
@@ -102,6 +113,16 @@ bounds.yz <- Fbwidths.by.x(tab.x=freq.x, tab.xy=freq.xy,
         tab.xz=freq.xz)
 
 bounds.yz$sum.unc
+
+# input tables estimated with pBayes()
+
+pf.x <- pBayes(x=freq.x)
+pf.xy <- pBayes(x=freq.xy)
+pf.xz <- pBayes(x=freq.xz)
+
+bounds.yz.p <- Fbwidths.by.x(tab.x = pf.x$pseudoB, 
+							 tab.xy = pf.xy$pseudoB,
+							 tab.xz = pf.xz$pseudoB)
 
 }
 

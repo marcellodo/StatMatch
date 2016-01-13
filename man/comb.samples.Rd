@@ -38,11 +38,11 @@ When \code{svy.C} is available, if \code{estimation="incomplete"} then it must c
 }
 
 \item{y.lab}{
-A string providing the name of the Y variable, collected in survey A and in survey C (if available).  The Y variable must be a categorical variable (\code{factor} or \code{integer} in \R).
+A string providing the name of the Y variable, collected in survey A and in survey C (if available).  The Y variable can be a categorical variable (\code{factor} in \R) or a continuous one (in this latter case \code{z.lab} should be categorical).
 }
 
 \item{z.lab}{
-A string providing the name of the Z variable collected in survey B and in survey C (if available).  The Z variable must be a categorical variable (\code{factor} or \code{integer} in \R).
+A string providing the name of the Z variable collected in survey B and in survey C (if available).  The Z variable can be a categorical variable (\code{factor} in \R)m or a continuous one (in this latter case \code{y.lab} should be categorical).
 }
 
 
@@ -59,7 +59,7 @@ Due to weights calibration features, it is preferable to work  with categorical 
 }
 
 \item{estimation}{
-A character string that identifies the method to be used to estimate the table of Y vs. Z when data from survey C are available.  As suggested in Renssen (1998), two alternative methods are available: (i) Incomplete Two-Way Stratification (\code{estimation="incomplete"}, or \code{estimation="ITWS"}, the default one) and (ii) Synthetic Two-Way Stratification (\code{estimation="synthetic"} or \cr \code{estimation="STWS"}).  In the first case (\code{estimation="incomplete"}) only Y and Z variables must be available in \code{svy.C}.  On the contrary, when \code{estimation="synthetic"} the survey C must contain all the \bold{X} variables specified via \code{form.x}, the Y variable and the Z variable.  See Details for further information.
+A character string that identifies the method to be used to estimate the table of Y vs. Z when data from survey C are available.  As suggested in Renssen (1998), two alternative methods are available: (i) Incomplete Two-Way Stratification (\code{estimation="incomplete"}, or \code{estimation="ITWS"}, the default one) and (ii) Synthetic Two-Way Stratification (\code{estimation="synthetic"} or \cr \code{estimation="STWS"}).  In the first case (\code{estimation="incomplete"}) only Y and Z variables must be available in \code{svy.C}.  On the contrary, when \cr \code{estimation="synthetic"} the survey C must contain all the \bold{X} variables specified via \code{form.x}, the Y variable and the Z variable.  See Details for further information.
 }
 
 \item{micro}{

@@ -1,3 +1,11 @@
+1.2.4 added the new function pBayes for applying pseudo-Bayes estimator to sparse contingency tables
+		
+		modified comb.samples to handle a continuous target variable (Y or Z)
+		
+		Faster versions of Frechet.bound.cat and Fbwidths.by.x.
+		 
+		Fbwidths.by.x now provides a richer output. 
+
 1.2.3 corrected a bug in RANDwNND.hotdeck. Thanks to Kirill Muller
 
 1.2.2 added 3 data sets used in the function's help pages and in the vignette

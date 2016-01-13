@@ -11,7 +11,7 @@ options(warn=-1)
 
 
 ###################################################
-### code chunk number 2: Statistical_Matching_with_StatMatch.Rnw:112-119
+### code chunk number 2: Statistical_Matching_with_StatMatch.Rnw:112-118
 ###################################################
 library(StatMatch) #loads pkg StatMatch
 data(samp.A) # sample A in SM examples
@@ -21,9 +21,8 @@ data(samp.B) # sample B in the SM examples
 str(samp.B)
 
 
-
 ###################################################
-### code chunk number 3: Statistical_Matching_with_StatMatch.Rnw:124-130
+### code chunk number 3: Statistical_Matching_with_StatMatch.Rnw:123-128
 ###################################################
 X.vars <- intersect(names(samp.A), names(samp.B))
 X.vars
@@ -32,9 +31,8 @@ setdiff(names(samp.A), names(samp.B)) # available just in A
 setdiff(names(samp.B), names(samp.A)) # available just in B
 
 
-
 ###################################################
-### code chunk number 4: Statistical_Matching_with_StatMatch.Rnw:149-152
+### code chunk number 4: Statistical_Matching_with_StatMatch.Rnw:147-150
 ###################################################
 require(Hmisc)
 spearman2(n.income~area5+urb+hsize+age+sex+marital+edu7, 
@@ -42,13 +40,13 @@ spearman2(n.income~area5+urb+hsize+age+sex+marital+edu7,
 
 
 ###################################################
-### code chunk number 5: Statistical_Matching_with_StatMatch.Rnw:159-160
+### code chunk number 5: Statistical_Matching_with_StatMatch.Rnw:157-158
 ###################################################
 pw.assoc(labour5~area5+urb+hsize5+c.age+sex+marital+edu7, data=samp.B)
 
 
 ###################################################
-### code chunk number 6: Statistical_Matching_with_StatMatch.Rnw:200-210
+### code chunk number 6: Statistical_Matching_with_StatMatch.Rnw:198-208
 ###################################################
 # choiche of the matching variables based on uncertainty
 xx <- xtabs(~c.age+sex+marital+edu7, data=samp.A)
@@ -63,7 +61,7 @@ head(sort.av) # best 6 combinations of the Xs
 
 
 ###################################################
-### code chunk number 7: Statistical_Matching_with_StatMatch.Rnw:231-235
+### code chunk number 7: Statistical_Matching_with_StatMatch.Rnw:228-232
 ###################################################
 group.v <- c("area5","sex")
 X.mtc <- "age" 
@@ -72,14 +70,14 @@ out.nnd <- NND.hotdeck(data.rec=samp.A, data.don=samp.B,
 
 
 ###################################################
-### code chunk number 8: Statistical_Matching_with_StatMatch.Rnw:240-242
+### code chunk number 8: Statistical_Matching_with_StatMatch.Rnw:237-239
 ###################################################
 summary(out.nnd$dist.rd) # summary distances rec-don
 summary(out.nnd$noad) # summary available donors at min. dist.
 
 
 ###################################################
-### code chunk number 9: Statistical_Matching_with_StatMatch.Rnw:247-253
+### code chunk number 9: Statistical_Matching_with_StatMatch.Rnw:244-250
 ###################################################
 head(out.nnd$mtc.ids)
 fA.nnd <- create.fused(data.rec=samp.A, data.don=samp.B,
@@ -90,7 +88,7 @@ head(fA.nnd) #first 6 obs.
 
 
 ###################################################
-### code chunk number 10: Statistical_Matching_with_StatMatch.Rnw:260-269
+### code chunk number 10: Statistical_Matching_with_StatMatch.Rnw:257-266
 ###################################################
 group.v <- c("sex","area5")
 X.mtc <- "age"
@@ -104,7 +102,7 @@ fA.nnd.c <- create.fused(data.rec=samp.A, data.don=samp.B,
 
 
 ###################################################
-### code chunk number 11: Statistical_Matching_with_StatMatch.Rnw:274-277
+### code chunk number 11: Statistical_Matching_with_StatMatch.Rnw:271-274
 ###################################################
 #comparing distances
 sum(out.nnd$dist.rd) # unconstrained
@@ -112,7 +110,7 @@ sum(out.nnd.c$dist.rd) # constrained
 
 
 ###################################################
-### code chunk number 12: Statistical_Matching_with_StatMatch.Rnw:282-292
+### code chunk number 12: Statistical_Matching_with_StatMatch.Rnw:279-289
 ###################################################
 # estimating marginal distribution of labour5
 tt0 <- xtabs(~labour5, data=samp.B) # reference distr.
@@ -127,8 +125,9 @@ cp2$meas
 
 
 ###################################################
-### code chunk number 13: Statistical_Matching_with_StatMatch.Rnw:302-308
+### code chunk number 13: Statistical_Matching_with_StatMatch.Rnw:299-306
 ###################################################
+# random hot deck in classes formed crossing "area5" and "sex"
 group.v <- c("area5","sex")
 rnd.1 <- RANDwNND.hotdeck(data.rec=samp.A, data.don=samp.B, 
                           match.vars=NULL, don.class=group.v)
@@ -138,9 +137,10 @@ fA.rnd <- create.fused(data.rec=samp.A, data.don=samp.B,
 
 
 ###################################################
-### code chunk number 14: Statistical_Matching_with_StatMatch.Rnw:315-325
+### code chunk number 14: Statistical_Matching_with_StatMatch.Rnw:313-324
 ###################################################
-# random choiches of a donor among the closest k=20 wrt age
+# random choice of a donor among the closest k=20 wrt age
+# sharing the same values of "area5" and "sex"
 group.v <- c("area5","sex")
 X.mtc <- "age"
 rnd.2 <- RANDwNND.hotdeck(data.rec=samp.A, data.don=samp.B, 
@@ -153,14 +153,15 @@ fA.knnd <- create.fused(data.rec=samp.A, data.don=samp.B,
 
 
 ###################################################
-### code chunk number 15: Statistical_Matching_with_StatMatch.Rnw:330-331
+### code chunk number 15: Statistical_Matching_with_StatMatch.Rnw:329-330
 ###################################################
 head(rnd.2$sum.dist)
 
 
 ###################################################
-### code chunk number 16: Statistical_Matching_with_StatMatch.Rnw:349-357
+### code chunk number 16: Statistical_Matching_with_StatMatch.Rnw:348-357
 ###################################################
+# distance computed on the percentage points of ecdf of "age"
 rnk.1 <- rankNND.hotdeck(data.rec=samp.A, data.don=samp.B, 
                          var.rec="age", var.don="age")
 #create the synthetic data set
@@ -172,8 +173,10 @@ head(fA.rnk)
 
 
 ###################################################
-### code chunk number 17: Statistical_Matching_with_StatMatch.Rnw:362-370
+### code chunk number 17: Statistical_Matching_with_StatMatch.Rnw:362-372
 ###################################################
+# distance computed on the percentage points of ecdf of "age"
+# computed separately by "sex"
 rnk.2 <- rankNND.hotdeck(data.rec=samp.A, data.don=samp.B, var.rec="age",
                          var.don="age", don.class="sex",
                          constrained=TRUE, constr.alg="Hungarian")
@@ -185,12 +188,12 @@ head(fA.grnk)
 
 
 ###################################################
-### code chunk number 18: Statistical_Matching_with_StatMatch.Rnw:395-422
+### code chunk number 18: Statistical_Matching_with_StatMatch.Rnw:397-424
 ###################################################
 # step 0) introduce missing values in iris
+data(iris, package="datasets")
 set.seed(1324)
 miss <- rbinom(150, 1, 0.30) #generates randomly missing
-data(iris, package="datasets")
 iris.miss <- iris
 iris.miss$Petal.Length[miss==1] <- NA
 summary(iris.miss$Petal.L)
@@ -217,7 +220,7 @@ tapply(imp.iris$Petal.Length, imp.iris$imp.PL, summary)
 
 
 ###################################################
-### code chunk number 19: Statistical_Matching_with_StatMatch.Rnw:438-455
+### code chunk number 19: Statistical_Matching_with_StatMatch.Rnw:440-457
 ###################################################
 # uses iris data set
 iris.A <- iris[101:150, 1:3]
@@ -239,7 +242,7 @@ cor(mix.1$filled.rec)
 
 
 ###################################################
-### code chunk number 20: Statistical_Matching_with_StatMatch.Rnw:462-469
+### code chunk number 20: Statistical_Matching_with_StatMatch.Rnw:464-471
 ###################################################
 # parameters estimated using ML and rho_YZ|X=0.85
 mix.2 <- mixed.mtc(data.rec=iris.A, data.don=iris.B, match.vars=X.mtc,
@@ -251,7 +254,7 @@ head(mix.2$filled.rec)
 
 
 ###################################################
-### code chunk number 21: Statistical_Matching_with_StatMatch.Rnw:474-480
+### code chunk number 21: Statistical_Matching_with_StatMatch.Rnw:476-482
 ###################################################
 mix.3 <- mixed.mtc(data.rec=iris.A, data.don=iris.B, match.vars=X.mtc,
                     y.rec="Petal.Length", z.don="Petal.Width", 
@@ -262,7 +265,7 @@ mix.3$rho.yz
 
 
 ###################################################
-### code chunk number 22: Statistical_Matching_with_StatMatch.Rnw:495-517
+### code chunk number 22: Statistical_Matching_with_StatMatch.Rnw:497-519
 ###################################################
 # summary info on the weights
 sum(samp.A$ww) # estimated pop size from A
@@ -289,7 +292,7 @@ c1$meas
 
 
 ###################################################
-### code chunk number 23: Statistical_Matching_with_StatMatch.Rnw:524-537
+### code chunk number 23: Statistical_Matching_with_StatMatch.Rnw:526-539
 ###################################################
 group.v <- c("sex","area5")
 rnd.2 <- RANDwNND.hotdeck(data.rec=samp.A, data.don=samp.B, 
@@ -307,7 +310,7 @@ c1$meas
 
 
 ###################################################
-### code chunk number 24: Statistical_Matching_with_StatMatch.Rnw:548-565
+### code chunk number 24: Statistical_Matching_with_StatMatch.Rnw:550-567
 ###################################################
 rnk.w <- rankNND.hotdeck(data.rec=samp.A, data.don=samp.B, 
                          don.class="area5", var.rec="age", 
@@ -329,7 +332,7 @@ c1$meas
 
 
 ###################################################
-### code chunk number 25: Statistical_Matching_with_StatMatch.Rnw:588-611
+### code chunk number 25: Statistical_Matching_with_StatMatch.Rnw:590-613
 ###################################################
 tt.A <- xtabs(ww~sex+c.age, data=samp.A)
 tt.B <- xtabs(ww~sex+c.age, data=samp.B)
@@ -357,7 +360,7 @@ c1$meas
 
 
 ###################################################
-### code chunk number 26: Statistical_Matching_with_StatMatch.Rnw:627-633
+### code chunk number 26: Statistical_Matching_with_StatMatch.Rnw:629-635
 ###################################################
 # estimating c.netI vs. labour5 under the CI assumption
 out <- comb.samples(svy.A=out.hz$cal.A, svy.B=out.hz$cal.B,
@@ -368,7 +371,7 @@ addmargins(t(out$yz.CIA))  # table estimated under the CIA
 
 
 ###################################################
-### code chunk number 27: Statistical_Matching_with_StatMatch.Rnw:638-651
+### code chunk number 27: Statistical_Matching_with_StatMatch.Rnw:640-653
 ###################################################
 data(samp.C, package="StatMatch")
 str(samp.C)
@@ -386,7 +389,7 @@ addmargins(t(out.inc$yz.est))
 
 
 ###################################################
-### code chunk number 28: Statistical_Matching_with_StatMatch.Rnw:656-678
+### code chunk number 28: Statistical_Matching_with_StatMatch.Rnw:658-680
 ###################################################
 new.ww <- weights(out.inc$cal.C) #new cal. weights for C 
 #
@@ -413,7 +416,7 @@ c2$meas
 
 
 ###################################################
-### code chunk number 29: Statistical_Matching_with_StatMatch.Rnw:683-690
+### code chunk number 29: Statistical_Matching_with_StatMatch.Rnw:685-692
 ###################################################
 # synthetic two-way estimation
 out.synt <- comb.samples(svy.A=out.hz$cal.A, svy.B=out.hz$cal.B,
@@ -425,7 +428,7 @@ addmargins(t(out.synt$yz.est))
 
 
 ###################################################
-### code chunk number 30: Statistical_Matching_with_StatMatch.Rnw:699-712
+### code chunk number 30: Statistical_Matching_with_StatMatch.Rnw:701-714
 ###################################################
 # predicting prob of labour5 in A under the CI assumption
 out <- comb.samples(svy.A=out.hz$cal.A, svy.B=out.hz$cal.B,
@@ -443,14 +446,15 @@ c1$meas
 
 
 ###################################################
-### code chunk number 31: Statistical_Matching_with_StatMatch.Rnw:717-735
+### code chunk number 31: Statistical_Matching_with_StatMatch.Rnw:719-738
 ###################################################
 # predicting categories of labour5 in A
 # randomized prediction with prob proportional to estimated prob.
 pps1 <- function(x) sample(x=1:length(x), size=1, prob=x)
 pred.zA <- apply(out$Z.A, 1, pps1)
 samp.A$labour5 <- factor(pred.zA, levels=1:nlevels(samp.B$labour5), 
-                       labels=as.character(levels(samp.B$labour5)), ordered=T)
+                       labels=as.character(levels(samp.B$labour5)), 
+                       ordered=T)
 
 # comparing marginal distributions of Z
 t.zA <- xtabs(out.hz$weights.A ~ samp.A$labour5)
@@ -466,7 +470,7 @@ out.comp$chi.sq
 
 
 ###################################################
-### code chunk number 32: Statistical_Matching_with_StatMatch.Rnw:776-787
+### code chunk number 32: Statistical_Matching_with_StatMatch.Rnw:779-790
 ###################################################
 #comparing joint distribution of the X_M variables in A and in B
 t.xA <- xtabs(ww~c.age+sex, data=samp.A)
@@ -482,7 +486,7 @@ out.fb
 
 
 ###################################################
-### code chunk number 33: Statistical_Matching_with_StatMatch.Rnw:795-804
+### code chunk number 33: Statistical_Matching_with_StatMatch.Rnw:798-807
 ###################################################
 # continuous variables
 samp.A$log.netI <- log(ifelse(samp.A$n.income>0, samp.A$n.income, 0) + 1)
