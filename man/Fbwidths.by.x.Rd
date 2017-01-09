@@ -66,8 +66,6 @@ When \code{compress.sum = TRUE} the data.frame \code{sum.unc} will show a combin
 
 Note that in the presence of too many cells with 0s in the input contingency tables is an indication of sparseness; this is an unappealing situation when estimating the cells' relative frequencies needed to derive the bounds; in such cases the corresponding results may be unreliable. A possible alternative way of working consists in estimating the required parameters by considering a pseudo-Bayes estimator (see \code{\link[StatMatch]{pBayes}}); in practice the input \code{tab.x}, \code{tab.xy} and \code{tab.xz} should be the ones provided by the \code{\link[StatMatch]{pBayes}} function.
 
-
-
 }
 
 \references{
@@ -82,7 +80,7 @@ D'Orazio, M., Di Zio, M. and Scanu, M. (2006). \emph{Statistical Matching: Theor
 
 
 \author{
- Marcello D'Orazio \email{madorazi@istat.it} 
+ Marcello D'Orazio \email{mdo.statmatch@gmail.com} 
 }
 
 \seealso{ 

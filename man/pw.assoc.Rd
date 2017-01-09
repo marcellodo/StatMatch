@@ -87,7 +87,7 @@ Agresti A (2002) \emph{Categorical Data Analysis. Second Edition}. Wiley, new Yo
 }
 
 \author{
- Marcello D'Orazio \email{madorazi@istat.it} 
+ Marcello D'Orazio \email{mdo.statmatch@gmail.com} 
 }
 
 % \seealso{ 

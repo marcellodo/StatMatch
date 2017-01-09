@@ -88,7 +88,7 @@ Kaufman, L. and Rousseeuw, P.J. (1990), \emph{Finding Groups in Data: An Introdu
 }
 
 \author{
- Marcello D'Orazio \email{madorazi@istat.it} 
+ Marcello D'Orazio \email{mdo.statmatch@gmail.com} 
 }
 
 \seealso{ 
@@ -105,11 +105,12 @@ x4 <- ordered(cut(x3, -4:4, include.lowest=TRUE))
 xx <- data.frame(x1, x2, x3, x4, stringsAsFactors = FALSE)
 
 # matrix of distances among observations in xx
-gower.dist(xx)
+dx <- gower.dist(xx)
+head(dx)
 
 # matrix of distances among first obs. in xx
 # and the remaining ones
-gower.dist(data.x=xx[1:3,], data.y=xx[4:10,])
+gower.dist(data.x=xx[1:6,], data.y=xx[7:10,])
 
 }
 

@@ -208,9 +208,9 @@ RANDwNND.hd <- function (rec, don, dfun="Manhattan", cut.don="rot", k=NULL, w.do
         }
 
         else if(cut.don=="k.dist"){
-			if(k<min.dist) {
+			if(k < min.dist) {
 			    cat("Warning: the value of k,", k, fill=TRUE)
-			    cat("is smaller than the minimum distance:", min.d, fill=TRUE)
+			    cat("is smaller than the minimum distance:", min.dist, fill=TRUE)
 			}			
             tst <- (vd<=k) & !is.na(vd)
 		    appo <- d.lab[tst]

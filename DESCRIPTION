@@ -1,15 +1,15 @@
 Package: StatMatch
 Type: Package
 Title: Statistical Matching
-Version: 1.2.4
-Date: 2016-01-13
+Version: 1.2.5
+Date: 2016-12-22
 Author: Marcello D'Orazio
-Maintainer: Marcello D'Orazio <madorazi@istat.it>
+Maintainer: Marcello D'Orazio <mdo.statmatch@gmail.com>
 Depends: R (>= 2.7.0), proxy, clue, survey, RANN, lpSolve
 Suggests: MASS, Hmisc
 Description: Integration of two data sources referred to the same target population which share a number of common variables (aka data fusion). Some functions can also be used to impute missing values in data sets through hot deck imputation methods. Methods to perform statistical matching when dealing  with data from complex sample surveys are available too.
 License: GPL (>= 2)
 NeedsCompilation: no
-Packaged: 2016-01-13 09:03:21 UTC; UTENTE
+Packaged: 2017-01-09 15:13:27 UTC; madorazi
 Repository: CRAN
-Date/Publication: 2016-01-13 13:54:07
+Date/Publication: 2017-01-09 17:11:42

@@ -39,7 +39,7 @@ A matrix with the dummy variables instead of initial factor variables.
 }
 
 \author{
- Marcello D'Orazio \email{madorazi@istat.it} 
+ Marcello D'Orazio \email{mdo.statmatch@gmail.com} 
 }
 
 \seealso{ 

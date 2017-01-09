@@ -136,7 +136,7 @@ Renssen, R.H. (1998) \dQuote{Use of Statistical Matching Techniques in Calibrati
 
 
 \author{
- Marcello D'Orazio \email{madorazi@istat.it} 
+ Marcello D'Orazio \email{mdo.statmatch@gmail.com} 
 }
 
 \seealso{ 

@@ -105,7 +105,7 @@ Sarndal CE, Swensson B, Wretman JH (1992) \emph{Model Assisted Survey Sampling}.
 }
 
 \author{
- Marcello D'Orazio \email{madorazi@istat.it} 
+ Marcello D'Orazio \email{mdo.statmatch@gmail.com} 
 }
 
 %\seealso{ 

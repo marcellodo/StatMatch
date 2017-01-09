@@ -38,10 +38,7 @@ function (tab.x, tab.xy, tab.xz, compress.sum=FALSE)
     H <- length(appo.var)
     out.rng <- as.list(as.numeric(H))
     av.rng <- matrix(NA, H, 8)
-#    av.rng <- matrix(NA, H, 9)
-#    all.H <- matrix(NA, H, 5)
-#    all.U <- matrix(NA, H, 2)
-    
+
     for (h in 1:H) {
         lab <- appo.var[[h]]
         
@@ -62,13 +59,12 @@ function (tab.x, tab.xy, tab.xz, compress.sum=FALSE)
         fb <- Frechet.bounds.cat(xx, xy, xz, print.f = "tables")
         appo <- data.frame(fb$low.cx)
         out.rng[[h]] <- data.frame(appo[, 1:2], lower = c(fb$low.cx), 
-                                   upper = c(fb$up.cx), width = c(fb$up.cx - fb$low.cx))
+                                   upper = c(fb$up.cx), 
+                                   width = c(fb$up.cx - fb$low.cx),
+                                   CIA = c(fb$CIA))
         
         av.rng[h, 7] <- fb$uncertainty[2]
         av.rng[h, 8] <- fb$uncertainty[2] / fb$uncertainty[1]
-#        av.rng[h, 9] <- fb$uncertainty[3]
-#        all.H[h, ] <- fb$H
-#        all.U[h, ] <- fb$U
     }
     lab.list <- paste("|", lapply(appo.var, paste, collapse = "+"), 
                       sep = "")
@@ -78,7 +74,6 @@ function (tab.x, tab.xy, tab.xz, compress.sum=FALSE)
                          xy.cells = av.rng[, 3], xy.freq0 = av.rng[, 4],
                          xz.cells = av.rng[, 5], xz.freq0 = av.rng[, 6],
                          av.width = av.rng[, 7], rel.av.width = av.rng[, 8])
-#                         delta.CMS=av.rng[, 9])
     row.names(av.rng) <- paste("|", lapply(appo.var, paste, collapse = "*"), 
                                sep = "")
     av.rng.0 <- c(x.vars=0, x.cells=NA, x.freq0=NA, 
@@ -86,9 +81,6 @@ function (tab.x, tab.xy, tab.xz, compress.sum=FALSE)
                   xz.cells = NA, xz.freq0 = NA,
                   av.width = fb$uncertainty[1], rel.av.width = 1)
     av.rng <- rbind(unconditioned=av.rng.0, av.rng)
-#    colnames(all.H) <- names(fb$H)
-#    colnames(all.U) <- names(fb$U)
-#    row.names(all.H) <- rownames(all.U) <- paste("|", lapply(appo.var, paste, collapse = "+"), sep = "")
     aa <- n.x - av.rng$x.vars
     ord.lab <- order(aa, av.rng$av.width, decreasing = TRUE)
     av.rng <- av.rng[ord.lab, ]
@@ -107,8 +99,5 @@ function (tab.x, tab.xy, tab.xz, compress.sum=FALSE)
     }
     out.rng[[(H + 1)]] <- av.rng
     names(out.rng) <- c(lab.list, "sum.unc")
-#    out.rng$all.H <- all.H[ord.lab,]
-#    out.rng$all.U <- all.U[ord.lab,]
-
     out.rng
 }

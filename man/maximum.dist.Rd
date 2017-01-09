@@ -49,7 +49,7 @@ Kovar, J.G., MacMillan, J. and Whitridge, P. (1988). \dQuote{Overview and strate
 }
 
 \author{
- Marcello D'Orazio \email{madorazi@istat.it} 
+ Marcello D'Orazio \email{mdo.statmatch@gmail.com} 
 }
 
 \seealso{ 

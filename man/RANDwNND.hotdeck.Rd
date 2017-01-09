@@ -136,7 +136,7 @@ Singh, A.C., Mantel, H., Kinack, M. and Rowe, G. (1993). \dQuote{Statistical mat
 }
 
 \author{
- Marcello D'Orazio \email{madorazi@istat.it} 
+ Marcello D'Orazio \email{mdo.statmatch@gmail.com} 
 }
 
 \seealso{ 

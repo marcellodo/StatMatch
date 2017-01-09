@@ -21,8 +21,8 @@
 }
 \author{
   Marcello D'Orazio\\
-   \large \emph{Italian National Institute of Statistics (Istat), Rome, Italy}\\
-   \large E-mail: \href{mailto:madorazi@istat.it}{madorazi@istat.it}
+%   \large \emph{Italian National Institute of Statistics (Istat), Rome, Italy}\\
+   \large E-mail: \href{mailto:mdo.statmatch@gmail.com}{mdo.statmatch@gmail.com}
 }
 
 \date{\today}
@@ -842,7 +842,7 @@ When a single $X$ variable is considered, the bounds can be obtained explicitly 
 
 \item[] D'Orazio M. (2010) \dQuote{Statistical matching when dealing with data from complex survey sampling}, in \emph{Report of WP1. State of the art on statistical methodologies for data integration}, ESSnet project on Data Integration, 33--37, \url{http://www.essnet-portal.eu/sites/default/files/131/ESSnetDI_WP1_v1.32.pdf}
 
-\item[] D'Orazio M. (2016) \dQuote{StatMatch: Statistical Matching}. R package version 1.2.4. 
+\item[] D'Orazio M. (2016) \dQuote{StatMatch: Statistical Matching}. R package version 1.2.5. 
 \url{http://CRAN.R-project.org/package=StatMatch}
 
 \item[] D'Orazio M., Di Zio M., Scanu, M. (2005) \dQuote{A comparison among different estimators of regression parameters on statistically matched files trough an extensive simulation study}. \emph{Contributi Istat}, \textbf{2005/10}
@@ -861,7 +861,7 @@ When a single $X$ variable is considered, the bounds can be obtained explicitly 
 
 \item[] Harrell F.E. (2001) \emph{Regression Modeling Strategies With Applications to Linear Models, Logistic Regression, and Survival Analysis}. New York, Springer
 
-\item[] Harrell F.E., with contributions from Charles Dupont and many others (2015). \dQuote{Hmisc: Harrell Miscellaneous}. R package version 3.17-1. \url{https://CRAN.R-project.org/package=Hmisc}
+\item[] Harrell F.E., with contributions from Charles Dupont and many others (2016). \dQuote{Hmisc: Harrell Miscellaneous}. R package version 4.0-1. \url{https://CRAN.R-project.org/package=Hmisc}
 
 \item[] Hornik K. (2005).  \dQuote{A CLUE for CLUster Ensembles}.
   \emph{Journal of Statistical Software} 14/12.  \url{
@@ -879,15 +879,15 @@ When a single $X$ variable is considered, the bounds can be obtained explicitly 
 \item[] Lumley T. (2004) \dQuote{Analysis of complex survey samples}.
   \emph{Journal of Statistical Software}, 9(1): 1-19
 
-\item[] Lumley T. (2014) \dQuote{survey: analysis of complex survey samples}. R package version 3.30. \url{http://CRAN.R-project.org/package=survey}
+\item[] Lumley T. (2016) \dQuote{survey: analysis of complex survey samples}. R package version 3.31-5. \url{http://CRAN.R-project.org/package=survey}
 
-\item[] Meyer D., Buchta C. (2015) \dQuote{proxy: Distance and Similarity Measures}. R package version 0.4-15.  \url{http://CRAN.R-project.org/package=proxy}
+\item[] Meyer D., Buchta C. (2016) \dQuote{proxy: Distance and Similarity Measures}. R package version 0.4-16.  \url{http://CRAN.R-project.org/package=proxy}
 
 \item[] Moriarity C., Scheuren F. (2001) \dQuote{Statistical matching: a paradigm for assessing the uncertainty in the procedure}. \emph{Journal of Official Statistics}, \textbf{17}, 407--422. 
 
 \item[] Moriarity C., Scheuren F. (2003). \dQuote{A note on Rubin's statistical matching using file concatenation with adjusted weights and multiple imputation}, \emph{Jour. of Business and Economic Statistics}, \textbf{21}, 65--73.
 
-\item[] R Core Team (2015) \emph{R: A language and environment for statistical computing}. R Foundation for Statistical Computing, Vienna, Austria.  \url{http://www.R-project.org/}.
+\item[] R Core Team (2016) \emph{R: A language and environment for statistical computing}. R Foundation for Statistical Computing, Vienna, Austria.  \url{http://www.R-project.org/}.
 
 \item[] R\"assler S. (2002) \emph{Statistical matching: a frequentist theory, practical applications and alternative Bayesian approaches}. Springer Verlag, New York.
 

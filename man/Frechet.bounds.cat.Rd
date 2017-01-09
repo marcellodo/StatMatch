@@ -132,7 +132,7 @@ D'Orazio, M., Di Zio, M. and Scanu, M. (2006). \emph{Statistical Matching: Theor
 
 
 \author{
- Marcello D'Orazio \email{madorazi@istat.it} 
+ Marcello D'Orazio \email{mdo.statmatch@gmail.com} 
 }
 
 \seealso{ 

@@ -1,3 +1,12 @@
+1.2.5 gower.dist is faster and more efficient due improvements of Jan van der Laan (also thanks to Ton de Waal )
+		
+		NND.hotdeck allows performing constrained search of donors, allowing donor to be selected not more than k times (k>=1). 
+                argument k is set by the user		
+
+		fixed a minor bug in RANDwNND.hotdeck (not affecting results)
+		
+		richer output in Frechet.bounds.cat and Fb.widths.byx
+
 1.2.4 added the new function pBayes for applying pseudo-Bayes estimator to sparse contingency tables
 		
 		modified comb.samples to handle a continuous target variable (Y or Z)

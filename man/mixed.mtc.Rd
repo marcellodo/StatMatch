@@ -157,7 +157,7 @@ D'Orazio, M., Di Zio, M. and Scanu, M. (2005). \dQuote{A comparison among differ
 
 D'Orazio, M., Di Zio, M. and Scanu, M. (2006). \emph{Statistical Matching: Theory and Practice.} Wiley, Chichester.
 
-Hornik K. (2012).  clue: Cluster ensembles.  R package version 0.3-45.  \url{http://CRAN.R-project.org/package=clue}.
+Hornik K. (2012).  clue: Cluster ensembles.  R package version 0.3-45.  \url{https://CRAN.R-project.org/package=clue}.
 
 Moriarity, C., and Scheuren, F. (2001). \dQuote{Statistical matching: a paradigm for assessing the uncertainty in the procedure}. \emph{Journal of Official Statistics}, \bold{17}, 407--422.
 \url{http://www.jos.nu/Articles/abstract.asp?article=173407}
@@ -167,7 +167,7 @@ Moriarity, C., and Scheuren, F. (2003). \dQuote{A note on Rubin's statistical ma
 }
 
 \author{
- Marcello D'Orazio \email{madorazi@istat.it} 
+ Marcello D'Orazio \email{mdo.statmatch@gmail.com} 
 }
 
 \seealso{ 

@@ -103,7 +103,7 @@ Sarndal, C.E. and Lundstrom, S. (2005) \emph{Estimation in Surveys with Nonrespo
 
 
 \author{
- Marcello D'Orazio \email{madorazi@istat.it} 
+ Marcello D'Orazio \email{mdo.statmatch@gmail.com} 
 }
 
 \seealso{ 

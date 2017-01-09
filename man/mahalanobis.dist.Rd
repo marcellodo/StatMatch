@@ -47,7 +47,7 @@ Mahalanobis, P C (1936) \dQuote{On the generalised distance in statistics}. Proc
 }
 
 \author{
- Marcello D'Orazio \email{madorazi@istat.it} 
+ Marcello D'Orazio \email{mdo.statmatch@gmail.com} 
 }
 
 \seealso{ 

@@ -108,7 +108,6 @@ function(tab.x, tab.xy, tab.xz, print.f="tables", tol= 0.001)
         
         H <- nrow(xx.0)
         out.CIA <- out.low <- out.up <- array(0, dim=c(ncol(xx.y), ncol(xx.z), H))
-#       out.D <- array(0, dim=c(ncol(xx.y), ncol(xx.z), H))
         for(h in 1:H){
             out.CIA[ , ,h] <- outer(ygxx[h,], zgxx[h,], FUN="*") * xx.0[h,]
             thetas <- outer(ygxx[h,], zgxx[h,], FUN="+")-1
@@ -116,9 +115,6 @@ function(tab.x, tab.xy, tab.xz, print.f="tables", tol= 0.001)
             uu <- outer(ygxx[h, ], zgxx[h, ], FUN="pmin")
             out.low[ , , h] <- ll*xx.0[h, ]
             out.up[  , , h] <- uu*xx.0[h, ]
-#            jgi <- outer(ygxx[h, ], rep(1,length(zgxx[h, ])), FUN="*")
-#            kgi <- outer(rep(1,length(ygxx[h, ])), zgxx[h, ], FUN="*")
-#            out.D[ , ,h] <- (uu - ll)*jgi*kgi*xx.0[h, ]
         }
 
         fine.CIA <- apply(out.CIA, c(1,2), sum, na.rm=TRUE)
@@ -131,19 +127,8 @@ function(tab.x, tab.xy, tab.xz, print.f="tables", tol= 0.001)
         class(fine.CIA) <- class(fine.low) <- class(fine.up) <- "table"
         dimnames(fine.CIA) <- dimnames(fine.low) <-  dimnames(fine.up) <- list(l.y, l.z)
 
-# uncertainty        
-#        H.x <- sum(-1 * p.x * log(p.x), na.rm=TRUE)
-#        H.y <- sum(-1 * p.y * log(p.y), na.rm=TRUE)
-#        H.z <- sum(-1 * p.z * log(p.z), na.rm=TRUE)
-#        H.ygx <- sum(-1 * xx.y * log(ygxx), na.rm=TRUE)
-#        H.zgx <- sum(-1 * xx.z * log(zgxx), na.rm=TRUE)
-#        vet.H <- c(H.x=H.x, H.y=H.y, H.ygx=H.ygx, H.z=H.z, H.zgx=H.zgx)
-#        vet.U <- c(U.ygx = 1-H.ygx/H.y, U.zgx = 1-H.zgx/H.z)
-#
-#        vet.unc <- c(av.u=mean(c(upper-low)), av.cx=mean(c(fine.up-fine.low)), delta.CMS=sum(c(out.D), na.rm=TRUE))
         vet.unc <- c(av.u=mean(c(upper-low)), av.cx=mean(c(fine.up-fine.low)))
         res.1 <- list(CIA=fine.CIA, low.cx=fine.low, up.cx=fine.up) 
-#        res.2 <- list(H=vet.H, U=vet.U, uncertainty=vet.unc)
         res.2 <- list(uncertainty=vet.unc)
         
         if(print.f=="tables"){

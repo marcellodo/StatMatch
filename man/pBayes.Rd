@@ -76,7 +76,7 @@ Bishop Y.M.M., Fienberg, S.E., Holland, P.W. (1974) \emph{Discrete Multivariate 
 }
 
 \author{
- Marcello D'Orazio \email{madorazi@istat.it} 
+ Marcello D'Orazio \email{mdo.statmatch@gmail.com} 
 }
 
 % \seealso{ 
