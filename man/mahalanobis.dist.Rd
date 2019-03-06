@@ -23,7 +23,7 @@ When only \code{data.x} is supplied, the distances between rows of \code{data.x}
 }
 
 \item{vc}{
-Covariance matrix that should be used in distance computation.  If it is not supplied (\code{vc=NULL}) it is estimated from the input data.  In particular, when \code{vc=NULL} and only \code{data.x} is supplied then the covariance matrix is estimated from \code{data.x} (\code{var(data.x)}).  On the contrary when \code{vc=NULL} and both \code{data.x} and \code{data.y} are available then the covariance matrix is estimated on the joined data sets (i.e. \code{var(rbind(data.x, data.y))}).
+Covariance matrix that should be used in distance computation.  If it is not supplied (\code{vc = NULL}) it is estimated from the input data.  In particular, when \code{vc = NULL} and only \code{data.x} is supplied then the covariance matrix is estimated from \code{data.x} (i.e. \code{vc = var(data.x)}).  On the contrary when \code{vc = NULL} and both \code{data.x} and \code{data.y} are available then the covariance matrix is estimated on the joined data sets (i.e. \code{vc = var(rbind(data.x, data.y))}).
 }
 
 }

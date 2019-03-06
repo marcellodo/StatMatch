@@ -37,14 +37,14 @@ When \code{x.tot} is not provided (i.e. \code{x.tot=NULL}) then the vector of to
 }
 
 \item{cal.method}{
-A string that specifies how the calibration of the weights in \code{svy.A} and \code{svy.B} has to be carried out.  By default \code{cal.method="linear"} linear calibration is performed.  In particular, the calibration is carried out by mean of the function \code{\link[survey]{calibrate}} in the package \pkg{survey}.
+A string that specifies how the calibration of the weights in \code{svy.A} and \code{svy.B} has to be carried out.  By default linear calibration is performed ( \code{cal.method="linear"}).  In particular, the calibration is carried out by mean of the function \code{\link[survey]{calibrate}} in the package \pkg{survey}.
 
 Alternatively, it is possible to rake the origin survey weights by specifying \code{cal.method="raking"}.  Finally, it is possible to perform a simple post-stratification by setting \code{cal.method="poststratify"}.  Note that in this case the weights adjustments are carried out by considering the function \cr
 \code{\link[survey]{postStratify}} in the package \pkg{survey}.
 }
 \item{...}{
 
-Further arguments that may be necessary for calibration or post-stratification.  In particular, when \code{cal.method="linear"} there is the chance of having negative weights.  This drawback can be avoided by requiring that the final weights lie in a given interval specified via \code{bounds} argument (an argument of \code{\link[survey]{calibrate}}).  In sample surveys  one expects that weights are greater than or equal to 1, i.e. \code{bounds=c(1, Inf)}.
+Further arguments that may be necessary for calibration or post-stratification.  In particular, when \code{cal.method="linear"} there is the chance of having negative weights.  This drawback can be avoided by requiring that the final weights lie in a given interval specified via \code{bounds} argument (an argument of \code{\link[survey]{calibrate}}).  In sample surveys  one expects that weights are greater than or equal to 1.
 
 The number of iterations used in calibration can be modified too by using the argument \code{maxit} (by default \code{maxit=50}).
 
@@ -61,7 +61,7 @@ The calibration procedure may not produce the final result due to convergence pr
 
 In some limited cases it could be possible to consider both categorical and continuous variables.  In this situation it may happen that calibration is not successful.  In order to reach convergence it may be necessary to categorize the continuous \bold{X} variables.
 
-Post-stratification is a special case of calibration; all the weights of the units in a given post-stratum are modified so the reproduce the known total for that post-stratum.  Post-stratification avoids problems of convergence but, on the other hand it may produce final weights with a higher variability than those derived from the calibration.
+Post-stratification is a special case of calibration; all the weights of the units in a given post-stratum are modified so as to reproduce the known total for that post-stratum.  Post-stratification avoids problems of convergence but, on the other hand it may produce final weights with a higher variability than those derived from the calibration.
 
 }
 

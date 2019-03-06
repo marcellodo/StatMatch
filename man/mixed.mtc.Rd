@@ -15,11 +15,11 @@ mixed.mtc(data.rec, data.don, match.vars, y.rec, z.don, method="ML",
 \arguments{
 
 \item{data.rec}{
-  	A matrix or data frame that plays the role of \emph{recipient} in the statistical matching application. This data set must contain all variables (columns) that should be used in statistical matching, i.e. the variables called by the arguments \cr \code{match.vars} and \code{y.rec}. Note that continuous variables are expected, if there are some categorical variables they are recoded into dummies. Missing values (\code{NA}) are not allowed.
+  	A matrix or data frame that plays the role of \emph{recipient} in the statistical matching application. This data set must contain all variables (columns) that should be used in statistical matching, i.e. the variables called by the arguments \cr \code{match.vars} and \code{y.rec}. Note that continuous variables are expected, if there are some categorical variables they are re-coded into dummies. Missing values (\code{NA}) are not allowed.
 }
 
 \item{data.don}{
-   A matrix or data frame that plays the role of \emph{donor} in the statistical matching application. This data set must contain all the numeric variables (columns) that should be used in statistical matching, i.e. the variables called by the arguments \code{match.vars} and \code{z.don}. Note that continuous variables are expected, if there are some categorical variables they are recoded into dummies. Missing values (\code{NA}) are not allowed. 
+   A matrix or data frame that plays the role of \emph{donor} in the statistical matching application. This data set must contain all the numeric variables (columns) that should be used in statistical matching, i.e. the variables called by the arguments \code{match.vars} and \code{z.don}. Note that continuous variables are expected, if there are some categorical variables they are re-coded into dummies. Missing values (\code{NA}) are not allowed. 
 }
 
 \item{match.vars}{

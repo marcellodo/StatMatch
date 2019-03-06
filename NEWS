@@ -1,3 +1,24 @@
+1.3.0 changes in the functions related to uncertainty investigation when dealing with categorical variables
+
+		Frechet.bounds.cat now permits to align marginal distributions of X variables via IPF algorithm
+		(previously harmonization had to be done befor calling it by using harmonize.x function)
+		
+		Fbwidths.by.x provides penalty measures because of the increase of cells to estimate when increasing the number of Xs.
+		Sparsness of tables is explicitly considered.
+
+		New function selMtc.by.unc() permits to identify best subset of matching variables which minimize a penalized 
+		uncertainty estimate, as in D'Orazio, Di Zio, Scanu 2017 paper (see ref in help pages)
+
+		Updates in pw.assoc() to allow computation of bias corrected Cramer's V, mutual information (also 
+		normalized), AIC and BIC. Results can be organized in a data.frame. Changes in the dicumentation layout
+		to achieve coherence with documentation of other functions in the package
+		
+		Please note that Vignette is frozen to StatMatch 1.2.5, therefore it will not provide new feauter related to investigation
+		of uncertainty and more in general selecting of matching variables. 
+		New vignette related to uncertainty topic is expected to be realesed in future.
+
+#####################################################################################################################
+
 1.2.5 gower.dist is faster and more efficient due improvements of Jan van der Laan (also thanks to Ton de Waal )
 		
 		NND.hotdeck allows performing constrained search of donors, allowing donor to be selected not more than k times (k>=1). 

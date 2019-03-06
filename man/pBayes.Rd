@@ -19,33 +19,33 @@ pBayes(x, method="m.ind", const=NULL)
 \item{method}{ 
  The method for estimating the final cell frequencies. The following options are available:
 
-\code{method = "Jeffreys"}, consists in adding 0.5 to each cell before estimation of the relative frequencies, in particular the final relative frequencies are derived by means of \eqn{ \tilde{p}_i = (n_i + 0.5)/(n + c/2)}{ep_i = (n_i + 0.5)/(n + c/2)}, being \eqn{n}{n} the sum of all the counts and \eqn{c}{c} the number of cells in the table. The final estimated cell frequencies are obtained as \eqn{\tilde{n}_i=n \times \tilde{p}_i}{en_i=ep_i*n}.
+\code{method = "Jeffreys"}, consists in adding 0.5 to each cell before estimation of the relative frequencies. 
 
-\code{method = "minimax"}, consists in adding \eqn{\sqrt(n)/c}{sqrt(n)/c} to each cell before estimation of the relative frequencies, in particular the final relative frequencies are derived by means of \eqn{ \tilde{p}_i = (n_i + sqrt(n)/c)/(n + sqrt(n))}{ep_i = (n_i + sqrt(n)/c)/(n + sqrt(n))}.
+\code{method = "minimax"}, consists in adding \eqn{\sqrt(n)/c}{sqrt(n)/c} to each cell before estimation of the relative frequencies, being \eqn{n}{n} the sum of all the counts and \eqn{c}{c} the number of cells in the table.
 
-\code{method = "invcat"}, consists in adding \eqn{1/c}{1/c} to each cell before estimation of the relative frequencies, in particular the final relative frequencies are derived by means of \eqn{ \tilde{p}_i = (n_i + 1/c)/(n + 1)}{ep_i = (n_i + 1/c)/(n + 1)}.
+\code{method = "invcat"}, consists in adding \eqn{1/c}{1/c} to each cell before estimation of the relative frequencies.
 
-\code{method = "user"}, consists in adding a used defined constant \eqn{a}{a} (\eqn{a>0}{a>0}) to each cell before estimation of the relative frequencies with \eqn{ \tilde{p}_i = (n_i + a/c)/(n + a \times c)}{ep_i = (n_i + a)/(n + a*c)}. The constant \eqn{a}{a} should be passed via the argument \code{const}.
+\code{method = "user"}, consists in adding a used defined constant \eqn{a}{a} (\eqn{a>0}{a>0}) to each cell before estimation of the relative frequencies. The constant \eqn{a}{a} should be passed via the argument \code{const}.
 
-\code{method = "m.ind"}, the prior guess for the unknown cell probabilities is obtained by considering estimated probabilities under the mutual independence hypothesis. In such a case a data driven \eqn{K}{K} is considered (see Details). This option is available when dealing with at least two-way contingency tables \cr (\code{length(dim(x))>=2}).
+\code{method = "m.ind"}, the prior guess for the unknown cell probabilities is obtained by considering estimated probabilities under the mutual independence hypothesis. This option is available when dealing with at least two-way contingency tables \cr (\code{length(dim(x))>=2}).
 
-\code{method = "h.assoc"}, the prior guess for the unknown cell probabilities is obtained by considering estimated probabilities under the homogeneous association hypothesis. In such a case a data drive \eqn{K}{K} is considered (see Details). This option is available when dealing with at least two-way contingency tables (\code{length(dim(x))>=2}).
+\code{method = "h.assoc"}, the prior guess for the unknown cell probabilities is obtained by considering estimated probabilities under the homogeneous association hypothesis. This option is available when dealing with at least two-way contingency tables (\code{length(dim(x))>=2}).
 
 }
 
 \item{const}{
- Numeric value, a user defined constant \eqn{a}{a} (\eqn{a>0}{a>0}) added to each cell before estimation of the relative frequencies when \code{method = "user"}. As a general rule of thumb it is preferable to avoid that the sum of constant over all the cells in table is greater than \eqn{0.20 \times n}{0.20*n}.
+ Numeric value, a user defined constant \eqn{a}{a} (\eqn{a>0}{a>0}) added to each cell before estimation of the relative frequencies when \code{method = "user"}. As a general rule of thumb, it is preferable to avoid that the sum of constant over all the cells in table is greater than \eqn{0.20 \times n}{0.20*n}.
 }
 
 }
 
 \details{
-This function estimates the frequencies in a contingency table by using the pseudo-Bayes approach. In practice the estimator being considered is a weighted average of the observed cell counts \eqn{n_h}{n_h} and a suitable prior guess for cell probabilities \eqn{\gamma_h}{gamma_h}:
+This function estimates the frequencies in a contingency table by using the pseudo-Bayes approach. In practice the estimator being considered is a weighted average of the observed cells counts \eqn{n_h}{n_h} and a suitable prior guess for cells probabilities \eqn{\gamma_h}{gamma_h}:
 
 \deqn{\tilde{p}_h = \frac{n}{n+K} \hat{p}_h + \frac{K}{n+K} \gamma_h }{ep_h = n/(n+K)*p_h + K/(n+K)*gamma_h }
 
-\eqn{K}{K} depends on the parameters of Dirichilet prior distribution being considered (for major details see Chapter 12 in Bishop et al., 1974).
-It is worth noting that with a constant prior guess \eqn{\gamma_h=1/c}{gamma_h=1/c} (\eqn{h=1,2,\cdots, c}{h=1,2,...,c}), setting \eqn{K=1}{K=1} corresponds to adding \eqn{1/c}{1/c} to each cell before estimation of the relative frequencies (\code{method = "invcat"}); with \eqn{K=c/2}{K=c/2} the constant 0.5 is added to each cell (\code{method = "Jeffreys"}); finally when \eqn{K=\sqrt{n}}{sqrt(n)} the quantity \eqn{\sqrt{n}/c}{sqrt(n)/c} is added to each cell (\code{method = "minimax"}). All these cases corresponds to adding a flattening constant; the higher is the value of \eqn{K}{K} the more the estimates will be shrinked towards \eqn{\gamma_h=1/c}{gamma_h=1/c} (flattening).
+\eqn{K}{K} depends on the parameters of Dirichlet prior distribution being considered (for major details see Chapter 12 in Bishop et al., 1974).
+It is worth noting that with a constant prior guess \eqn{\gamma_h=1/c}{gamma_h=1/c} (\eqn{h=1,2,\cdots, c}{h=1,2,...,c}), then \eqn{K=1}{K=1} and in practice corresponds to adding \eqn{1/c}{1/c} to each cell before estimation of the relative frequencies (\code{method = "invcat"}); \eqn{K=c/2}{K=c/2} when the constant 0.5 is added to each cell (\code{method = "Jeffreys"}); finally \eqn{K=\sqrt{n}}{sqrt(n)} when the quantity \eqn{\sqrt{n}/c}{sqrt(n)/c} is added to each cell (\code{method = "minimax"}). All these cases corresponds to adding a flattening constant; the higher is the value of \eqn{K}{K} the more the estimates will be shrinked towards \eqn{\gamma_h=1/c}{gamma_h=1/c} (flattening).
 
 When \code{method = "m.ind"} the prior guess \eqn{\gamma_h}{gamma_h} is estimated under the hypothesis of mutual independence between the variables crossed in the initial contingency table \code{x}, supposed to be at least a two-way table.  In this case the value of \eqn{K}{K} is estimated via a data driven approach by considering
 
@@ -53,14 +53,14 @@ When \code{method = "m.ind"} the prior guess \eqn{\gamma_h}{gamma_h} is estimate
 
 On the contrary, when \code{method = "h.assoc"} the prior guess \eqn{\gamma_h}{gamma_h} is estimated under the hypothesis of homogeneous association between the variables crossed in the initial contingency table \code{x}. 
 
-Please note that when the input table is estimated from sample data where a weight is assigned to each unit, the weights should e used in estimation of the input table but it is suggested to rescale them so that they sum up to \emph{n}, the sample size.
+Please note that when the input table is estimated from sample data where a weight is assigned to each unit, the weights should be used in estimating the input table, but it is suggested to rescale them so that they sum up to \emph{n}, the sample size.
   
 }
 
 \value{
 A \code{list} object with three components. 
 
-\item{invo}{A vector with the sample size \code{"n"}, the number of cells (\code{"no.cells"}) in \code{x}, the average cell frequency (\code{"av.cfr"}), the number of cells showing frequencies equal to zero (\code{"no.0s"}), the \code{const} input argument, the chosen/estimated \eqn{K}{K} (\code{"K"}) and the relative size of \eqn{K}{K}, i.e. \eqn{K/(n+K)}{K/(n+K)} (\code{"rel.K"}).}
+\item{info}{A vector with the sample size \code{"n"}, the number of cells (\code{"no.cells"}) in \code{x}, the average cell frequency (\code{"av.cfr"}), the number of cells showing frequencies equal to zero (\code{"no.0s"}), the \code{const} input argument, the chosen/estimated \eqn{K}{K} (\code{"K"}) and the relative size of \eqn{K}{K}, i.e. \eqn{K/(n+K)}{K/(n+K)} (\code{"rel.K"}).}
 
 \item{prior}{ A table having the same dimension as \code{x} with the considered prior values for the cell frequencies.}
 

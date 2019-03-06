@@ -121,7 +121,7 @@ RANDwNND.hd <- function (rec, don, dfun="Manhattan", cut.don="rot", k=NULL, w.do
         if(cut.don=="min") k0 <- 10
         else if (cut.don=="k.dist") stop("When dist.fun='RANN' it is not possible to to set \n cut.don = 'k.dist' ")
         else k0 <- k
-        dd <- nn2(data=x.don, query=x.rec, k=k0, ...)
+        dd <- RANN::nn2(data=x.don, query=x.rec, k=k0, ...)
         mdist <- dd$nn.dists
     }
     else if(dfun=="difference" || dfun=="diff"){

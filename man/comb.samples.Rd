@@ -5,11 +5,11 @@
 \title{Statistical Matching of data from complex sample surveys}
 
 \description{
-This function permits to cross--tabulate two categorical variables, Y and Z, observed separately in two independent surveys (Y is collected in survey A and Z is collected in survey B) carried out on the same target population.  The two surveys share a number of common variables \bold{X}.  When it is available a third survey C, carried on the same population, in which both Y and Z are collected, these data are used as a source of auxiliary information.
+This function permits to cross-tabulate two categorical variables, Y and Z, observed separately in two independent surveys (Y is collected in survey A and Z is collected in survey B) carried out on the same target population.  The two surveys share a number of common variables \bold{X}.  When it is available a third survey C, carried on the same population, in which both Y and Z are collected, these data are used as a source of auxiliary information.
 
 The statistical matching is performed by carrying out calibration of the survey weights, as suggested in Renssen (1998).
 
-It is possible also to use the function to derive the estimates that units present a given category of the target variable (estimation are based on Liner Probability Models and are obtained as a by-product of the Renssen's method).
+It is possible also to use the function to derive the estimates that unit falls in one of the categories of the target variable (estimation are based on Liner Probability Models and are obtained as a by-product of the Renssen's method).
 }
 
 \usage{
@@ -38,11 +38,11 @@ When \code{svy.C} is available, if \code{estimation="incomplete"} then it must c
 }
 
 \item{y.lab}{
-A string providing the name of the Y variable, collected in survey A and in survey C (if available).  The Y variable can be a categorical variable (\code{factor} in \R) or a continuous one (in this latter case \code{z.lab} should be categorical).
+A string providing the name of the Y variable, available in survey A and in survey C (if available).  The Y variable can be a categorical variable (\code{factor} in \R) or a continuous one (in this latter case \code{z.lab} should be categorical).
 }
 
 \item{z.lab}{
-A string providing the name of the Z variable collected in survey B and in survey C (if available).  The Z variable can be a categorical variable (\code{factor} in \R)m or a continuous one (in this latter case \code{y.lab} should be categorical).
+A string providing the name of the Z variable available in survey B and in survey C (if available).  The Z variable can be a categorical variable (\code{factor} in \R)m or a continuous one (in this latter case \code{y.lab} should be categorical).
 }
 
 
@@ -59,11 +59,11 @@ Due to weights calibration features, it is preferable to work  with categorical 
 }
 
 \item{estimation}{
-A character string that identifies the method to be used to estimate the table of Y vs. Z when data from survey C are available.  As suggested in Renssen (1998), two alternative methods are available: (i) Incomplete Two-Way Stratification (\code{estimation="incomplete"}, or \code{estimation="ITWS"}, the default one) and (ii) Synthetic Two-Way Stratification (\code{estimation="synthetic"} or \cr \code{estimation="STWS"}).  In the first case (\code{estimation="incomplete"}) only Y and Z variables must be available in \code{svy.C}.  On the contrary, when \cr \code{estimation="synthetic"} the survey C must contain all the \bold{X} variables specified via \code{form.x}, the Y variable and the Z variable.  See Details for further information.
+A character string that identifies the method to be used to estimate the table of Y vs. Z when data from survey C are available.  As suggested in Renssen (1998), two alternative methods are available: (i) Incomplete Two-Way Stratification (\code{estimation="incomplete"}, or \code{estimation="ITWS"}, the default one) and (ii) Synthetic Two-Way Stratification (\code{estimation="synthetic"} or \cr \code{estimation="STWS"}).  In the first case (\code{estimation="incomplete"}) only Y and Z variables must be available in \code{svy.C}.  On the contrary, when \cr \code{estimation="synthetic"} the survey C must contain all the \bold{X} variables specified via \code{form.x}, as well as the Y and Z variables.  See Details for further information.
 }
 
 \item{micro}{
-Predictions of Z in A and of Y in B are provided.  In particular when Y and Z are both categorical variables it is provided the estimated probability that a unit presents a category of the given variable.  These probabilities are estimated as a by-product of the whole procedure by considering Linear Probability Models, as suggested in Renssen (1998) (see Details)
+Logical, when \code{TRUE} predictions of Z in A and of Y in B are provided.  In particular when Y and Z are both categorical variables it is provided the estimated probability that a unit falls in each of the  categories of the given variable.  These probabilities are estimated as a by-product of the whole procedure by considering Linear Probability Models, as suggested in Renssen (1998) (see Details)
 }
 
 \item{...}{
@@ -113,11 +113,11 @@ The table of Y (\code{y.lab}) vs. Z (\code{z.lab}) estimated under the method sp
 }
 
 \item{Z.A}{
-Only when \code{micro=TRUE}.  It is a data frame with the same rows as in \code{svy.A} and the number of columns is equal to the number of categories of the variable \code{z.lab}. Each row provides the estimated probabilities for that unit of presenting the various categories of \code{z.lab}.
+Only when \code{micro=TRUE}.  It is a data frame with the same rows as in \code{svy.A} and the number of columns is equal to the number of categories of the variable \code{z.lab}. Each row provides the estimated probabilities for a unit being in the various categories of \code{z.lab}.
 }
 
 \item{Y.B}{
-Only when \code{micro=TRUE}.  It is a data frame with the same rows as in \code{svy.B} and the number of columns is equal to the number of categories of \code{y.lab}. Each row provides the estimated probabilities for that unit of presenting the various categories of \code{y.lab}.
+Only when \code{micro=TRUE}.  It is a data frame with the same rows as in \code{svy.B} and the number of columns is equal to the number of categories of \code{y.lab}. Each row provides the estimated probabilities for a unit being in the various categories of \code{y.lab}.
 }
 
 \item{call}{

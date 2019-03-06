@@ -11,8 +11,8 @@ Functions to perform statistical matching (aka data fusion), i.e. the integratio
 }
 \details{
 
-Statistical matching (aka data fusion) aims at integrating two data sources referred to same target population and sharing a number of variables in common.  The final objective is that of studying the relationship of variables not jointly observed in a single data sources.  The integration can be performed at micro (a synthetic of fused file is the output)  or macro level (estimates of correlations, regression coefficients, contingency tables are required).  
-Nonparametric hot deck imputation methods (random, rank and nearest neighbour donor) can be used to derive the synthetic data set.  In alternative it is possible to use a mixed (parametric--nonparametric) procedure based on predictive mean matching.  Methods to perform statistical matching when dealing with data from complex sample surveys are available too.  Finally some functions can be used to explore the uncertainty due to the typical matching framework.  For major details see D'Orazio et al. (2006) or the package vignette.
+\emph{Statistical matching} (aka \emph{data fusion}) aims at integrating two data sources (typically samples)  referred to same target population and sharing a number of variables in common.  The final objective is that of studying the relationship of variables not jointly observed in a single data sources.  The integration can be performed at \emph{micro} (a \emph{synthetic} or \emph{fused} file is the output) or \emph{macro} level (goal is estimation of correlation coefficients, regression coefficients, contingency tables, etc.).  
+Nonparametric hot deck imputation methods (random, rank and nearest neighbour donor) can be used to derive the synthetic data set.  In alternative it is possible to use a mixed (parametric-nonparametric) procedure based on predictive mean matching.  Methods to perform statistical matching when dealing with data from complex sample surveys are available too.  Finally some functions can be used to explore the uncertainty due to the typical matching framework.  For major details see D'Orazio et al. (2006) or the package vignette.
 
 
 }

@@ -4,7 +4,7 @@
 \title{Computes the Gower's Distance}
 
 \description{
-  This function computes the Gower's distance (dissimilarity) among units in a dataset or among observations in two distinct datasets.
+  This function computes the Gower's distance (dissimilarity) between units in a dataset or between observations in two distinct datasets.
 }
 
 \usage{

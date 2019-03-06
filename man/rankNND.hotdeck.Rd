@@ -35,7 +35,7 @@ A character vector with the name of the variable \code{data.don} that should be 
 }
 
 \item{don.class}{
-A character vector with the names of the variables (columns in both the data frames) that have to be used to identify donation classes.  In each donation class the computation of percentage points is carried out independently.  Then only distances among percentage points of the units in the same donation class are computed.  The case of empty donation classes should be avoided.  It would be preferable the variables used to form donation classes are defined as \code{factor}.
+A character vector with the names of the variables (columns in both the data frames) that have to be used to identify donation classes.  In each donation class the computation of percentage points is carried out independently.  Then only distances among percentage points of the units in the same donation class are computed.  The case of empty donation classes should be avoided.  It would be preferable that the variables used to form donation classes are defined as \code{factor}.
 
 When not specified (default), no donation classes are used.
 }
@@ -69,15 +69,15 @@ This function finds a donor record for each record in the recipient data set.  T
 
 being \eqn{I()=1}{I()=1} if \eqn{y_i\leq y}{ y_i <= y} and 0 otherwise.
 
-In the presence of weights the empirical cumulative distribution function is estimated by:
+In presence of weights the empirical cumulative distribution function is estimated by:
 
 \deqn{ \hat{F}(y) =  \frac{\sum_{i=1}^{n} w_i I(y_i\leq y)}{\sum_{i=1}^{n} w_i} }{F(y) = (sum_i w_i*I(y_i <= y)) /(sum_i w_i)}
 
 In the unconstrained case, when there are more donors at the same distance, one of them is chosen at random.
 
-Note that when the donation classes are introduced then empirical cumulative distribution function is estimated independently in each donation classes and the search of a recipient is restricted to donors in the same donation class.
+Note that when the donation class are introduced then empirical cumulative distribution function is estimated independently in each donation classes and the search of a recipient is restricted to donors in the same donation class.
 
-A donor can be chosen more than once. To avoid this set \code{constrained=TRUE}. In such a case a donor can be chosen just once and the selection of the donors is carried out by solving a transportation problem with the objective of minimizing the overall matching distance (sum of the distances recipient-donor).
+A donor can be chosen more than once. To avoid it set \code{constrained=TRUE}. In such a case a donor can be chosen just once and the selection of the donors is carried out by solving a transportation problem with the objective of minimizing the overall matching distance (sum of the distances recipient-donor).
 } 
 
 

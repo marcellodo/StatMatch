@@ -16,7 +16,7 @@ maximum.dist(data.x, data.y=data.x, rank=FALSE)
 \item{data.x}{
   A matrix or a data frame containing variables that should be used in the computation of the distance.  Only continuous variables are allowed.  Missing values (\code{NA}) are not allowed.
 
-When only \code{data.x} is supplied, the distances between rows of \code{data.x} is computed. 
+When only \code{data.x} is supplied, the distances between rows of \code{data.x} are computed. 
 }
 
 \item{data.y}{

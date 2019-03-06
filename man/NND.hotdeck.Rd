@@ -36,7 +36,7 @@ A character vector with the names of the variables (columns in both the data fra
 
 The variables chosen for the creation of the donation clasess should not contain missing values (NAs).
 
-When not specified (default) no donation classes are used.  This choice may require more memory to store a larger distance matrix and a higher computational effort.
+When not specified (default), no donation classes are used.  This choice may require more memory to store a larger distance matrix and a higher computational effort.
 }
 
 \item{dist.fun}{
@@ -46,7 +46,7 @@ When \code{dist.fun="Manhattan"}, \code{"Euclidean"}, \code{"Mahalanobis"} or \c
 }
 
 \item{constrained}{
-Logical.  When \code{constrained=FALSE} (default) each record in \code{data.don} can be used as a donor more than once.  On the contrary, when \cr \code{constrained=TRUE} each record in \code{data.don} can be used as a donor only  \code{k} times. In this case, the set of donors is selected by solving an optimization problem, in order to minimize the overall matching distance.  See description of the argument \code{constr.alg} for details.
+Logical.  When \code{constrained=FALSE} (default) each record in \code{data.don} can be used as a donor more than once.  On the contrary, when \cr \code{constrained=TRUE} each record in \code{data.don} can be used as a donor only  \code{k} times. In this case, the set of donors is selected by solving an optimization problem, whose goal is to minimize the overall matching distance.  See description of the argument \code{constr.alg} for details.
 }
 
 \item{constr.alg}{
@@ -54,7 +54,7 @@ A string that has to be specified when \code{constrained=TRUE}.  Two choices are
 }
 
 \item{k}{
-The number of times that a unit in \code{data.don} can be selected as a donor when  \code{constrained=TRUE}  (default \code{k = 1} ). When \code{k>1} then optimization problem can be solved by setting \code{constr.alg="lpSolve"}. Hungarian algorithm (\code{constr.alg="hungarian"}) can be used only when  \code{k = 1}. 
+The number of times that a unit in \code{data.don} can be selected as a donor when  \code{constrained=TRUE}  (default \code{k = 1} ). When \code{k>1} then optimization problem can be solved by setting \code{constr.alg="lpSolve"}. Hungarian algorithm \cr (\code{constr.alg="hungarian"}) can be used only when  \code{k = 1}. 
 }
 
 \item{keep.t}{
@@ -68,11 +68,11 @@ Additional arguments that may be required by \code{\link[StatMatch]{gower.dist}}
 }
   
 \details{
-This function finds a donor record in \code{data.don} for each record in \code{data.rec}.  In the unconstrained case, it searches for the closest donor record in \code{data.don} for each record in the recipient data set, according to the chosen distance function.  When for a given recipient record there are more donors available at the minimum distance, one of them is picked at random.
+This function finds a donor record in \code{data.don} for each record in \code{data.rec}.  In the unconstrained case, it searches for the closest donor record according to the chosen distance function.  When for a given recipient record there are more donors available at the minimum distance, one of them is picked at random.
 
 In the constrained case a donor can be used just a fixed number of times, as specified by the \code{k} argument, but the whole set of donors is chosen in order to minimize the overall matching distance.  When \code{k=1}  the number of units (rows) in the donor data set has to be larger or equal to the number of units of the recipient data set; when the donation classes are used, this condition must be satisfied in each donation class.  For further details on nearest neighbor distance hot deck refer to Chapter 2 in D'Orazio \emph{et al.} (2006).
 
-This function can also be used to impute missing values in a data set using the nearest neighbor distance hot deck.  In this case \code{data.rec} is the part of the initial data set that contains missing values; on the contrary, \code{data.don} is the part of the data set without missing values.  See \R code in the Examples for details.
+This function can also be used to impute missing values in a data set using the nearest neighbor distance hot deck.  In this case \code{data.rec} is the part of the initial data set that contains missing values on the target variable; on the contrary, \code{data.don} is the part of the data set without missing values on it.  See \R code in the Examples for details.
 
 Please note that only  \dQuote{Gower} and \dQuote{minimax} distance functions allow for the presence of missing values (\code{NA}s) in the variables used in computing distances.  In both the cases when one of the of the observations presents a variable showing an NA, then this variable is excluded from the computation of distance. 
 

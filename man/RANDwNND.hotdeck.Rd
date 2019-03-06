@@ -4,7 +4,7 @@
 \title{Random Distance hot deck.}
 
 \description{
-  This function implements a variant of the distance hot deck method.  For each recipient record a subset of of the closest donors is retained and then a donor is selected.
+  This function implements a variant of the distance hot deck method.  For each recipient record a subset of of the closest donors is retained and then a donor is selected at random.
 }
 
 \usage{
@@ -91,10 +91,10 @@ Additional arguments that may be required by \code{\link[StatMatch]{gower.dist}}
 }
   
 \details{
-This function finds a donor record for each record in the recipient data set.  The donor is chosen at random in the subset of available donors.  This procedure is known as \emph{random hot deck} (cf. Andridge and Little, 2010).  In \code{RANDwNND.hotdeck} , the number of closest donors retained to form the subset is determined according to criterion specified with the argument \code{cut.don}.
-The selection of the donor among those in the subset is carried out with equal probability (\code{weight.don=NULL}) or with probability proportional to a weight associated to the donors (specified via the \code{weight.don} argument).  This procedure is is known as \emph{weighted random hot deck} (cf. Andridge and Little, 2010).
+This function finds a donor record for each record in the recipient data set.  The donor is chosen at random in the subset of available donors.  This procedure is known as \emph{random hot deck} (cf. Andridge and Little, 2010).  In \code{RANDwNND.hotdeck}, the number of closest donors retained to form the subset is determined according to criterion specified with the argument \code{cut.don}.
+The selection of the donor among those in the subset is carried out with equal probability (\code{weight.don=NULL}) or with probability proportional to a weight associated to the donors, specified via the \code{weight.don} argument.  This procedure is is known as \emph{weighted random hot deck} (cf. Andridge and Little, 2010).
 
-The search for the subset of the closest donors can be speed up by using the Artificial Neural Network as implemented in the package \pkg{ANN} that is called by the function \code{\link[RANN]{nn2}} provided by the package \pkg{RANN}.  Note that this search can be used in all the cases with the exception of \code{cut.don="k.dist"}.  The search of the closest donors can be exact or approximate (for details see \code{\link[RANN]{nn2}}.
+The search for the subset of the closest donors can be speed up by using the Approximate Nearest Neighbor Search as implemented in the  function \code{\link[RANN]{nn2}} provided by the package \pkg{RANN}.  Note that this search can be used in all the cases with the exception of \code{cut.don="k.dist"}.
 
 Note that the same donor can be used more than once.
 

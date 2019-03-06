@@ -4,7 +4,7 @@ function (data, all=TRUE, lab="x")
 	dum.fcn <- function(x, all=TRUE){
         fine <- model.matrix(~x-1)
 		colnames(fine) <- levels(x)
-		if(!all) fine <- fine[,-1, drop=FALSE]
+		if(!all) fine <- fine[,-ncol(fine), drop=FALSE]
 		fine
     }
 	
@@ -21,23 +21,26 @@ function (data, all=TRUE, lab="x")
             p <- ncol(data)
             n <- nrow(data)
 		    vtype <- lapply(data, class)
-		    out <- as.list(rep(NA,p))
-		
+		    out <- as.list(rep(NA, p))
+		    lab <- names(data)
+		    
+		    
 		    for(i in 1:p){
                 if(vtype[[i]][1]=="numeric" || vtype[[i]][1]=="integer" || vtype[[i]][1]=="logical") {
 				    aa <- matrix(1*data[,i])
-				    colnames(aa) <- names(data)[i]
+				    colnames(aa) <- lab[i]
 				    out[[i]] <- aa
                 }
 	            else{
                     aa <- dum.fcn(data[,i], all=all)
-				    colnames(aa) <- paste(names(data)[i], colnames(aa), sep="")
+				    colnames(aa) <- paste(lab[i], 1:ncol(aa), sep="")
 				    out[[i]] <- aa
                 }
 		    }
-            oo <- unlist(out)
-            oo <- matrix(oo, nrow=n)
-            dimnames(oo) <- list(row.names(data), unlist(lapply(out, colnames)))
+            # oo <- unlist(out)
+            # oo <- matrix(oo, nrow=n)
+            # dimnames(oo) <- list(row.names(data), unlist(lapply(out, colnames)))
+		    oo <- do.call("cbind", out)
 		}
 	}	
 	oo
