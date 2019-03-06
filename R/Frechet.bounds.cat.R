@@ -146,10 +146,9 @@ Frechet.bounds.cat <- function (tab.x, tab.xy, tab.xz,
             out.CIA[, , h] <- outer(ygxx[h, ], zgxx[h, ], FUN = "*") * 
                 xx.0[h, ]
             thetas <- outer(ygxx[h, ], zgxx[h, ], FUN = "+") - 1
-            ll <- thetas
-            ll[thetas<0] <- 0
-            # ll <- pmax(thetas, matrix(0, nrow = nrow(thetas), 
-            #                           ncol = ncol(thetas)))
+            # thetas[thetas<0] <- 0
+            ll <- pmax(thetas, matrix(0, nrow = nrow(thetas), 
+                                      ncol = ncol(thetas)))
             uu <- outer(ygxx[h, ], zgxx[h, ], FUN = "pmin")
             out.low[, , h] <- ll * xx.0[h, ]
             out.up[, , h] <- uu * xx.0[h, ]

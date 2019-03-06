@@ -178,6 +178,7 @@ Moriarity, C., and Scheuren, F. (2003). \dQuote{A note on Rubin's statistical ma
 
 # reproduce the statistical matching framework
 # starting from the iris data.frame
+suppressWarnings(RNGversion("3.5.0"))
 set.seed(98765)
 pos <- sample(1:150, 50, replace=FALSE)
 ir.A <- iris[pos,c(1,3:5)]

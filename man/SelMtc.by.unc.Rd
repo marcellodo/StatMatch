@@ -53,7 +53,7 @@ Logical (default \code{FALSE}). When when \code{TRUE} the distribution of \bold{
 }
 
 \details{
-This function follows the sequential procedure described in D'Orazio \emph{et al.} (2017) to identify the combination of common variables most effective in reducing uncertainty when estimating the contingency table Y vs. Z. Initially, the available Xs are ordered according to the reduction of average width of uncertainty bounds when conditioning on each of them. Then in each step one the remaining X variables is added until the table became too sparse; in practice the procedure stops when: 
+This function follows the sequential procedure described in D'Orazio \emph{et al.} (2017, 2019) to identify the combination of common variables most effective in reducing uncertainty when estimating the contingency table Y vs. Z. Initially, the available Xs are ordered according to the reduction of average width of uncertainty bounds when conditioning on each of them. Then in each step one the remaining X variables is added until the table became too sparse; in practice the procedure stops when: 
 
 \deqn{min\left[ \frac{n_A}{H_{D_m} \times J}, \frac{n_B}{H_{D_m} \times K} \right] \leq 1 }{ min[ nA/(H_Dm*J), nB/(H_Dm*K) ] <= 1} 
 
@@ -84,6 +84,8 @@ Data.frame with all the relevant information for each of combination of X variab
 D'Orazio, M., Di Zio, M. and Scanu, M. (2006). \emph{Statistical Matching: Theory and Practice.} Wiley, Chichester.
 
 D'Orazio, M., Di Zio, M. and Scanu, M. (2017). ``The use of uncertainty to choose matching variables in statistical matching''. \emph{International Journal of Approximate Reasoning}, 90, pp. 433-440.
+
+D'Orazio, M., Di Zio, M. and Scanu, M. (2019). ``Auxiliary variable selection in a a statistical matching problem''. In Zhang, L.-C. and Chambers, R. L. (eds.) \emph{Analysis of Integrated Data}, Chapman & Hall/CRC (Forthcoming).
 }
 
 
@@ -104,6 +106,7 @@ table(quine$c.Days)
 
 
 # split quine in two subsets
+suppressWarnings(RNGversion("3.5.0"))
 set.seed(4567)
 lab.A <- sample(nrow(quine), 70, replace=TRUE)
 quine.A <- quine[lab.A, 1:4]

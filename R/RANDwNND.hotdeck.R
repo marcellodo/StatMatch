@@ -78,20 +78,20 @@ RANDwNND.hd <- function (rec, don, dfun="Manhattan", cut.don="rot", k=NULL, w.do
     
     if(dfun=="Euclidean" || dfun=="Manhattan"){
    #     require(proxy)
-        x.rec <- fact2dummy(x.rec, all=FALSE)
-        x.don <- fact2dummy(x.don, all=FALSE)
+        x.rec <- fact2dummy(x.rec, all=TRUE)
+        x.don <- fact2dummy(x.don, all=TRUE)
         mdist <- dist(x=x.rec, y=x.don, method=dfun, ...)
         dimnames(mdist) <- list(r.lab, d.lab)
     }
 	else if(dfun=="Mahalanobis" || dfun=="mahalanobis"){
-        if(is.data.frame(x.rec)) x.rec <- fact2dummy(x.rec, all=FALSE)
-        if(is.data.frame(x.don)) x.don <- fact2dummy(x.don, all=FALSE)
+        if(is.data.frame(x.rec)) x.rec <- fact2dummy(x.rec, all=TRUE)
+        if(is.data.frame(x.don)) x.don <- fact2dummy(x.don, all=TRUE)
         mdist <- mahalanobis.dist(data.x=x.rec, data.y=x.don, ...)
         dimnames(mdist) <- list(r.lab, d.lab)
 	}
 	else if(dfun=="minimax" || dfun=="MiniMax" || dfun=="Minimax"){
-        x.rec <- fact2dummy(x.rec, all=FALSE)
-        x.don <- fact2dummy(x.don, all=FALSE)
+        x.rec <- fact2dummy(x.rec, all=TRUE)
+        x.don <- fact2dummy(x.don, all=TRUE)
         mdist <- maximum.dist(data.x=x.rec, data.y=x.don, ...)
         dimnames(mdist) <- list(r.lab, d.lab)
 	}

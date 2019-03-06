@@ -1,4 +1,5 @@
-gower.dist<- function(data.x, data.y = data.x, rngs = NULL, KR.corr = TRUE){
+gower.dist<- function(data.x, data.y = data.x, rngs = NULL, KR.corr = TRUE,
+                      var.weights = NULL){
 
 ####################    
         gower.fcn <- function(x, y, rng = NULL, KR.corr = TRUE) {
@@ -71,17 +72,20 @@ gower.dist<- function(data.x, data.y = data.x, rngs = NULL, KR.corr = TRUE){
             stop("data.x should be of the same length of the no. of cols of data.y")
         num <- array(0, c(1, nrow(data.y)))
         den <- array(0, c(1, nrow(data.y)))
+        if(is.null(var.weights)) var.weights <- rep(1, p)
         for (k in 1:p) {
             
             if (is.null(rngs)) 
                 rng.k <- NULL
             else rng.k <- rngs[k]
+            w.k <- var.weights[k]
             out.gow <- gower.fcn(x = data.x[, k], y = data.y[,k],
               rng = rng.k, KR.corr = KR.corr)
-            n <- out.gow$dist * out.gow$delta
+            n <- out.gow$dist * out.gow$delta * w.k
+            
             n[is.na(n)] <- 0
-            num[] <- num + n
-            d <- out.gow$delta
+            num <- num + n
+            d <- out.gow$delta * w.k
             d[is.na(d)] <- 0
             den <- den + d
         }
@@ -93,17 +97,20 @@ gower.dist<- function(data.x, data.y = data.x, rngs = NULL, KR.corr = TRUE){
             stop("data.x and data.y must have the same no. of cols")
         num <- array(0, c(nrow(data.x), nrow(data.y)))
         den <- array(0, c(nrow(data.x), nrow(data.y)))
+        if(is.null(var.weights)) var.weights <- rep(1, p)
         for (k in 1:p) {
             
             if (is.null(rngs)) 
                 rng.k <- NULL
             else rng.k <- rngs[k]
+            w.k <- var.weights[k]
             out.gow <- gower.fcn(x = data.x[, k], y = data.y[, k], rng = rng.k,
               KR.corr = KR.corr)
-            n <- out.gow$dist * out.gow$delta
+            n <- out.gow$dist * out.gow$delta * w.k
+            
             n[is.na(n)] <- 0
-            num[] <- num + n
-            d <- out.gow$delta
+            num <- num + n
+            d <- out.gow$delta * w.k
             d[is.na(d)] <- 0
             den <- den + d
         }

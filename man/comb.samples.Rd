@@ -152,6 +152,8 @@ table(quine$c.Days)
 
 
 # split quine in two subsets
+
+suppressWarnings(RNGversion("3.5.0"))
 set.seed(124)
 lab.A <- sample(nrow(quine), 70, replace=TRUE)
 quine.A <- quine[lab.A, c("Eth","Sex","Age","Lrn")]
@@ -194,6 +196,7 @@ addmargins(out.1$yz.CIA)
 # select a sample C from quine
 # and define a survey object
 
+suppressWarnings(RNGversion("3.5.0"))
 set.seed(4321)
 lab.C <- sample(nrow(quine), 50, replace=TRUE)
 quine.C <- quine[lab.C, c("Lrn","c.Days")]

@@ -148,6 +148,7 @@ data(quine, package="MASS") #loads quine from MASS
 str(quine)
 
 # split quine in two subsets
+suppressWarnings(RNGversion("3.5.0"))
 set.seed(7654)
 lab.A <- sample(nrow(quine), 70, replace=TRUE)
 quine.A <- quine[lab.A, 1:3]

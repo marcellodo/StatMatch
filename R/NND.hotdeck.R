@@ -64,26 +64,26 @@ NND.hotdeck <- function (data.rec, data.don, match.vars, don.class = NULL,
         if (dfun == "Euclidean" || dfun == "euclidean" || dfun == 
             "Manhattan" || dfun == "manhattan") {
             if (is.data.frame(x.rec)) 
-                x.rec <- fact2dummy(x.rec, all = FALSE)
+                x.rec <- fact2dummy(x.rec, all = TRUE)
             if (is.data.frame(x.don)) 
-                x.don <- fact2dummy(x.don, all = FALSE)
+                x.don <- fact2dummy(x.don, all = TRUE)
             mdist <- dist(x = x.rec, y = x.don, method = dfun, 
                           ...)
         }
         else if (dfun == "Mahalanobis" || dfun == "mahalanobis") {
             if (is.data.frame(x.rec)) 
-                x.rec <- fact2dummy(x.rec, all = FALSE)
+                x.rec <- fact2dummy(x.rec, all = TRUE)
             if (is.data.frame(x.don)) 
-                x.don <- fact2dummy(x.don, all = FALSE)
+                x.don <- fact2dummy(x.don, all = TRUE)
             mdist <- mahalanobis.dist(data.x = x.rec, data.y = x.don, 
                                       ...)
         }
         else if (dfun == "minimax" || dfun == "MiniMax" || dfun == 
                  "Minimax") {
             if (is.data.frame(x.rec)) 
-                x.rec <- fact2dummy(x.rec, all = FALSE)
+                x.rec <- fact2dummy(x.rec, all = TRUE)
             if (is.data.frame(x.don)) 
-                x.don <- fact2dummy(x.don, all = FALSE)
+                x.don <- fact2dummy(x.don, all = TRUE)
             mdist <- maximum.dist(data.x = x.rec, data.y = x.don, 
                                   ...)
         }

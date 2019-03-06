@@ -8,7 +8,7 @@
 }
 
 \usage{
-gower.dist(data.x, data.y=data.x, rngs=NULL, KR.corr=TRUE)
+gower.dist(data.x, data.y=data.x, rngs=NULL, KR.corr=TRUE, var.weights = NULL)
 }
 
 \arguments{
@@ -38,6 +38,11 @@ rngs["X1"] <- max(data.x[,"X1"], data.y[,"X1"]) -
 When \code{TRUE} (default) the extension of the Gower's dissimilarity measure proposed by Kaufman and Rousseeuw (1990) is used. Otherwise, when \cr
 \code{KR.corr=FALSE}, the Gower's (1971) formula is considered.
 }
+
+\item{var.weights}{
+By default (\code{NULL}) each variable has the same weight (1) in calculating overall distance as a weighted average of distances on single variables. User can specify different weights for the different variables by providing a numeric value for each of the variables contributing to the distance. In other words, \code{var.weights} should be set equal to numeric vector having the same length of the number of variables considered in calculating distance.  Entered weights are scales to sum up to 1. 
+}
+
 }
   
 \details{
@@ -110,7 +115,7 @@ head(dx)
 
 # matrix of distances among first obs. in xx
 # and the remaining ones
-gower.dist(data.x=xx[1:6,], data.y=xx[7:10,])
+gower.dist(data.x=xx[1:6,], data.y=xx[7:10,], , var.weights = c(1,2,5,2))
 
 }
 

@@ -77,7 +77,7 @@ Provided that uncertainty, measured in terms of \eqn{\bar{d}}{av(d)}, tends to r
 \deqn{g_1=log\left( 1 + \frac{H_{D_m}}{H_{D_Q}} \right) }{g1 = log(1 + H_Dm/H_DQ )}
     
 Where \eqn{H_{D_m}}{H_Dm} is the number of cell in the table obtained by crossing the given subset of \bold{X} variables and the \eqn{H_{D_Q}}{H_DQ} is the number of cell in the table achieved by crossing all the available \bold{X} variables. 
-A second penalty takes into account the number of cells to estimate with respect to the sample size. It is obtained as:
+A second penalty takes into account the number of cells to estimate with respect to the sample size (D'Orazio et al., 2019). It is obtained as:
 
 \deqn{g_2 = max \left[ \frac{1}{n_A - H_{D_m} \times J}, \frac{1}{n_B - H_{D_m} \times K}  \right]}{ g2=max[1/(nA - H_Dm*J), 1/(nB - H_Dm*K)]}
 
@@ -111,6 +111,8 @@ Finally, it is provided the average width of the uncertainty intervals (\code{"a
 D'Orazio, M., Di Zio, M. and Scanu, M. (2006). \emph{Statistical Matching: Theory and Practice.} Wiley, Chichester.
 
 D'Orazio, M., Di Zio, M. and Scanu, M. (2017). ``The use of uncertainty to choose matching variables in statistical matching''. \emph{International Journal of Approximate Reasoning }, 90, pp. 433-440.
+
+D'Orazio, M., Di Zio, M. and Scanu, M. (2019). ``Auxiliary variable selection in a a statistical matching problem''. In Zhang, L.-C. and Chambers, R. L. (eds.) \emph{Analysis of Integrated Data}, Chapman & Hall/CRC (Forthcoming).
 }
 
 
@@ -131,6 +133,7 @@ table(quine$c.Days)
 
 
 # split quine in two subsets
+suppressWarnings(RNGversion("3.5.0"))
 set.seed(4567)
 lab.A <- sample(nrow(quine), 70, replace=TRUE)
 quine.A <- quine[lab.A, 1:4]
