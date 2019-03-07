@@ -17,7 +17,7 @@ comp.prop(p1, p2, n1, n2=NULL, ref=FALSE)
 }
 
 \item{p2}{ 
-A vector or an array containing relative or absolute frequencies for one or more categorical variables.  Usually it is the output of the function \code{\link[stats]{xtabs}} or \code{\link[base]{table}}.  If \code{ref = FALSE} then \code{p2} is a further estimate of the distribution of the categorical variable(s) being considered.  On the contrary (\code{ref = TRUE}) it is the 'reference' distribution (the distribution considered true).  
+A vector or an array containing relative or absolute frequencies for one or more categorical variables.  Usually it is the output of the function \code{\link[stats]{xtabs}} or \code{\link[base]{table}}.  If \code{ref = FALSE} then \code{p2} is a further estimate of the distribution of the categorical variable(s) being considered.  On the contrary (\code{ref = TRUE}) it is the 'reference' distribution (the distribution considered true or a reliable estimate).  
 }
 
 \item{n1}{
@@ -36,7 +36,7 @@ A vector or an array containing relative or absolute frequencies for one or more
 
 
 \details{
-This function computes some similarity or dissimilarity measures among marginal (joint) distribution of categorical variables(s).
+This function computes some similarity or dissimilarity measures between marginal (joint) distribution of categorical variables(s).
 The following measures are considered:
 
 
@@ -44,7 +44,7 @@ The following measures are considered:
 
 \deqn{\Delta_{12} = \frac{1}{2} \sum_{j=1}^J \left| p_{1,j} - p_{2,j}  \right|}{D = (1/2) * sum_j |p_1,j - p_2,j| }
 
-where \eqn{p_{s,j}}{p_s,j} are the relative frequencies (\eqn{0 \leq p_{s,j} \leq 1}{0 <= p_s,j <= 1}). The dissimilarity index ranges from 0 (minimum dissimilarity) to 1.  It can be interpreted as the smallest fraction of units that need to be reclassified in order to make the distributions equal.  When \code{p2} is the reference distribution (true or expected distribution under a given hypothesis) than, following the Agresti's rule of thumb (Agresti 2002, pp. 329--330) , values of \eqn{\Delta_{12} \leq 0.03}{D <= 0.03} denotes that the estimated distribution \code{p1} follow the true or expected pattern quite closely.
+where \eqn{p_{s,j}}{p_s,j} are the relative frequencies (\eqn{0 \leq p_{s,j} \leq 1}{0 <= p_s,j <= 1}). The dissimilarity index ranges from 0 (minimum dissimilarity) to 1.  It can be interpreted as the smallest fraction of units that need to be reclassified in order to make the distributions equal.  When \code{p2} is the reference distribution (true or expected distribution under a given hypothesis) than, following the Agresti's rule of thumb (Agresti 2002, pp. 329--330) , values of \eqn{\Delta_{12} \leq 0.03}{D <= 0.03} denotes that the estimated distribution \code{p1} follows the true or expected pattern quite closely.
 
 \emph{Overlap} between two distributions:
 
@@ -63,7 +63,7 @@ It is a measure of similarity and ranges from 0 to 1 (the distributions are equa
 
 \deqn{d_{H,12} = \sqrt{1-B_{12}} }{d_H = sqrt(1 - B) }
 
-It is a dissimilarity measure which ranges from 0 (distributions are equal) to 1 (max dissimilarity).  It satisfies all the properties of a distance measure (\eqn{0 \leq d_{H,12} \leq 1}{0 <= d_H <= 1};  symmetry and triangle inequality).  
+It is a dissimilarity measure ranging from 0 (distributions are equal) to 1 (max dissimilarity).  It satisfies all the properties of a distance measure (\eqn{0 \leq d_{H,12} \leq 1}{0 <= d_H <= 1};  symmetry and triangle inequality).  
 Hellinger's distance is related to the dissimilarity index, and it is possible to show that:
 
 \deqn{d_{H,12}^2 \leq  \Delta_{12} \leq d_{H,12}\sqrt{2} }{ d_H^2 <= D <= d_H * sqrt(2) }
@@ -77,11 +77,13 @@ When \code{p2} is a distribution estimated on a second sample then:
 
 \deqn{ \chi^2_P = \sum_{i=1}^2 \sum_{j=1}^J n_i \frac{\left( p_{i,j} - p_{+,j}\right)^2}{p_{+,j}}  }{ Chi_P = sum_i * sum_j n_i * (p_i,j - p_+,j)^2/(p_+,j) }
 
-where \eqn{p_{+,j}}{p_+,j} is the expected frequency for category j, obtained as follows:
+where \eqn{p_{+,j}}{p_+,j} is the expected frequency for category \emph{j}, obtained as follows:
 
 \deqn{ p_{+,j} = \frac{n_1 p_{1,j} + n_2 p_{2,j}}{n_1+n_2}  }{ p_+,j = (n_1*p_1,j + n_2*p_2,j)/(n_1+n_2) }
 
-The Chi-Square value can be used to test the hypothesis that two distributions are equal (df=J-1).  Unfortunately such a test would not be useful when the distribution are estimated from samples selected from finite population using complex selection schemes (stratification, clustering, etc.).  In such a case different alternative corrected Chi-square tests are available (cf. Sarndal et al., 1992, Sec. 13.5). One possibility consist in dividing the Pearson's Chi-square test by the \emph{generalised design effect} of both the surveys.  Its estimation is not straightforward (sampling design variables need to be available). Generally speacking, the generalised design effect is smaller than 1 in the presence of stratified random sampling designs, while it exceeds 1 the presence of a two stage cluster sampling design.  For the purposes of analysis it is reported the value of the generalised design effect \emph{g} that would determine the acceptance of the null hypothesis (equality of distributions) in the case of \eqn{\alpha = 0.05}{alpha=0.05} (\eqn{df = J-1}{df = J-1}), i.e. values of \emph{g} such that 
+being \eqn{n_1}{n_1} and \eqn{n_2}{n_2} the sizes of the samples.
+
+The Chi-Square value can be used to test the hypothesis that two distributions are equal (\eqn{df=J-1}{df = J-1}).  Unfortunately such a test would not be useful when the distribution are estimated from samples selected from a finite population using complex selection schemes (stratification, clustering, etc.).  In such a case different alternative corrected Chi-square tests are available (cf. Sarndal et al., 1992, Sec. 13.5). One possibility consist in dividing the Pearson's Chi-square test by the \emph{generalised design effect} of both the surveys.  Its estimation is not straightforward (sampling design variables need to be available). Generally speacking, the generalised design effect is smaller than 1 in the presence of stratified random sampling designs, while it exceeds 1 the presence of a two stage cluster sampling design.  For the purposes of analysis it is reported the value of the generalised design effect \emph{g} that would determine the acceptance of the null hypothesis (equality of distributions) in the case of \eqn{\alpha = 0.05}{alpha=0.05} (\eqn{df = J-1}{df = J-1}), i.e. values of \emph{g} such that 
 
 \deqn{   \frac{\chi^2_P}{g} \leq \chi^2_{J-1,0.05} }{ Chi_P/d <= Chi_(J-1,0.05) }
 

@@ -60,6 +60,7 @@ fact2dummy(xyz, all=FALSE)
 #example with iris data frame
 str(iris)
 ir.mat <- fact2dummy(iris)
+head(ir.mat)
 
 }
 

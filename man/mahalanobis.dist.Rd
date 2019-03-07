@@ -3,7 +3,7 @@
 \title{Computes the Mahalanobis Distance}
 
 \description{
-  This function computes the Mahalanobis distance among units in a dataset or among observations in two distinct datasets.
+  This function computes the Mahalanobis distance among units in a dataset or between observations in two distinct datasets.
 }
 
 \usage{
@@ -13,7 +13,7 @@ mahalanobis.dist(data.x, data.y=NULL, vc=NULL)
 \arguments{
 
 \item{data.x}{
-  A matrix or a data frame containing variables that should be used in the computation of the distance.  Only continuous variables are allowed.  Missing values (\code{NA}) are not allowed.
+  A matrix or a data frame containing variables that should be used in the computation of the distance between units.  Only continuous variables are allowed.  Missing values (\code{NA}) are not allowed.
 
 When only \code{data.x} is supplied, the distances between rows of \code{data.x} is computed. 
 }
@@ -30,11 +30,11 @@ Covariance matrix that should be used in distance computation.  If it is not sup
 
 
 \details{
-This function computes the Mahalanobis distance:
+The Mahalanobis distance is calculated by means of:
 
 \deqn{d(i,j)=\sqrt{(x_i - x_j)^T S^{-1} (x_i - x_j)}}{d(i,j) = ((x_i - x_j)^T * S^(-1) * (x_i - x_j) )^(1/2)}
 
-When \code{vc=NULL} the covariance matrix S is estimated from the available data (see argument \code{vc} for details) otherwise the one supplied via the argument \code{vc} is used. 
+ The covariance matrix \emph{S} is estimated from the available data when \code{vc=NULL}, otherwise the one supplied via the argument \code{vc} is used. 
 
 }
 

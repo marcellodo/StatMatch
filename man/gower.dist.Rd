@@ -40,18 +40,18 @@ When \code{TRUE} (default) the extension of the Gower's dissimilarity measure pr
 }
 
 \item{var.weights}{
-By default (\code{NULL}) each variable has the same weight (1) in calculating overall distance as a weighted average of distances on single variables. User can specify different weights for the different variables by providing a numeric value for each of the variables contributing to the distance. In other words, \code{var.weights} should be set equal to numeric vector having the same length of the number of variables considered in calculating distance.  Entered weights are scales to sum up to 1. 
+By default (\code{NULL}) each variable has the same weight (value 1) when calculating the overall distance (weighted average of distances on single variables; see Details). User can specify different weights for the different variables by providing a numeric value for each of the variables contributing to the distance. In other words, \code{var.weights} should be set equal to a numeric vector having length equal to the number of variables considered in calculating distance.  Entered weights are scales to sum up to 1. 
 }
 
 }
   
 \details{
-This function computes distances among records when variables of different type (categorical and continuous) have been observed. In order to handle different types of variables, the Gower's  dissimilarity coefficient (Gower, 1971) is used. By default (\code{KR.corr=TRUE}) the Kaufman and Rousseeuw (1990) extension of the Gower's dissimilarity coefficient is used. 
+This function computes distances between records when variables of different type (categorical and continuous) have been observed. In order to handle different types of variables, the Gower's  dissimilarity coefficient (Gower, 1971) is used. By default (\code{KR.corr=TRUE}) the Kaufman and Rousseeuw (1990) extension of the Gower's dissimilarity coefficient is used. 
 
 The final dissimilarity between the \emph{i}th and \emph{j}th unit is obtained as a weighted sum of dissimilarities for each variable:
-\deqn{d(i,j) = \frac{\sum_k{\delta_{ijk} d_{ijk}}}{\sum_k{\delta_{ijk}}}}{d(i,j) = sum_k(delta_ijk * d_ijk ) / sum_k( delta_ijk )} 
+\deqn{d(i,j) = \frac{\sum_k{\delta_{ijk} d_{ijk} w_k}}{\sum_k{\delta_{ijk} w_k}}}{d(i,j) = sum_k(delta_ijk * d_ijk * w_k) / sum_k( delta_ijk * w_k)} 
 
-In particular, \eqn{d_{ijk}}{d_ijk} represents the distance between the \emph{i}th and \emph{j}th unit computed considering the \emph{k}th variable. It depends on the nature of the variable:
+In particular, \eqn{d_{ijk}}{d_ijk} represents the distance between the \emph{i}th and \emph{j}th unit computed considering the \emph{k}th variable, while \eqn{w_k}{w_k} is the weight assigned to variable \emph{k} (by default 1 for all the variables, unless different weights are provided by user with argument \code{var.weights}). Distance depends on the nature of the variable:
 \itemize{
 
 		\item \code{logical} columns are considered as asymmetric binary variables, for such case \eqn{d_{ijk}=0}{d_ijk = 0} if \eqn{x_{ik} = x_{jk} = \code{TRUE}}{x_ik = x_jk = TRUE}, 1 otherwise;
@@ -82,7 +82,7 @@ In practice, \code{NAs} and couple of cases with \eqn{x_{ik}=x_{jk}=\code{FALSE}
 }
 
 \value{
-A \code{matrix} object with distances among rows of \code{data.x} and those of \code{data.y}.
+A \code{matrix} object with distances between rows of \code{data.x} and those of \code{data.y}.
 }
 
 \references{
@@ -109,13 +109,13 @@ x3 <- rnorm(10)
 x4 <- ordered(cut(x3, -4:4, include.lowest=TRUE))
 xx <- data.frame(x1, x2, x3, x4, stringsAsFactors = FALSE)
 
-# matrix of distances among observations in xx
+# matrix of distances between observations in xx
 dx <- gower.dist(xx)
 head(dx)
 
-# matrix of distances among first obs. in xx
+# matrix of distances between first obs. in xx
 # and the remaining ones
-gower.dist(data.x=xx[1:6,], data.y=xx[7:10,], , var.weights = c(1,2,5,2))
+gower.dist(data.x=xx[1:6,], data.y=xx[7:10,], var.weights = c(1,2,5,2))
 
 }
 

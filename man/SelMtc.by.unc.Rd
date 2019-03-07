@@ -4,7 +4,7 @@
 \title{Identifies the best combination if matching variables in reducing uncertainty in estimation the contingency table Y vs. Z.}
 
 \description{
-This function identifies the ``best'' subset of matching variables in terms of reduction of uncertainty when estimating relative frequencies in the contingency table Y vs. Z. The sequential procedure presented in D'Orazio \emph{et al.}  (2017) is implemented. This procedure avoids exploring all the possible combinations of the available X variables as in \code{\link[StatMatch]{Fbwidths.by.x}}.
+This function identifies the ``best'' subset of matching variables in terms of reduction of uncertainty when estimating relative frequencies in the contingency table Y vs. Z. The sequential procedure presented in D'Orazio \emph{et al.}  (2017 and 2019) is implemented. This procedure avoids exploring all the possible combinations of the available X variables as in \code{\link[StatMatch]{Fbwidths.by.x}}.
 }
 
 \usage{
@@ -16,14 +16,14 @@ selMtc.by.unc(tab.x, tab.xy, tab.xz, corr.d=2,
 
 \item{tab.x}{
 A \R table crossing the \bold{X} variables.  This table must be obtained by using the function \code{\link[stats]{xtabs}} or \code{\link[base]{table}}, e.g. \cr
-\code{tab.x <- xtabs(~x1+x2+x3, data=data.all)}. A minimum number of 3 variables should be considered.
+\code{tab.x <- xtabs(~x1+x2+x3, data=data.all)}. \strong{A minimum number of 3 variables are needed}.
 }
 
 \item{tab.xy}{
 A \R table of \bold{X} vs. Y variable.  This table must be obtained by using the function \code{\link[stats]{xtabs}} or \code{\link[base]{table}}, e.g. \cr
 \code{table.xy <- xtabs(~x1+x2+x3+y, data=data.A)}.
 
-A single categorical Y variables is allowed.  One or more categorical variables can be considered as \bold{X} variables (common variables).  The same \bold{X} variables in \code{tab.x} must be available in \code{tab.xy}.   Usually, it is assumed that the joint distribution of the \bold{X} variables computed from \code{tab.xy} is equal to \code{tab.x} (a warning appears if any absolute difference is greater than \code{tol}). Note that when the marginal distribution of  \bold{X} in \code{tab.xy} is not equal to that of \code{tab.x} it is possible to align them before computations (see argument \code{align.margins}).
+A single categorical Y variables is allowed.  \strong{Three} or more categorical variables can be considered as \bold{X} variables (common variables).  The same \bold{X} variables in \code{tab.x} must be available in \code{tab.xy}.   Usually, it is assumed that the joint distribution of the \bold{X} variables computed from \code{tab.xy} is equal to \code{tab.x} (a warning appears if any absolute difference is greater than \code{tol}). Note that when the marginal distribution of  \bold{X} in \code{tab.xy} is not equal to that of \code{tab.x} it is possible to align them before computations (see argument \code{align.margins}).
 
 }
 
@@ -31,19 +31,19 @@ A single categorical Y variables is allowed.  One or more categorical variables 
 A \R table of \bold{X} vs. Z variable.  This table must be obtained by using the function \code{\link[stats]{xtabs}} or \code{\link[base]{table}}, e.g. \cr
 \code{tab.xz <- xtabs(~x1+x2+x3+z, data=data.B)}.
 
-A single categorical Z variable is allowed.  One or more categorical variables can be considered as \bold{X} variables (common variables).  The same \bold{X} variables in \code{tab.x} must be available in \code{tab.xz}.  Usually, it is assumed that the joint distribution of the \bold{X} variables computed from \code{tab.xz} is equal to \code{tab.x} (a warning appears if any absolute difference is greater than \code{tol}). Note that when the marginal distribution of  \bold{X} in \code{tab.xz} is not equal to that of \code{tab.x} it is possible to align them before computations (see argument \code{align.margins}).
+A single categorical Z variable is allowed.  \strong{Three} or more categorical variables can be considered as \bold{X} variables (common variables).  The same \bold{X} variables in \code{tab.x} must be available in \code{tab.xz}.  Usually, it is assumed that the joint distribution of the \bold{X} variables computed from \code{tab.xz} is equal to \code{tab.x} (a warning appears if any absolute difference is greater than \code{tol}). Note that when the marginal distribution of  \bold{X} in \code{tab.xz} is not equal to that of \code{tab.x} it is possible to align them before computations (see argument \code{align.margins}).
 }
 
 \item{corr.d}{
-Integer, indicates the penalty that should be introduced in estimating the uncertainty by means of the average width of cell bounds. When \code{corr.d=1}  the penalty being considered is the one introduced in D'Orazio \emph{et al.} (2017) (i.e. penalty1 in \code{\link[StatMatch]{Fbwidths.by.x}}). When \code{corr.d=2} (default) it is considered a penalty indicated as ``penalty2''  in   \code{\link[StatMatch]{Fbwidths.by.x}}. Finally, no penalties are considered when \code{corr.d=0}.
+Integer, indicates the penalty that should be introduced in estimating the uncertainty by means of the average width of cell bounds. When \code{corr.d=1}  the penalty being considered is the one introduced in D'Orazio \emph{et al.} (2017) (i.e. penalty1 in \code{\link[StatMatch]{Fbwidths.by.x}}). When \code{corr.d=2} (default) it is considered a penalty suggested in D'Orazio \emph{et al.} (2019) (indicated as ``penalty2''  in   \code{\link[StatMatch]{Fbwidths.by.x}}). Finally, no penalties are considered when \code{corr.d=0}.
 }
 
 \item{nA}{
-Integer, sample size of file A used to estimate \code{tab.xy}. If  \code{NULL} is obtained as sum of frequencies in\code{tab.xy}.
+Integer, sample size of file A used to estimate \code{tab.xy}. If  \code{NULL} is obtained as sum of frequencies in \code{tab.xy}.
 }
 
 \item{nB}{
-Integer, sample size of file B used to estimate \code{tab.xz}. If  \code{NULL} is obtained as sum of frequencies in\code{tab.xz}.
+Integer, sample size of file B used to estimate \code{tab.xz}. If  \code{NULL} is obtained as sum of frequencies in \code{tab.xz}.
 }
 
 \item{align.margins}{
@@ -63,10 +63,10 @@ For major details see also \code{\link[StatMatch]{Fbwidths.by.x}}.
 
 \value{
 
-A list with main details and outcomes of the procedure.
+A list with the main outcomes of the procedure.
 
 \item{ini.ord}{
-Average width of uncertainty bounds when conditioning on each of the available X variables. Variable most effective in reducing uncertainty comes first. The fist variable is the one entered as the first one in the sequential procedure. 
+Average width of uncertainty bounds when conditioning on each of the available X variables. Variable most effective in reducing uncertainty comes first. The ordering determines the order in which they are entered in the sequential procedure. 
 }
 
 \item{list.xs}{
@@ -85,7 +85,7 @@ D'Orazio, M., Di Zio, M. and Scanu, M. (2006). \emph{Statistical Matching: Theor
 
 D'Orazio, M., Di Zio, M. and Scanu, M. (2017). ``The use of uncertainty to choose matching variables in statistical matching''. \emph{International Journal of Approximate Reasoning}, 90, pp. 433-440.
 
-D'Orazio, M., Di Zio, M. and Scanu, M. (2019). ``Auxiliary variable selection in a a statistical matching problem''. In Zhang, L.-C. and Chambers, R. L. (eds.) \emph{Analysis of Integrated Data}, Chapman & Hall/CRC (Forthcoming).
+D'Orazio, M., Di Zio, M. and Scanu, M. (2019). ``Auxiliary variable selection in a a statistical matching problem''. In Zhang, L.-C. and Chambers, R. L. (eds.) \emph{Analysis of Integrated Data}, Chapman & Hall/CRC (forthcoming).
 }
 
 
@@ -107,7 +107,7 @@ table(quine$c.Days)
 
 # split quine in two subsets
 suppressWarnings(RNGversion("3.5.0"))
-set.seed(4567)
+set.seed(1111)
 lab.A <- sample(nrow(quine), 70, replace=TRUE)
 quine.A <- quine[lab.A, 1:4]
 quine.B <- quine[-lab.A, c(1:3,6)]
@@ -120,11 +120,14 @@ freq.xy <- xtabs(~Eth+Sex+Age+Lrn, data=quine.A)
 freq.xz <- xtabs(~Eth+Sex+Age+c.Days, data=quine.B)
 
 # apply Fbwidths.by.x()
-bounds.yz <- selMtc.by.unc(tab.x=freq.xA+freq.xB, 
-						  tab.xy=freq.xy,  tab.xz=freq.xz, corr.d=1)
+bb <- Fbwidths.by.x(tab.x=freq.xA+freq.xB, 
+                           tab.xy=freq.xy,  tab.xz=freq.xz)
+bb$sum.unc
+cc <- selMtc.by.unc(tab.x=freq.xA+freq.xB, 
+                           tab.xy=freq.xy,  tab.xz=freq.xz, corr.d=0)
+cc$ini.ord
+cc$av.df
 
-bounds.yz$ini.ord
-bounds.yz$av.df
 
 }
 

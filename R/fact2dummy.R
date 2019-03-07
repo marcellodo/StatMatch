@@ -43,6 +43,7 @@ function (data, all=TRUE, lab="x")
 		    oo <- do.call("cbind", out)
 		}
 	}	
+	rownames(oo) <- rownames(data)
 	oo
 }
 

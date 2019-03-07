@@ -212,7 +212,7 @@ function (data.rec, data.don, match.vars, y.rec, z.don, method="ML", rho.yz=NULL
 		# constrained nearest neighbour matching matching is performed
 		if(constr.alg=="lpSolve" || constr.alg=="lpsolve"){
 		    
-		    if(nA==nB) appo <- lp.assign(cost.mat=madist)
+		    if(nA==nB) appo <- lpSolve::lp.assign(cost.mat=madist)
 		    else if(nA<nB){
 		        r.sig <- rep("==", nA)
 		        r.rhs <- rep(1, nA)
@@ -238,11 +238,13 @@ function (data.rec, data.don, match.vars, y.rec, z.don, method="ML", rho.yz=NULL
 		
 		rec.lab <- substring(A.lab, 3)
 		don.lab <- substring(don.lab, 3)
+		
 		if(is.null(rownames(data.don))) {
 			rec.lab <- as.numeric(rec.lab)
 			don.lab <- as.numeric(don.lab)
 		}
 		mtc.ids <- cbind(rec.id=rec.lab, don.id=don.lab)
+		
 		fill.A <- cbind(data.rec, data.don[don.lab, z.lab])
 		colnames(fill.A) <- c(colnames(data.rec), z.lab)
 		

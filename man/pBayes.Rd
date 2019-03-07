@@ -3,7 +3,7 @@
 \title{Pseudo-Bayes estimates of cell probabilities}
 
 \description{
-  Estimation of cells counts using the pseudo-Bayes estimator.
+  Estimation of cells counts in contingency tables by means of the pseudo-Bayes estimator.
 }
 
 \usage{
@@ -34,26 +34,26 @@ pBayes(x, method="m.ind", const=NULL)
 }
 
 \item{const}{
- Numeric value, a user defined constant \eqn{a}{a} (\eqn{a>0}{a>0}) added to each cell before estimation of the relative frequencies when \code{method = "user"}. As a general rule of thumb, it is preferable to avoid that the sum of constant over all the cells in table is greater than \eqn{0.20 \times n}{0.20*n}.
+ Numeric value, a user defined constant \eqn{a}{a} (\eqn{a>0}{a>0}) to be added to each cell before estimation of the relative frequencies when \code{method = "user"}. As a general rule of thumb, it is preferable to avoid that the sum of constant over all the cells is greater than \eqn{0.20 \times n}{0.20*n}.
 }
 
 }
 
 \details{
-This function estimates the frequencies in a contingency table by using the pseudo-Bayes approach. In practice the estimator being considered is a weighted average of the observed cells counts \eqn{n_h}{n_h} and a suitable prior guess for cells probabilities \eqn{\gamma_h}{gamma_h}:
+This function estimates the frequencies in a contingency table by using the pseudo-Bayes approach. In practice the estimator being considered is a weighted average of the input (observed) cells counts \eqn{n_h}{n_h} and a suitable prior guess, \eqn{\gamma_h}{gamma_h}, for cells probabilities :
 
 \deqn{\tilde{p}_h = \frac{n}{n+K} \hat{p}_h + \frac{K}{n+K} \gamma_h }{ep_h = n/(n+K)*p_h + K/(n+K)*gamma_h }
 
 \eqn{K}{K} depends on the parameters of Dirichlet prior distribution being considered (for major details see Chapter 12 in Bishop et al., 1974).
 It is worth noting that with a constant prior guess \eqn{\gamma_h=1/c}{gamma_h=1/c} (\eqn{h=1,2,\cdots, c}{h=1,2,...,c}), then \eqn{K=1}{K=1} and in practice corresponds to adding \eqn{1/c}{1/c} to each cell before estimation of the relative frequencies (\code{method = "invcat"}); \eqn{K=c/2}{K=c/2} when the constant 0.5 is added to each cell (\code{method = "Jeffreys"}); finally \eqn{K=\sqrt{n}}{sqrt(n)} when the quantity \eqn{\sqrt{n}/c}{sqrt(n)/c} is added to each cell (\code{method = "minimax"}). All these cases corresponds to adding a flattening constant; the higher is the value of \eqn{K}{K} the more the estimates will be shrinked towards \eqn{\gamma_h=1/c}{gamma_h=1/c} (flattening).
 
-When \code{method = "m.ind"} the prior guess \eqn{\gamma_h}{gamma_h} is estimated under the hypothesis of mutual independence between the variables crossed in the initial contingency table \code{x}, supposed to be at least a two-way table.  In this case the value of \eqn{K}{K} is estimated via a data driven approach by considering
+When \code{method = "m.ind"} the prior guess \eqn{\gamma_h}{gamma_h} is estimated under the hypothesis of mutual independence between the variables crossed in the initial contingency table \code{x}, supposed to be at least a two-way table.  In this case the value of \eqn{K}{K} is estimated via a data-driven approach by considering
 
 \deqn{ \hat{K} = \frac{1 - \sum_{h} \hat{p}_h^2}{\sum_{h} \left( \hat{\gamma}_h - \hat{p}_h \right)^2 } }{ eK = (1 - sum(p_h^2))/(sum(gamma_h - p_h)^2) }
 
 On the contrary, when \code{method = "h.assoc"} the prior guess \eqn{\gamma_h}{gamma_h} is estimated under the hypothesis of homogeneous association between the variables crossed in the initial contingency table \code{x}. 
 
-Please note that when the input table is estimated from sample data where a weight is assigned to each unit, the weights should be used in estimating the input table, but it is suggested to rescale them so that they sum up to \emph{n}, the sample size.
+Please note that when the input table is estimated from sample data where a weight is assigned to each unit, the weights should be used in estimating the input table, but it is suggested to rescale them so that their sum is equal to \emph{n}, the sample size.
   
 }
 

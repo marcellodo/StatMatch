@@ -99,12 +99,14 @@ function(formula, data, weights=NULL, out.df=FALSE)
     
 ###################################################
 ###################################################
+    n <- nrow(data)
     if(is.null(weights)) ww <- rep(1, nrow(data))
     else{
         ww <- data[,weights]
+        ww <- ww/sum(ww)*n
         data <- data[,setdiff(colnames(data), weights)]
     }
-    n <- sum(ww)
+    # n <- sum(ww)
     
     df <- model.frame(formula=formula, data=data)
     lab <- colnames(df)

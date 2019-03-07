@@ -27,7 +27,7 @@ Missing values (\code{NA}) are allowed.
 }
 
 \item{match.vars}{
-A character vector with the names of the variables (the columns in both the data frames) that have to be used to compute distances among records (rows) in \code{data.rec} and those in \code{data.don}.  When no matching variables are considered (\code{match.vars=NULL}) then all the units in the same donation class are considered as possible donors.  Hence one of them is selected at random or with probability proportional to its weight (see argument \code{weight.don}).  When \code{match.vars=NULL} and the donation classes are not created \cr
+A character vector with the names of the variables (the columns in both the data frames) that have to be used to compute distances between records (rows) in \code{data.rec} and those in \code{data.don}.  When no matching variables are considered (\code{match.vars=NULL}) then all the units in the same donation class are considered as possible donors.  Hence one of them is selected at random or with probability proportional to its weight (see argument \code{weight.don}).  When \code{match.vars=NULL} and the donation classes are not created \cr
 (\code{don.class=NULL}) then all the available records in the \code{data.don} are considered as potential donors.
 }
 
@@ -40,7 +40,7 @@ When not specified (default), no donation classes are used.  This may result in 
 \item{dist.fun}{
 A string with the name of the distance function that has to be used.  The following distances can be used: \dQuote{Manhattan} (aka \dQuote{City block}; default), \dQuote{Euclidean}, \dQuote{Mahalanobis},\dQuote{exact} or \dQuote{exact matching}, \dQuote{Gower}, \dQuote{minimax}, \dQuote{difference}, or one of the distance functions available in the package \pkg{proxy}.  Note that the distances are computed using the function  \code{\link[proxy]{dist}} of the package \pkg{proxy} with the exception of the \dQuote{Gower} (see function \code{\link[StatMatch]{gower.dist}} for details), \dQuote{Mahalanobis} (function \code{\link[StatMatch]{mahalanobis.dist}}), \dQuote{minimax} (see \code{\link[StatMatch]{maximum.dist}}) \dQuote{difference} case.  Note that \code{dist.fun="difference"} computes just the difference between the values of the unique numeric matching variable considered; in practice, it should be used when the subset of the donation classes should be formed by comparing the values of the unique matching variable (for further details see the argument \code{cut.don}.
 
-By setting \code{dist.fun="ANN"} or \code{dist.fun="RANN"} it is possible to search for the \code{k} nearest neighbours for each recipient record by using the Artificial Neural Network (ANN) implemented in the package \pkg{ANN}.  The search is done via the function \code{\link[RANN]{nn2}} provided by the package \pkg{RANN}.
+By setting \code{dist.fun="ANN"} or \code{dist.fun="RANN"} it is possible to search for the \code{k} nearest neighbours for each recipient record by using the the Approximate Nearest Neighbor (ANN) search as implemented in the  function \code{\link[RANN]{nn2}} provided by the package \pkg{RANN}.
 
 When \code{dist.fun="Manhattan"}, \code{"Euclidean"}, \code{"Mahalanobis"} or \code{"minimax"} all the non numeric variables in \code{data.rec} and \code{data.don} will be converted to numeric.  On the contrary, when \code{dist.fun="exact"} or \cr
 \code{dist.fun="exact matching"}, all the variables in \code{data.rec} and \code{data.don} will be converted to character and, as far as the distance computation is concerned, they will be treated as categorical nominal variables, i.e. distance is 0 if a couple of units shows the same response category and 1 otherwise. 
@@ -60,13 +60,13 @@ A character string that, jointly with the argument \code{k}, identifies the rule
 			
 			\item \code{cut.don="k.dist"}: only the donors whose distance from the recipient is less or equal to the value specified with the argument \code{k}.  Note that in this case it is not possible to use \code{dist.fun="ANN"}.
 			
-			\item \code{cut.don="lt"} or \code{cut.don="<"}: only the donors whose value of the matching variable is smaller than the value of the recipient  Note that in this case it is has to be set \code{dist.fun="difference"}.
+			\item \code{cut.don="lt"} or \code{cut.don="<"}: only the donors whose value of the matching variable is smaller than the value of the recipient are retained. Note that in this case it is has to be set \code{dist.fun="difference"}.
 			
-			\item \code{cut.don="le"} or \code{cut.don="<="}: only the donors whose value of the matching variable is smaller or equal to the value of the recipient  Note that in this case it is has to be set \code{dist.fun="difference"}.
+			\item \code{cut.don="le"} or \code{cut.don="<="}: only the donors whose value of the matching variable is smaller or equal to the value of the recipient are retained.  Note that in this case it is has to be set \code{dist.fun="difference"}.
 			
-			\item \code{cut.don="ge"} or \code{cut.don=">="}: only the donors whose value of the matching variable is greater or equal to the value of the recipient  Note that in this case it is has to be set \code{dist.fun="difference"}.
+			\item \code{cut.don="ge"} or \code{cut.don=">="}: only the donors whose value of the matching variable is greater or equal to the value of the recipient are retained.  Note that in this case it is has to be set \code{dist.fun="difference"}.
 			
-			\item \code{cut.don="gt"} or \code{cut.don=">"}: only the donors whose value of the matching variable is greater than the value of the recipient  Note that in this case it is has to be set \code{dist.fun="difference"}.
+			\item \code{cut.don="gt"} or \code{cut.don=">"}: only the donors whose value of the matching variable is greater than the value of the recipient are retained. Note that in this case it is has to be set \code{dist.fun="difference"}.
 
 }
 
@@ -94,7 +94,7 @@ Additional arguments that may be required by \code{\link[StatMatch]{gower.dist}}
 This function finds a donor record for each record in the recipient data set.  The donor is chosen at random in the subset of available donors.  This procedure is known as \emph{random hot deck} (cf. Andridge and Little, 2010).  In \code{RANDwNND.hotdeck}, the number of closest donors retained to form the subset is determined according to criterion specified with the argument \code{cut.don}.
 The selection of the donor among those in the subset is carried out with equal probability (\code{weight.don=NULL}) or with probability proportional to a weight associated to the donors, specified via the \code{weight.don} argument.  This procedure is is known as \emph{weighted random hot deck} (cf. Andridge and Little, 2010).
 
-The search for the subset of the closest donors can be speed up by using the Approximate Nearest Neighbor Search as implemented in the  function \code{\link[RANN]{nn2}} provided by the package \pkg{RANN}.  Note that this search can be used in all the cases with the exception of \code{cut.don="k.dist"}.
+The search for the subset of the closest donors can be speed up by using the Approximate Nearest Neighbor search as implemented in the  function \code{\link[RANN]{nn2}} provided by the package \pkg{RANN}.  Note that this search can be used in all the cases with the exception of \code{cut.don="k.dist"}.
 
 Note that the same donor can be used more than once.
 
@@ -157,24 +157,24 @@ data(samp.A, samp.B, package="StatMatch") #loads data sets
 # gender ("sex"), then only the closest k=20 donors in terms of 
 # "age" are cnsidered and one of them is picked up at random
 
-out.NND.1 <- RANDwNND.hotdeck(data.rec=samp.A, data.don=samp.B,
+out.RND.1 <- RANDwNND.hotdeck(data.rec=samp.A, data.don=samp.B,
                               don.class=c("area5", "sex"), dist.fun="ANN",
                               match.vars="age", cut.don="exact", k=20)
 
 # create the synthetic (or fused) data.frame:
 # fill in "labour5" in A
 fused.1 <- create.fused(data.rec=samp.A, data.don=samp.B,
-                        mtc.ids=out.NND.1$mtc.ids, z.vars="labour5")
+                        mtc.ids=out.RND.1$mtc.ids, z.vars="labour5")
 head(fused.1)
 
 # weights ("ww") are used in selecting the donor in the final step
 
-out.NND.2 <- RANDwNND.hotdeck(data.rec=samp.A, data.don=samp.B,
+out.RND.2 <- RANDwNND.hotdeck(data.rec=samp.A, data.don=samp.B,
                               don.class=c("area5", "sex"), dist.fun="ANN",
                               match.vars="age", cut.don="exact", 
                               k=20, weight.don="ww")
 fused.2 <- create.fused(data.rec=samp.A, data.don=samp.B,
-                        mtc.ids=out.NND.2$mtc.ids, z.vars="labour5")
+                        mtc.ids=out.RND.2$mtc.ids, z.vars="labour5")
 head(fused.2)
 
 # find a donor in the in the same region ("area5") and with the same
@@ -182,14 +182,14 @@ head(fused.2)
 # recipient are considered,
 # then one of them is picked up at random
 
-out.NND.3 <- RANDwNND.hotdeck(data.rec=samp.A, data.don=samp.B,
+out.RND.3 <- RANDwNND.hotdeck(data.rec=samp.A, data.don=samp.B,
                               don.class=c("area5", "sex"), dist.fun="diff",
                               match.vars="age", cut.don="<=")
 
 # create the synthetic (or fused) data.frame:
 # fill in "labour5" in A
 fused.3 <- create.fused(data.rec=samp.A, data.don=samp.B,
-                        mtc.ids=out.NND.3$mtc.ids, z.vars="labour5")
+                        mtc.ids=out.RND.3$mtc.ids, z.vars="labour5")
 head(fused.3)
 
 # Example of Imputation of missing values
@@ -201,17 +201,17 @@ iris.rec <- ir.mat[miss==1,-1]
 iris.don <- ir.mat[miss==0,]
 
 #search for NND donors
-imp.NND <- RANDwNND.hotdeck(data.rec=iris.rec, data.don=iris.don,
+imp.RND <- RANDwNND.hotdeck(data.rec=iris.rec, data.don=iris.don,
                             match.vars=c("Sepal.Width","Petal.Length", "Petal.Width"),
                             don.class="Species")
 
 # imputing missing values
 iris.rec.imp <- create.fused(data.rec=iris.rec, data.don=iris.don,
-                             mtc.ids=imp.NND$mtc.ids, z.vars="Sepal.Length")
+                             mtc.ids=imp.RND$mtc.ids, z.vars="Sepal.Length")
 
 # rebuild the imputed data.frame
 final <- rbind(iris.rec.imp, iris.don)
-
+head(final)
 
 }
 

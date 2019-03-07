@@ -9,7 +9,7 @@ This function permits to cross-tabulate two categorical variables, Y and Z, obse
 
 The statistical matching is performed by carrying out calibration of the survey weights, as suggested in Renssen (1998).
 
-It is possible also to use the function to derive the estimates that unit falls in one of the categories of the target variable (estimation are based on Liner Probability Models and are obtained as a by-product of the Renssen's method).
+It is possible also to use the function to derive the estimates that a unit falls in one of the categories of the target variable (estimation are based on Liner Probability Models and are obtained as a by-product of the Renssen's method).
 }
 
 \usage{
@@ -20,15 +20,15 @@ comb.samples(svy.A, svy.B, svy.C=NULL, y.lab, z.lab, form.x,
 \arguments{
 
 \item{svy.A}{
-A \code{svydesign} \R object that stores the data collected in the survey A and all the information concerning the sampling design.  This object can be created by using the function \code{\link[survey]{svydesign}} in the package \pkg{survey}.  All the variables specified in \code{form.x} and by \code{y.lab} must be available in \code{svy.A}.
+A \code{svydesign} \R object that stores the data collected in the survey A and all the information concerning the corresponding sampling design.  This object can be created by using the function \code{\link[survey]{svydesign}} in the package \pkg{survey}.  All the variables specified in \code{form.x} and by \code{y.lab} must be available in \code{svy.A}.
 }
 
 \item{svy.B}{
-A \code{svydesign} \R object that stores the data collected in the survey B and all the information concerning the sampling design.  This object can be created by using the function \code{\link[survey]{svydesign}} in the package \pkg{survey}.  All the variables specified in \code{form.x} and by \code{z.lab} must be available in \code{svy.B}.
+A \code{svydesign} \R object that stores the data collected in the survey B and all the information concerning the corresponding sampling design.  This object can be created by using the function \code{\link[survey]{svydesign}} in the package \pkg{survey}.  All the variables specified in \code{form.x} and by \code{z.lab} must be available in \code{svy.B}.
 }
 
 \item{svy.C}{
-A \code{svydesign} \R object that stores the data collected in the the survey C and all the information concerning the sampling design.  This object can be created by using the function \code{\link[survey]{svydesign}} in the package \pkg{survey}.
+A \code{svydesign} \R object that stores the data collected in the the survey C and all the information concerning the corresponding sampling design.  This object can be created by using the function \code{\link[survey]{svydesign}} in the package \pkg{survey}.
 
 When \code{svy.C=NULL} (default), i.e. no auxiliary information is available, the function returns an estimate of the contingency table of Y vs. Z under the Conditional Independence assumption (CIA) (see Details for major information).
 
@@ -42,20 +42,19 @@ A string providing the name of the Y variable, available in survey A and in surv
 }
 
 \item{z.lab}{
-A string providing the name of the Z variable available in survey B and in survey C (if available).  The Z variable can be a categorical variable (\code{factor} in \R)m or a continuous one (in this latter case \code{y.lab} should be categorical).
+A string providing the name of the Z variable available in survey B and in survey C (if available).  The Z variable can be a categorical variable (\code{factor} in \R) or a continuous one (in this latter case \code{y.lab} should be categorical).
 }
 
 
 \item{form.x}{
-A \R formula specifying the matching variables (subset of the \bold{X} variables) collected in all the surveys, and how have to be considered in combining samples.  For instance \code{form.x=~x1+x2} means that the variables x1 and x2 have to be considered marginally without taking into account their cross-tabulation; just their marginal distribution is considered.  In order to skip the intercept the formula has to be written as \code{form.x=~x1+x2-1}.
+A \R formula specifying the matching variables (subset of the \bold{X} variables) collected in all the surveys, and how have to be considered in combining samples.  For instance, \code{form.x=~x1+x2} means that the variables x1 and x2 have to be considered marginally without taking into account their cross-tabulation; just their marginal distribution is considered.  In order to skip the intercept the formula has to be written as \code{form.x=~x1+x2-1}.
 
-When dealing with categorical variables, if the formula is written as \cr
-\code{form.x=~x1:x2-1}, it means that the the joint distribution of the two variables (table of x1 vs. x2) has to be considered.
+When dealing with categorical variables, \code{form.x=~x1:x2-1} means that the the joint distribution of the two variables (table of x1 vs. x2) has to be considered.
 
 To better understand the usage of \code{form.x} see \code{\link[stats]{model.matrix}} (see also \cr
 \code{\link[stats]{formula}}).
 
-Due to weights calibration features, it is preferable to work  with categorical \bold{X} variables.  In some cases, procedure may be successful when a single continuous variable is considered jointly with one or more categorical variables, but in most of the cases, it may be necessary to categorize the continuous variable (see Details).
+Due to weights calibration features, it is preferable to work  with categorical \bold{X} variables.  In some cases, procedure may be successful when a single continuous variable is considered jointly with one or more categorical variables but, often, it may be necessary to categorize the continuous variable (see Details).
 }
 
 \item{estimation}{
@@ -73,7 +72,7 @@ Further arguments that may be necessary for calibration.  In particular, the arg
 (ii) \code{calfun="raking"} to rake the survey weights; and \cr
 (iii) \code{calfun="logit"} for logit calibration.  See \code{\link[survey]{calibrate}} for major details.
 
-Note that when \code{calfun="linear"} there is the chance of having negative calibrated weights.  This drawback can be avoided by requiring that the final weights lie in a given interval specified via the argument \code{bounds} of the function \code{\link[survey]{calibrate}}.  Generally speaking, in sample surveys one expects that weights are greater than or equal to 1, i.e. \code{bounds=c(1, Inf)}.
+Note that when \code{calfun="linear"} calibration may return negative weights.  Generally speaking, in sample surveys weights are expected to be greater than or equal to 1, i.e. \code{bounds=c(1, Inf)}.
 
 The number of iterations used in calibration can be modified by using the argument \code{maxit} (by default \code{maxit=50}).
 
@@ -90,9 +89,7 @@ When data from survey C are available (Renssen, 1998), the table of Y vs. Z can 
 
 The Synthetic Two-Way Stratification allows to estimate the table of Y vs. Z by considering also the \bold{X} variables observed in C.  This method consists in correcting the table of Y vs. Z estimated under the CIA according to the relationship between Y and Z observed in survey C (for major details see Renssen, 1998).
 
-When the argument \code{micro} is set to \code{TRUE} the function provides also \code{Z.A} and \code{Y.B}.  The first data.frame has the same rows as \code{svy.A} and the number of columns equals the number of categories of the Z variable specified via \code{z.lab}.  Each row provides the estimated probabilities of assuming a value in the various categories.  The same happens for \code{Y.B} which presents the estimated probabilities of assuming a category of \code{y.lab} for each unit in B. 
-
-The estimated probabilities are obtained by applying the linear probability models (for major details see Renssen, 1998).  Unfortunately, such models may provide estimated probabilities less than 0 or greater than 1.  Much caution should be used in using such predictions for practical purposes.
+When the argument \code{micro} is set to \code{TRUE} the function provides also \code{Z.A} and \code{Y.B}.  The first data.frame has the same rows as \code{svy.A} and the number of columns equals the number of categories of the Z variable specified via \code{z.lab}.  Each row provides the estimated probabilities of assuming a value in the various categories.  The same happens for \code{Y.B} which presents the estimated probabilities of assuming a category of \code{y.lab} for each unit in B.  The estimated probabilities are obtained by applying the linear probability models (for major details see Renssen, 1998).  Unfortunately, such models may provide estimated probabilities less than 0 or greater than 1.  Much caution should be used in using such predictions for practical purposes.
 
 }
 

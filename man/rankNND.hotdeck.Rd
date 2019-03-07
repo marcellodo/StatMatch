@@ -4,7 +4,7 @@
 \title{ Rank distance hot deck method.}
 
 \description{
-  This function implements rank  hot deck distance method.  For each recipient record the closest donors is chosen by considering the distance among the percentage points of the empirical cumulative distribution function.
+  This function implements rank  hot deck distance method.  For each recipient record the closest donors is chosen by considering the distance between the percentage points of the empirical cumulative distribution function.
 }
 
 \usage{
@@ -17,13 +17,13 @@ rankNND.hotdeck(data.rec, data.don, var.rec, var.don=var.rec,
 \arguments{
 
 \item{data.rec}{
-  A numeric matrix or data frame that plays the role of \emph{recipient}.  This data frame must contain the variable \code{var.rec} to be used in computing the percentage points of the empirical cumulative distribution function and eventually the variables that should be used to identify the donation classes (see argument \code{don.class}) and the case weights (see argument \code{weight.rec}). 
+  A numeric matrix or data frame that plays the role of \emph{recipient}.  This data frame must contain the variable \code{var.rec} to be used in computing the percentage points of the empirical cumulative distribution function and eventually the variables that identify the donation classes (see argument \code{don.class}) and the case weights (see argument \code{weight.rec}). 
 
 Missing values (\code{NA}) are not allowed.
 }
 
 \item{data.don}{
-   A matrix or data frame that plays the role of \emph{donor}.  This data frame must contain the variable \code{var.don} to be used in computing percentage points of the the empirical cumulative distribution function and eventually the variables that should be used to identify the donation classes (see argument \code{don.class}) and the case weights (see argument \code{weight.don}).  
+   A matrix or data frame that plays the role of \emph{donor}.  This data frame must contain the variable \code{var.don} to be used in computing percentage points of the the empirical cumulative distribution function and eventually the variables that identify the donation classes (see argument \code{don.class}) and the case weights (see argument \code{weight.don}).  
 }
 
 \item{var.rec}{
@@ -35,7 +35,7 @@ A character vector with the name of the variable \code{data.don} that should be 
 }
 
 \item{don.class}{
-A character vector with the names of the variables (columns in both the data frames) that have to be used to identify donation classes.  In each donation class the computation of percentage points is carried out independently.  Then only distances among percentage points of the units in the same donation class are computed.  The case of empty donation classes should be avoided.  It would be preferable that the variables used to form donation classes are defined as \code{factor}.
+A character vector with the names of the variables (columns in both the data frames) that identify donation classes.  In each donation class the computation of percentage points is carried out independently.  Then only distances between percentage points of the units in the same donation class are computed.  The case of empty donation classes should be avoided.  It would be preferable that the variables used to form donation classes are defined as \code{factor}.
 
 When not specified (default), no donation classes are used.
 }
@@ -69,13 +69,13 @@ This function finds a donor record for each record in the recipient data set.  T
 
 being \eqn{I()=1}{I()=1} if \eqn{y_i\leq y}{ y_i <= y} and 0 otherwise.
 
-In presence of weights the empirical cumulative distribution function is estimated by:
+In presence of weights, the empirical cumulative distribution function is estimated by:
 
 \deqn{ \hat{F}(y) =  \frac{\sum_{i=1}^{n} w_i I(y_i\leq y)}{\sum_{i=1}^{n} w_i} }{F(y) = (sum_i w_i*I(y_i <= y)) /(sum_i w_i)}
 
 In the unconstrained case, when there are more donors at the same distance, one of them is chosen at random.
 
-Note that when the donation class are introduced then empirical cumulative distribution function is estimated independently in each donation classes and the search of a recipient is restricted to donors in the same donation class.
+When the donation class are introduced, then the empirical cumulative distribution function is estimated independently in each donation classes and the search of a recipient is restricted to donors in the same donation class.
 
 A donor can be chosen more than once. To avoid it set \code{constrained=TRUE}. In such a case a donor can be chosen just once and the selection of the donors is carried out by solving a transportation problem with the objective of minimizing the overall matching distance (sum of the distances recipient-donor).
 } 
@@ -89,7 +89,7 @@ A \R list with the following components:
 A matrix with the same number of rows of \code{data.rec} and two columns.  The first column contains the row names of the \code{data.rec} and the second column contains the row names of the corresponding donors selected from the \code{data.don}.  When the input matrices do not contain row names, then a numeric matrix with the indexes of the rows is provided.
 }
 \item{dist.rd}{
-A vector with the distances among each recipient unit and the corresponding donor. 
+A vector with the distances between each recipient unit and the corresponding donor. 
 }
 
 \item{noad}{

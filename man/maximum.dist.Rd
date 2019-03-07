@@ -4,7 +4,7 @@
 \title{Computes the Maximum  Distance}
 
 \description{
-  This function computes the Maximum distance (or \eqn{L^\infty}{L^Inf} norm) among units in a dataset or among observations in two distinct datasets.
+  This function computes the Maximum distance (or \eqn{L^\infty}{L^Inf} norm) between units in a dataset or between observations in two distinct datasets.
 }
 
 \usage{
@@ -32,7 +32,7 @@ Logical, when \code{TRUE} the original values are substituted by their ranks div
 
   
 \details{
-This function computes the \eqn{L^\infty}{L^Inf} distance also know as minimax distance.  In practice the distance among two records is the maximum of the absolute differences among the observed variables:
+This function computes the \eqn{L^\infty}{L^Inf} distance also know as \emph{minimax} distance.  In practice the distance between two records is the maximum of the absolute differences on the available variables:
 
 \deqn{d(i,j) = max \left( \left|x_{1i}-x_{1j} \right|, \left|x_{2i}-x_{2j} \right|,\ldots,\left|x_{Ki}-x_{Kj} \right| \right)}{d(i,j) =max(|x_1i-x_1j|,|x_2i-x_2j|,...,|x_Ki-x_Kj|) }
 
@@ -41,7 +41,7 @@ When \code{rank=TRUE} the original values are substituted by their ranks divided
 }
 
 \value{
-A \code{matrix} object with distances among rows of \code{data.x} and those of \code{data.y}.
+A \code{matrix} object with distances between rows of \code{data.x} and those of \code{data.y}.
 }
 
 \references{

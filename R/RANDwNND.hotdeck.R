@@ -80,7 +80,7 @@ RANDwNND.hd <- function (rec, don, dfun="Manhattan", cut.don="rot", k=NULL, w.do
    #     require(proxy)
         x.rec <- fact2dummy(x.rec, all=TRUE)
         x.don <- fact2dummy(x.don, all=TRUE)
-        mdist <- dist(x=x.rec, y=x.don, method=dfun, ...)
+        mdist <- proxy::dist(x=x.rec, y=x.don, method=dfun, ...)
         dimnames(mdist) <- list(r.lab, d.lab)
     }
 	else if(dfun=="Mahalanobis" || dfun=="mahalanobis"){
@@ -133,7 +133,7 @@ RANDwNND.hd <- function (rec, don, dfun="Manhattan", cut.don="rot", k=NULL, w.do
 
     else {
   #      require(proxy)
-        mdist <- dist(x=x.rec, y=x.don, method=dfun, ...)
+        mdist <- proxy::dist(x=x.rec, y=x.don, method=dfun, ...)
         dimnames(mdist) <- list(r.lab, d.lab)
     }
 

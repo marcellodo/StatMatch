@@ -44,7 +44,7 @@ A string: when \code{print.f="tables"} (default) all the cells' estimates will b
 }
 
 \item{align.margins}{
-Logical (default \code{FALSE}). When when \code{TRUE} the distribution of \bold{X} variables in \code{tab.xy} is aligned with the distribution resulting from \code{tab.x}, without affecting the marginal distribution of Y. Similarly, the distribution of \bold{X} variables in \code{tab.xz} is aligned with the distribution resulting from \code{tab.x} without affecting the marginal distribution of Z. The alignment is performed by running IPF algorithm as implemented in the function \code{\link[mipfp]{Estimate}} in the package \pkg{mipfp}. Note that to avoid lack of convergence due to combinations of Xs encountered in one table but not in the other (statistical 0s) before running IPF a small constant (1e-06) is added to empty cells in \code{tab.xy} and \code{tab.xz}.
+Logical (default \code{FALSE}). When when \code{TRUE} the distribution of \bold{X} variables in \code{tab.xy} is aligned with the distribution resulting from \code{tab.x}, without affecting the marginal distribution of Y. Similarly, the distribution of \bold{X} variables in \code{tab.xz} is aligned with the distribution resulting from \code{tab.x} without affecting the marginal distribution of Z. The alignment is performed by running IPF algorithm as implemented in the function \code{\link[mipfp]{Estimate}} in the package \pkg{mipfp}. Note that to avoid lack of convergence due to combinations of Xs encountered in one table but not in the other (statistical 0s), before running IPF a small constant (1e-06) is added to empty cells in \code{tab.xy} and \code{tab.xz}.
 }
 
 \item{tol}{
@@ -63,7 +63,7 @@ This function permits to compute the expected conditional Frechet bounds for the
 
 The relative frequencies \eqn{p_{X=i}=n_i/n}{p(X=i)=n_i/n} are computed from the frequencies in \code{tab.x}; \cr
 the relative frequencies \eqn{p_{Y=j|X=i}=n_{ij}/n_{i+}}{p(Y=j|X=i)=n_ij/n_i.} are derived from \code{tab.xy}, \cr
-finally, \eqn{p_{Z=k|X=i}=n_{ik}/n_{k+}}{p(Z=k|X=i)=n_ik/n_i.} are derived from \code{tab.xy}.
+finally, \eqn{p_{Z=k|X=i}=n_{ik}/n_{i+}}{p(Z=k|X=i)=n_ik/n_i.} are derived from \code{tab.xz}.
 
 Estimation requires that all the starting tables share the same marginal distribution of the \bold{X} variables. 
 

@@ -87,13 +87,13 @@ rankNND.hd <- function (x.rec, x.don, w.rec=NULL, w.don=NULL, constr=FALSE, c.al
 # the functions in library lpSolve are used
     
     if(constr && (c.alg=="lpSolve" || c.alg=="lpsolve")){
-        if(nr==nd) appo <- lp.assign(cost.mat=mdist)
+        if(nr==nd) appo <- lpSolve::lp.assign(cost.mat=mdist)
         else if(nr<nd){
             r.sig <- rep("==", nr)
             r.rhs <- rep(1, nr)
             c.sig <- rep("<=", nd)
             c.rhs <- rep(1, nd)
-            appo <- lp.transport(cost.mat=mdist, row.signs=r.sig, row.rhs=r.rhs, col.signs=c.sig, col.rhs=c.rhs)
+            appo <- lpSolve::lp.transport(cost.mat=mdist, row.signs=r.sig, row.rhs=r.rhs, col.signs=c.sig, col.rhs=c.rhs)
         }   
         else if(nr > nd){
             warning("There more recipients than donors!")
@@ -102,7 +102,7 @@ rankNND.hd <- function (x.rec, x.don, w.rec=NULL, w.don=NULL, constr=FALSE, c.al
             r.rhs <- rep(1, nr)
             c.sig <- rep(">=", nd)
             c.rhs <- rep(1, nd)
-            appo <- lp.transport(cost.mat=mdist, row.signs=r.sig, row.rhs=r.rhs, col.signs=c.sig, col.rhs=c.rhs)
+            appo <- lpSolve::lp.transport(cost.mat=mdist, row.signs=r.sig, row.rhs=r.rhs, col.signs=c.sig, col.rhs=c.rhs)
         }
         sol <- appo$solution
         ss <- c(t(sol))

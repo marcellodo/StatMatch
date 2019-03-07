@@ -67,7 +67,7 @@ NND.hotdeck <- function (data.rec, data.don, match.vars, don.class = NULL,
                 x.rec <- fact2dummy(x.rec, all = TRUE)
             if (is.data.frame(x.don)) 
                 x.don <- fact2dummy(x.don, all = TRUE)
-            mdist <- dist(x = x.rec, y = x.don, method = dfun, 
+            mdist <- proxy::dist(x = x.rec, y = x.don, method = dfun, 
                           ...)
         }
         else if (dfun == "Mahalanobis" || dfun == "mahalanobis") {
@@ -107,7 +107,7 @@ NND.hotdeck <- function (data.rec, data.don, match.vars, don.class = NULL,
             mdist[is.na(mdist)] <- 1
         }
         else {
-            mdist <- dist(x = x.rec, y = x.don, method = dfun, 
+            mdist <- proxy::dist(x = x.rec, y = x.don, method = dfun, 
                           ...)
         }
         dimnames(mdist) <- list(r.lab, d.lab)
@@ -136,7 +136,7 @@ NND.hotdeck <- function (data.rec, data.don, match.vars, don.class = NULL,
                 r.rhs <- rep(1, nr)
                 c.sig <- rep("<=", nd)
                 c.rhs <- rep(k, nd)
-                appo <- lp.transport(cost.mat = mdist, row.signs = r.sig, 
+                appo <- lpSolve::lp.transport(cost.mat = mdist, row.signs = r.sig, 
                                      row.rhs = r.rhs, col.signs = c.sig, col.rhs = c.rhs)
             } 
                 
@@ -145,7 +145,7 @@ NND.hotdeck <- function (data.rec, data.don, match.vars, don.class = NULL,
                 r.rhs <- rep(1, nr)
                 c.sig <- rep("<=", nd)
                 c.rhs <- rep(k, nd)
-                appo <- lp.transport(cost.mat = mdist, row.signs = r.sig, 
+                appo <- lpSolve::lp.transport(cost.mat = mdist, row.signs = r.sig, 
                                      row.rhs = r.rhs, col.signs = c.sig, col.rhs = c.rhs)
             }
             else if (nr > nd) {
@@ -159,7 +159,7 @@ NND.hotdeck <- function (data.rec, data.don, match.vars, don.class = NULL,
                 r.rhs <- rep(1, nr)
                 c.sig <- rep("<=", nd)
                 c.rhs <- rep(k, nd)
-                appo <- lp.transport(cost.mat = mdist, row.signs = r.sig, 
+                appo <- lpSolve::lp.transport(cost.mat = mdist, row.signs = r.sig, 
                                      row.rhs = r.rhs, col.signs = c.sig, col.rhs = c.rhs)
             }
             sol <- appo$solution

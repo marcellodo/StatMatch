@@ -39,19 +39,19 @@ A single categorical Z variable is allowed.  One or more categorical variables c
 \item{deal.sparse}{
 Text, how to estimate the cell relative frequencies when dealing with too sparse tables. When \code{deal.sparse="discard"} (default) no estimation is performed if \code{tab.xy} or \code{tab.xz} is too sparse. When \code{deal.sparse="relfreq"} the standard estimator (cell count divided by the sample size) is considered. Finally, when \code{deal.sparse="pBayes"} cells' relative frequencies are estimated by applying a pseudo-Bayes estimator (see \code{\link[StatMatch]{pBayes}}); in this case additional arguments required by  \code{\link[StatMatch]{pBayes}} should be passed. 
 
-Note that here sparseness is measured by no. of cells wrt the sample size; sparse table are those where the number of cells exceeds  the sample size (see Details).
+Note that here sparseness is measured by number of cells with respect to the sample size; sparse table are those where the number of cells exceeds  the sample size (see Details).
 }
 
 \item{nA}{
-Integer, sample size of file A used to estimate \code{tab.xy}. If  \code{NULL} is obtained as sum of frequencies in\code{tab.xy}.
+Integer, sample size of file A used to estimate \code{tab.xy}. If  \code{NULL}, it is obtained as sum of frequencies in\code{tab.xy}.
 }
 
 \item{nB}{
-Integer, sample size of file B used to estimate \code{tab.xz}. If  \code{NULL} is obtained as sum of frequencies in\code{tab.xz}.
+Integer, sample size of file B used to estimate \code{tab.xz}. If  \code{NULL}, it is obtained as sum of frequencies in\code{tab.xz}.
 }
 
 \item{...}{
-Additional arguments that may be required when estimating the cell probabilities in sparse tables via  \code{\link[StatMatch]{pBayes}} or when deriving an estimate of uncertainty by calling \code{\link[StatMatch]{Frechet.bounds.cat}}.
+Additional arguments that may be required when estimating the cells' probabilities in sparse tables via  \code{\link[StatMatch]{pBayes}} or when deriving an estimate of uncertainty by calling \code{\link[StatMatch]{Frechet.bounds.cat}}.
 }
 
 }
@@ -72,7 +72,7 @@ The uncertainty is measured by the average of the widths of the bounds for the c
 
 For details see \code{\link[StatMatch]{Frechet.bounds.cat}}.
 
-Provided that uncertainty, measured in terms of \eqn{\bar{d}}{av(d)}, tends to reduce when conditioning on a higher number of \bold{X} variables. Two penalties are introduced to account for the additional number of cells to be estimated when adding a variable. The first penalty, introduced in D'Orazio et al. (2017), is:
+Provided that uncertainty, measured in terms of \eqn{\bar{d}}{av(d)}, tends to reduce when conditioning on a higher number of \bold{X} variables. Two penalties are introduced to account for the additional number of cells to be estimated when adding a X variable. The first penalty, introduced in D'Orazio et al. (2017), is:
 
 \deqn{g_1=log\left( 1 + \frac{H_{D_m}}{H_{D_Q}} \right) }{g1 = log(1 + H_Dm/H_DQ )}
     
@@ -81,12 +81,12 @@ A second penalty takes into account the number of cells to estimate with respect
 
 \deqn{g_2 = max \left[ \frac{1}{n_A - H_{D_m} \times J}, \frac{1}{n_B - H_{D_m} \times K}  \right]}{ g2=max[1/(nA - H_Dm*J), 1/(nB - H_Dm*K)]}
 
-with \eqn{n_A > H_{D_m} \times J}{nA > H_Dm*J}  and  \eqn{n_B > H_{D_m} \times K}{nB > H_Dm*K}. In practice, it is considered the number of cells to estimate compared to the sample size. This criterion is considered to measure sparseness too. In particular, for the purposes of this function, tables are considered NOT sparse when: 
+with \eqn{n_A > H_{D_m} \times J}{nA > H_Dm*J}  and  \eqn{n_B > H_{D_m} \times K}{nB > H_Dm*K}. In practice, it is considered the number of cells to estimate compared to the sample size. This criterion is considered to measure sparseness too. In particular, for the purposes of this function, tables are NOT considered sparse when: 
 
 \deqn{min\left[ \frac{n_A}{H_{D_m} \times J}, \frac{n_B}{H_{D_m} \times K} \right] > 1 }{ min[ nA/(H_Dm*J), nB/(H_Dm*K) ] > 1}
 
 This rule is applied when deciding how to proceed with estimation in case of sparse table (argument \code{deal.sparse}). 
-Note that sparseness can be measured in different manners. The output table will provide also the empty cells in each table (due to statistical zeros or structural zeros) and the Cohen's effect size with respect to the case of uniform distribution of frequencies across cells (1/no.of.cells in each cell):
+Note that sparseness can be measured in different manners. The outputs include also the empty cells in each table (due to statistical zeros or structural zeros) and the Cohen's effect size with respect to the case of uniform distribution of frequencies across cells (the value 1/no.of.cells in every cell):
 
 \deqn{\omega_{eq} = \sqrt{H \sum_{h=1}^{H} (\hat{p}_h - 1/H)^2 } }{ w_eq = ( H*sum((p_h - 1/H)^2))^(1/2) }
 

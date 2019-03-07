@@ -3,7 +3,7 @@
 \title{Pairwise measures between categorical variables}
 
 \description{
-  This function computes some association and PRE measures between a categorical nominal variable and each of the other available predictors (also categorical variables).
+  This function computes some association and \emph{Proportional Reduction in Error} (PRE) measures between a categorical nominal variable and each of the other available predictors (being also categorical variables).
 }
 
 \usage{
@@ -21,7 +21,7 @@ The data frame which contains the variables called by \code{formula}.
 }
 
 \item{weights}{
- The name of the variable in \code{data} which provides the units' weights.  Weights are used to estimate frequencies (a cell frequency is estimated by summing the weights of the units which present the given characteristic).  Default is \code{NULL} (no weights available) and each unit counts 1.
+ The name of the variable in \code{data} which provides the units' weights.  Weights are used to estimate frequencies (a cell frequency is estimated by summing the weights of the units which present the given characteristic).  Default is \code{NULL} (no weights available) and each unit counts 1. When case weight are provided, then they are scales so that their sum equals \emph{n}, the sample size (assumed to be \code{nrow(data)}).
 }
 
 \item{out.df}{
@@ -79,7 +79,7 @@ Theil's uncertainty coefficient:
 
 It takes values in the interval [0,1] and measures the reduction of uncertainty in the column variable Y due to knowing the row variable X. Note that the numerator of U(Y|X) is the mutual information I(X;Y)
 
-It is worth noting that \eqn{\lambda}{lambda}, \eqn{\tau}{tau} and \emph{U} are measures of the proportional reduction of the variance of the Y variable when passing from its marginal distribution to its conditional distribution given the predictor X, derived from the general expression (cf. Agresti, 2002, p. 56):
+It is worth noting that \eqn{\lambda}{lambda}, \eqn{\tau}{tau} and \emph{U} can be viewed as measures of the proportional reduction of the variance of the Y variable when passing from its marginal distribution to its conditional distribution given the predictor X, derived from the general expression (cf. Agresti, 2002, p. 56):
 
 \deqn{ \frac{V(Y) - E[V(Y|X)]}{V(Y)}}{ (V(Y) - E[V(Y|X)])/V(Y) }
 
@@ -89,7 +89,7 @@ Finally, AIC (and BIC) is calculated, as suggested in Sakamoto and Akaike (1977)
 
 \deqn{ AIC(Y|X) = -2 \sum_{i,j} n_{ij} \, log \left( \frac{n_{ij}}{n_{i+}} \right) + 2I(J - 1) }{-2*sum_ij (n_ij * log(n_ij/n_i+) +2*I*(J-1) )  }
 
-\deqn{ BIC(Y|X) = -2 \sum_{i,j} n_{ij} \, log \left( \frac{n_{ij}}{n_{i+}} \right) + log(n) I(J-1)   }{-2*sum_ij (n_ij * log(n_ij/n_i+) +I*(J-1)*log(n) )  }
+\deqn{ BIC(Y|X) = -2 \sum_{i,j} n_{ij} \, log \left( \frac{n_{ij}}{n_{i+}} \right) +I(J-1) log(n)    }{-2*sum_ij (n_ij * log(n_ij/n_i+) +I*(J-1)*log(n) )  }
 
 being \eqn{I(J-1)}{I*(J-1)} the parameters (conditional probabilities) to estimate. Note that the \R package \pkg{catdap} provides functions to identify the best subset of predictors based on AIC.
 

@@ -27,14 +27,14 @@ Missing values (\code{NA}) are allowed.
 }
 
 \item{match.vars}{
-A character vector with the names of the matching variables (the columns in both the data frames) that have to be used to compute distances among records (rows) in \code{data.rec} and those in \code{data.don}.
-The variables used in computing distances may cointain missing values but in this case a limited number of distance functions can be used (see Details for clarifications). 
+A character vector with the names of the matching variables (the columns in both the data frames) that have to be used to compute distances between records (rows) in \code{data.rec} and those in \code{data.don}.
+The variables used in computing distances may contain missing values but only a limited number of distance functions can handle them (see Details for clarifications). 
 }
 
 \item{don.class}{
 A character vector with the names of the variables (columns in both the data frames) that have to be used to identify the donation classes.  In this case the computation of distances is limited to those units of \code{data.rec} and \code{data.doc} that belong to the same donation class.  The case of empty donation classes should be avoided.  It would be preferable that variables used to form donation classes are defined as \code{factor}.
 
-The variables chosen for the creation of the donation clasess should not contain missing values (NAs).
+The variables chosen for the creation of the donation clasess should NOT contain missing values (NAs).
 
 When not specified (default), no donation classes are used.  This choice may require more memory to store a larger distance matrix and a higher computational effort.
 }
@@ -62,8 +62,8 @@ Logical, when donation classes are used by setting  \code{keep.t=TRUE} prints in
 }
 
 \item{...}{ 
-Additional arguments that may be required by \code{\link[StatMatch]{gower.dist}}, or by \cr 
-\code{\link[StatMatch]{maximum.dist}}, or by \code{\link[proxy]{dist}}.
+Additional arguments that may be required by \code{\link[StatMatch]{gower.dist}}, \cr 
+\code{\link[StatMatch]{maximum.dist}}, or \code{\link[proxy]{dist}}.
 }
 }
   
@@ -74,7 +74,7 @@ In the constrained case a donor can be used just a fixed number of times, as spe
 
 This function can also be used to impute missing values in a data set using the nearest neighbor distance hot deck.  In this case \code{data.rec} is the part of the initial data set that contains missing values on the target variable; on the contrary, \code{data.don} is the part of the data set without missing values on it.  See \R code in the Examples for details.
 
-Please note that only  \dQuote{Gower} and \dQuote{minimax} distance functions allow for the presence of missing values (\code{NA}s) in the variables used in computing distances.  In both the cases when one of the of the observations presents a variable showing an NA, then this variable is excluded from the computation of distance. 
+Please note that only  \dQuote{Gower} and \dQuote{minimax} distance functions allow for the presence of missing values (\code{NA}s) in the variables used in computing distances.  In both the cases when one of the of the observations presents a variable showing an NA, then this variable is excluded from the computation of distance between them. 
 
 } 
 
@@ -87,7 +87,7 @@ A matrix with the same number of rows of \code{data.rec} and two columns.  The f
 }
 
 \item{dist.rd}{
-A vector with the distances among each recipient unit and the corresponding donor. 
+A vector with the distances between each recipient unit and the corresponding donor. 
 }
 
 \item{noad}{
@@ -122,7 +122,7 @@ Singh, A.C., Mantel, H., Kinack, M. and Rowe, G. (1993). \dQuote{Statistical mat
 \examples{
 
 
-# reproduce the classical matching framework
+# create the classical matching framework
 lab <- c(1:15, 51:65, 101:115)
 iris.rec <- iris[lab, c(1:3,5)]  # recipient data.frame 
 iris.don <- iris[-lab, c(1:2,4:5)] #donor data.frame
@@ -145,7 +145,7 @@ out.NND.1 <- NND.hotdeck(data.rec=iris.rec, data.don=iris.don,
 
 fused.1 <- create.fused(data.rec=iris.rec, data.don=iris.don, 
                         mtc.ids=out.NND.1$mtc.ids, z.vars="Petal.Width") 
-
+head(fused.1)
 
 # Find the closest donors computing distance
 # on "Sepal.Length", "Sepal.Width" and Species;
@@ -194,6 +194,7 @@ iris.rec.imp <- create.fused(data.rec=iris.rec, data.don=iris.don,
 
 # rebuild the imputed data.frame
 final <- rbind(iris.rec.imp, iris.don)
+head(final)
 
 
 }

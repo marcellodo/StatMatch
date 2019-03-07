@@ -39,13 +39,13 @@ A character vector that identifies the method that should be used to estimate th
 }
 
 \item{rho.yz}{
-A numeric value representing a guess for the correlation among the Y (\code{y.rec}) and the Z variable (\code{z.don}) that are not jointly observed.  When \code{method="MS"} then the argument \code{cor.yz} must specify the value of the correlation coefficient \eqn{\rho_{YZ}}{rho_YZ}; on the contrary, when \code{method="ML"}, it must specify the \emph{partial correlation coefficient} among Y and Z given \bold{X} (\eqn{\rho_{YZ|\bf{X}}}{rho_YZ|X}). 
+A numeric value representing a guess for the correlation between the Y (\code{y.rec}) and the Z variable (\code{z.don}) that are not jointly observed.  When \code{method="MS"} then the argument \code{cor.yz} must specify the value of the correlation coefficient \eqn{\rho_{YZ}}{rho_YZ}; on the contrary, when \code{method="ML"}, it must specify the \emph{partial correlation coefficient} between Y and Z given \bold{X} (\eqn{\rho_{YZ|\bf{X}}}{rho_YZ|X}). 
 
-By default (\code{rho.yz=NULL}).  In practice, in absence of auxiliary information concerning the correlation coefficient or the partial correlation coefficient, the statistical matching is carried out under the assumption of independence among Y and Z given \bold{X} (Conditional Independence Assumption, CIA ), i.e.  \eqn{\rho_{YZ|\bf{X}}=0}{rho_YZ|X = 0}. 
+By default (\code{rho.yz=NULL}).  In practice, in absence of auxiliary information concerning the correlation coefficient or the partial correlation coefficient, the statistical matching is carried out under the assumption of independence between Y and Z given \bold{X} (Conditional Independence Assumption, CIA ), i.e.  \eqn{\rho_{YZ|\bf{X}}=0}{rho_YZ|X = 0}. 
 }
 
 \item{micro}{
-Logical.  When \code{micro=FALSE} (default) only the parameter estimates are returned.  On the contrary, when \code{micro=TRUE} the function returns also \code{data.rec} filled in with the values for the variable Z.  The donors for filling in Z in \code{data.rec} are identified using a constrained distance hot deck method.  In this case, the number of units (rows) in \code{data.don} must be grater or equal to the number of units (rows) in \code{data.rec}.  See next argument and Details for further information.
+Logical.  When \code{micro=FALSE} (default) only the parameters' estimates are returned.  On the contrary, when \code{micro=TRUE} the function returns also \code{data.rec} filled in with the values for the variable Z.  The donors for filling in Z in \code{data.rec} are identified using a constrained distance hot deck method.  In this case, the number of units (rows) in \code{data.don} must be grater or equal to the number of units (rows) in \code{data.rec}.  See next argument and Details for further information.
 }
 
 \item{constr.alg}{
@@ -63,7 +63,7 @@ This function implements some mixed methods to perform statistical matching. A m
 (2) derivation of a complete \dQuote{synthetic} data set (recipient data set filled in with values for the Z variable) using a nonparametric approach.
 
 
-In this case, as far as (1) is concerned, it is assumed that  \eqn{ \left( \mathbf{X},Y,Z \right) }{(\bold{X},Y,Z)} follows a multivariate normal distribution.  Please note that if some of the \bold{X} are categorical, then they are recoded into dummies before starting with the estimation.  In such a case the assumption of multivariate normal distribution may be questionable.  
+In this case, as far as (1) is concerned, it is assumed that  \eqn{ \left( \mathbf{X},Y,Z \right) }{(\bold{X},Y,Z)} follows a multivariate normal distribution.  Please note that if some of the \bold{X} are categorical, then they are recoded into dummies before starting with the estimation.  In such a case, the assumption of multivariate normal distribution may be questionable.  
 
 The whole procedure is based on the imputation method known as \emph{predictive mean matching}.  The procedure consists of three steps: 
 
@@ -123,7 +123,7 @@ It is the initial guess for the partial correlation coefficient \eqn{\rho_{YZ|\b
 }
 
 \item{rho.yz}{
-Returned in output only when \code{method="MS"}. It is a vector with four values: the initial guess for \eqn{\rho_{YZ}}{ rho_YZ}; the lower and upper bounds for \eqn{\hat{\rho}_{YZ}}{rho_YZ} in the statistical matching framework given the correlation coefficients among Y and \bold{X} and the correlation coefficients among Z and \bold{X} estimated from the available data; and, finally, the closest admissible value used in computations instead of the initial \code{rho.yz} that resulted not coherent with the others correlation coefficients estimated from the available data.
+Returned in output only when \code{method="MS"}. It is a vector with four values: the initial guess for \eqn{\rho_{YZ}}{ rho_YZ}; the lower and upper bounds for \eqn{\hat{\rho}_{YZ}}{rho_YZ} in the statistical matching framework given the correlation coefficients between Y and \bold{X} and the correlation coefficients between Z and \bold{X} estimated from the available data; and, finally, the closest admissible value used in computations instead of the initial \code{rho.yz} that resulted not coherent with the others correlation coefficients estimated from the available data.
 }
 
 \item{phi}{
@@ -141,7 +141,7 @@ when \code{micro=TRUE}. This is a matrix with the same number of rows of \code{d
 }
 
 \item{dist.rd}{
-A vector with the distances among each recipient unit and the corresponding donor, returned only in case \code{micro=TRUE}.
+A vector with the distances between each recipient unit and the corresponding donor, returned only in case \code{micro=TRUE}.
 }
 
 \item{call}{
@@ -160,7 +160,6 @@ D'Orazio, M., Di Zio, M. and Scanu, M. (2006). \emph{Statistical Matching: Theor
 Hornik K. (2012).  clue: Cluster ensembles.  R package version 0.3-45.  \url{https://CRAN.R-project.org/package=clue}.
 
 Moriarity, C., and Scheuren, F. (2001). \dQuote{Statistical matching: a paradigm for assessing the uncertainty in the procedure}. \emph{Journal of Official Statistics}, \bold{17}, 407--422.
-\url{http://www.jos.nu/Articles/abstract.asp?article=173407}
 
 Moriarity, C., and Scheuren, F. (2003). \dQuote{A note on Rubin's statistical matching using file concatenation with adjusted weights and multiple imputation}, \emph{Journal of Business and Economic Statistics}, \bold{21}, 65--73.
 
