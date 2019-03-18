@@ -9,7 +9,7 @@ This function permits to derive the bounds for cell probabilities of the table Y
 
 \usage{
 Frechet.bounds.cat(tab.x, tab.xy, tab.xz, print.f="tables", align.margins = FALSE,
-                            tol= 0.001) 
+                            tol= 0.001, warn = TRUE) 
 }
 
 \arguments{
@@ -48,7 +48,11 @@ Logical (default \code{FALSE}). When when \code{TRUE} the distribution of \bold{
 }
 
 \item{tol}{
-Tolerance used in comparing joint distributions as far as \bold{X} variables are considered (default \code{tol= 0.001}); estimation of cells bounds would require that distribution of \bold{X} variables computed from \code{tab.xy} and \code{tab.xz} should be approximatly equal to that in \code{tab.x}, on contrary  incoherences in estimated cells' bounds could happen. In case of not-coherent marginal distributions it is suggested to get them aligned by setting \code{align.margins=TRUE}.
+Tolerance used in comparing joint distributions as far as \bold{X} variables are considered (default \code{tol= 0.001}); estimation of cells bounds would require that distribution of \bold{X} variables computed from \code{tab.xy} and \code{tab.xz} should be approximately equal to that in \code{tab.x}, on contrary  incoherences in estimated cells' bounds could happen. In case of not-coherent marginal distributions it is suggested to get them aligned by setting \code{align.margins=TRUE}.
+}
+
+\item{warn}{
+Logical, when \code{TRUE} (default) return warnings when marginal distributions of \bold{X} variables show differences grater than \code{tol}.
 }
 
 }

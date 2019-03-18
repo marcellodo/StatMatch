@@ -37,8 +37,7 @@ A single categorical Z variable is allowed.  One or more categorical variables c
 %Logical (default \code{FALSE)}. If \code{TRUE} reduces the information saved in \code{sum.unc}. See Value for further information.
 %}
 \item{deal.sparse}{
-Text, how to estimate the cell relative frequencies when dealing with too sparse tables. When \code{deal.sparse="discard"} (default) no estimation is performed if \code{tab.xy} or \code{tab.xz} is too sparse. When \code{deal.sparse="relfreq"} the standard estimator (cell count divided by the sample size) is considered. Finally, when \code{deal.sparse="pBayes"} cells' relative frequencies are estimated by applying a pseudo-Bayes estimator (see \code{\link[StatMatch]{pBayes}}); in this case additional arguments required by  \code{\link[StatMatch]{pBayes}} should be passed. 
-
+Text, how to estimate the cell relative frequencies when dealing with too sparse tables. When \code{deal.sparse="discard"} (default) no estimation is performed if \code{tab.xy} or \code{tab.xz} is too sparse. When \code{deal.sparse="relfreq"} the standard estimator (cell count divided by the sample size) is considered. 
 Note that here sparseness is measured by number of cells with respect to the sample size; sparse table are those where the number of cells exceeds  the sample size (see Details).
 }
 
@@ -51,7 +50,7 @@ Integer, sample size of file B used to estimate \code{tab.xz}. If  \code{NULL}, 
 }
 
 \item{...}{
-Additional arguments that may be required when estimating the cells' probabilities in sparse tables via  \code{\link[StatMatch]{pBayes}} or when deriving an estimate of uncertainty by calling \code{\link[StatMatch]{Frechet.bounds.cat}}.
+Additional arguments that may be required when deriving an estimate of uncertainty by calling \code{\link[StatMatch]{Frechet.bounds.cat}}.
 }
 
 }
@@ -152,15 +151,6 @@ bounds.yz <- Fbwidths.by.x(tab.x=freq.xA+freq.xB, tab.xy=freq.xy,
 
 bounds.yz$sum.unc
 
-# input tables estimated with pBayes()
-
-pf.x <- pBayes(x=freq.xA+freq.xB)
-pf.xy <- pBayes(x=freq.xy)
-pf.xz <- pBayes(x=freq.xz)
-
-bounds.yz.p <- Fbwidths.by.x(tab.x = pf.x$pseudoB, 
-							 tab.xy = pf.xy$pseudoB,
-							 tab.xz = pf.xz$pseudoB)
 
 }
 

@@ -1,6 +1,6 @@
 Frechet.bounds.cat <- function (tab.x, tab.xy, tab.xz, 
                                 print.f = "tables", align.margins = FALSE,
-                                tol = 0.001) 
+                                tol = 0.001, warn=TRUE) 
 {
 # fucntion to compute uncertainty bounds in the unconditional case
 # i.e. no X variables    
@@ -79,15 +79,15 @@ Frechet.bounds.cat <- function (tab.x, tab.xy, tab.xz,
         if(!align.margins){
             d1.x <- 1:length(dim(p.xy))
             m1.x <- margin.table(p.xy, d1.x[-pos.y]) 
-            if (any(abs(m1.x - p.x) > tol)) 
+            if (any(abs(m1.x - p.x) > tol) & warn) 
                 warning("The marginal distr. of the X variables \n 
                         in tab.xy is not equal to tab.x")
             d2.x <- 1:length(dim(p.xz))
             m2.x <- margin.table(p.xz, d2.x[-pos.z])
-            if (any(abs(m2.x - p.x) > tol)) 
+            if (any(abs(m2.x - p.x) > tol) & warn) 
                 warning("The marginal distr. of the X variables \n 
                         in tab.xz is not equal to tab.x")
-            if (any(abs(m1.x - m2.x) > tol)) 
+            if (any(abs(m1.x - m2.x) > tol) & warn) 
                 warning("The marginal distr. of the X variables \n 
                         in tab.xy and in tab.xz are not equal")    
         }

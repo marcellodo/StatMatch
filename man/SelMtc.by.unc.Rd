@@ -16,14 +16,14 @@ selMtc.by.unc(tab.x, tab.xy, tab.xz, corr.d=2,
 
 \item{tab.x}{
 A \R table crossing the \bold{X} variables.  This table must be obtained by using the function \code{\link[stats]{xtabs}} or \code{\link[base]{table}}, e.g. \cr
-\code{tab.x <- xtabs(~x1+x2+x3, data=data.all)}. \strong{A minimum number of 3 variables are needed}.
+\code{tab.x <- xtabs(~x1+x2+x3, data=data.all)}. \strong{A minimum number of 3 variables is needed}.
 }
 
 \item{tab.xy}{
 A \R table of \bold{X} vs. Y variable.  This table must be obtained by using the function \code{\link[stats]{xtabs}} or \code{\link[base]{table}}, e.g. \cr
 \code{table.xy <- xtabs(~x1+x2+x3+y, data=data.A)}.
 
-A single categorical Y variables is allowed.  \strong{Three} or more categorical variables can be considered as \bold{X} variables (common variables).  The same \bold{X} variables in \code{tab.x} must be available in \code{tab.xy}.   Usually, it is assumed that the joint distribution of the \bold{X} variables computed from \code{tab.xy} is equal to \code{tab.x} (a warning appears if any absolute difference is greater than \code{tol}). Note that when the marginal distribution of  \bold{X} in \code{tab.xy} is not equal to that of \code{tab.x} it is possible to align them before computations (see argument \code{align.margins}).
+A single categorical Y variables is allowed.  At least \strong{three} categorical variables should be considered as \bold{X} variables (common variables).  The same \bold{X} variables in \code{tab.x} must be available in \code{tab.xy}.   Usually, it is assumed that the joint distribution of the \bold{X} variables computed from \code{tab.xy} is equal to \code{tab.x} (a warning appears if any absolute difference is greater than \code{tol}). Note that when the marginal distribution of  \bold{X} in \code{tab.xy} is not equal to that of \code{tab.x} it is possible to align them before computations (see argument \code{align.margins}).
 
 }
 
@@ -31,7 +31,7 @@ A single categorical Y variables is allowed.  \strong{Three} or more categorical
 A \R table of \bold{X} vs. Z variable.  This table must be obtained by using the function \code{\link[stats]{xtabs}} or \code{\link[base]{table}}, e.g. \cr
 \code{tab.xz <- xtabs(~x1+x2+x3+z, data=data.B)}.
 
-A single categorical Z variable is allowed.  \strong{Three} or more categorical variables can be considered as \bold{X} variables (common variables).  The same \bold{X} variables in \code{tab.x} must be available in \code{tab.xz}.  Usually, it is assumed that the joint distribution of the \bold{X} variables computed from \code{tab.xz} is equal to \code{tab.x} (a warning appears if any absolute difference is greater than \code{tol}). Note that when the marginal distribution of  \bold{X} in \code{tab.xz} is not equal to that of \code{tab.x} it is possible to align them before computations (see argument \code{align.margins}).
+A single categorical Z variable is allowed.  At least \strong{three} categorical variables should be considered as \bold{X} variables (common variables).  The same \bold{X} variables in \code{tab.x} must be available in \code{tab.xz}.  Usually, it is assumed that the joint distribution of the \bold{X} variables computed from \code{tab.xz} is equal to \code{tab.x} (a warning appears if any absolute difference is greater than \code{tol}). Note that when the marginal distribution of  \bold{X} in \code{tab.xz} is not equal to that of \code{tab.x} it is possible to align them before computations (see argument \code{align.margins}).
 }
 
 \item{corr.d}{
@@ -121,7 +121,8 @@ freq.xz <- xtabs(~Eth+Sex+Age+c.Days, data=quine.B)
 
 # apply Fbwidths.by.x()
 bb <- Fbwidths.by.x(tab.x=freq.xA+freq.xB, 
-                           tab.xy=freq.xy,  tab.xz=freq.xz)
+                           tab.xy=freq.xy,  tab.xz=freq.xz,
+                           warn=FALSE)
 bb$sum.unc
 cc <- selMtc.by.unc(tab.x=freq.xA+freq.xB, 
                            tab.xy=freq.xy,  tab.xz=freq.xz, corr.d=0)

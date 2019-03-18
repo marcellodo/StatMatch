@@ -224,22 +224,6 @@ svytable(formula=~Eth, design=out.hz$cal.B)
 svytable(formula=~Sex+Age, design=out.hz$cal.A)
 svytable(formula=~Sex+Age, design=out.hz$cal.B)
 
-#-----------------------------------------------------
-# example (4)
-# Harmonizazion wrt the joint distribution
-# of ('Sex' x 'Age' x 'Eth')
-
-# vector of population total known
-# estimated from the full data set
-# note the formula!
-tot.m <- colSums(model.matrix(~Eth:Sex:Age-1, data=quine))
-tot.m
-
-out.hz <- harmonize.x(svy.A=svy.qA, svy.B=svy.qB, x.tot=tot.m,
-            form.x=~Eth:Sex:Age-1, cal.method="linear")
-tot.m
-svytable(formula=~Eth+Sex+Age, design=out.hz$cal.A)
-svytable(formula=~Eth+Sex+Age, design=out.hz$cal.B)
 
 }
 

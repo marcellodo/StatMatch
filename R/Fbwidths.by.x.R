@@ -132,27 +132,28 @@ function (tab.x, tab.xy, tab.xz,
                 av.rng[h, 13] <- NA
             }
         }
-        if(deal.sparse=='pseudoB'){
-        # estimation of rel. frequencies is performed using 
-        # pseudoBayes estimator
-            pb.xx <- pBayes(x=xx, method="m.ind")
-            pb.xy <- pBayes(x=xy, method="m.ind")
-            pb.xz <- pBayes(x=xz, method="m.ind")
-            fb <- Frechet.bounds.cat(pb.xx, pb.xy, pb.xz, print.f = "tables", 
-                                     ...)
-            appo <- data.frame(fb$low.cx)
-            out.rng[[h]] <- data.frame(appo[, 1:2], lower = c(fb$low.cx), 
-                                       upper = c(fb$up.cx), 
-                                       width = c(fb$up.cx - fb$low.cx),
-                                       CIA = c(fb$CIA))
-            
-            av.rng[h, 9] <- fb$uncertainty[2]
-            av.rng[h, 10] <- penalty1
-            av.rng[h, 11] <- fb$uncertainty[2] + penalty1
-            av.rng[h, 12] <- penalty2
-            av.rng[h, 13] <- fb$uncertainty[2] + penalty2
-            
-        }
+        # if(deal.sparse=='pseudoB'){
+        # # estimation of rel. frequencies is performed using 
+        # # pseudoBayes estimator
+        #     if(length(p.x)>1) pb.xx <- pBayes(x=xx, method="m.ind")
+        #     else pb.xx <- xx
+        #     pb.xy <- pBayes(x=xy, method="m.ind")
+        #     pb.xz <- pBayes(x=xz, method="m.ind")
+        #     fb <- Frechet.bounds.cat(pb.xx, pb.xy, pb.xz, print.f = "tables", 
+        #                              ...)
+        #     appo <- data.frame(fb$low.cx)
+        #     out.rng[[h]] <- data.frame(appo[, 1:2], lower = c(fb$low.cx), 
+        #                                upper = c(fb$up.cx), 
+        #                                width = c(fb$up.cx - fb$low.cx),
+        #                                CIA = c(fb$CIA))
+        #     
+        #     av.rng[h, 9] <- fb$uncertainty[2]
+        #     av.rng[h, 10] <- penalty1
+        #     av.rng[h, 11] <- fb$uncertainty[2] + penalty1
+        #     av.rng[h, 12] <- penalty2
+        #     av.rng[h, 13] <- fb$uncertainty[2] + penalty2
+        #     
+        # }
             
     }
     lab.list <- paste("|", lapply(appo.var, paste, collapse = "+"), 

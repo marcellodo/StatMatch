@@ -92,7 +92,7 @@ findbest.fcn <- function(pp.x, pp.xy, pp.xz, x.vars, corr=0,
             av.n <- min(N.xy/nc.xy, N.xz/nc.xz) 
             if(av.n>1){
                 fb <- Frechet.bounds.cat(xx, xy, xz, print.f = "tables", 
-                                         align.margins=align)
+                                         align.margins=align, warn=FALSE)
                 
                 if(corr==0) {
                     cc <- 0
@@ -209,7 +209,7 @@ findbest.fcn <- function(pp.x, pp.xy, pp.xz, x.vars, corr=0,
         chk <- fnd$bst
         
         # if(is.na(chk) | fnd$av.pen[1]>ref.d) break
-        if(is.na(chk)) break
+        if(is.na(chk[1])) break
         else {
             # ref.d <- fnd$av.pen[1]
             best.x <- fnd$bst
@@ -226,7 +226,7 @@ findbest.fcn <- function(pp.x, pp.xy, pp.xz, x.vars, corr=0,
     if(min(nA/length(tab.xy), nB/length(tab.xz)) > 1 ){
         fnd <-  Frechet.bounds.cat(tab.x=tab.x, tab.xy=tab.xy, tab.xz=tab.xz,
                                    print.f = "tables",
-                                   align.margins = align.margins)
+                                   align.margins = align.margins, warn=FALSE)
         
         av.w[n.x] <- fnd$uncertainty[2]
         if(corr.d==0) {
@@ -267,7 +267,7 @@ findbest.fcn <- function(pp.x, pp.xy, pp.xz, x.vars, corr=0,
     tz <- margin.table(tab.xz, p.z)
     
 # case of unconditional uncertainty (no Xs)    
-    fbc0 <- Frechet.bounds.cat(tab.x=NULL, tab.xy = ty, tab.xz=tz)
+    fbc0 <- Frechet.bounds.cat(tab.x=NULL, tab.xy = ty, tab.xz=tz, warn=FALSE)
    
     l0 = data.frame(x.vars=NA, nxv=0, 
                     nc.x=NA, nc0.x=NA, av.crf.x=NA, veq.x=NA,
