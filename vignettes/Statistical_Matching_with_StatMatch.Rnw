@@ -1,7 +1,0 @@
-\documentclass{article}
-\usepackage{pdfpages}
-%\VignetteIndexEntry{Old2017Vignette}
-
-\begin{document}
-\includepdf[pages=-, fitpaper=true]{Statistical_Matching_with_StatMatch.pdf}
-\end{document}
