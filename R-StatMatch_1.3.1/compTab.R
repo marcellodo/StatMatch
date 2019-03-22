@@ -21,8 +21,8 @@ compTab <- function(data.A, data.B, xlab, wA=NULL, wB=wA){
     
     dfA <- cbind(data.frame(tA), sample="A")
     dfB <- cbind(data.frame(tB), sample="B")
+    colnames(dfA) <- colnames(dfB) <- c("Var1", "Freq", "sample")
     df <- rbind(dfA, dfB)
-    colnames(df) <- c("Var1", "Freq", "sample")
     ggplot(data = df, 
            aes(x = Var1, y = Freq, fill = sample)) +
         geom_bar(stat = "identity", position = "dodge") +

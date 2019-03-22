@@ -39,4 +39,20 @@ compTab(data.A = samp.A, data.B = samp.B, xlab="urb", wA = "ww")
 compDens(data.A = samp.A, data.B = samp.B, xlab="age")
 compDens(data.A = samp.A, data.B = samp.B, xlab="age", wA = "ww")
     
-    
+compDens(data.A = samp.A, data.B = samp.B, xlab="age", type='qqplot')
+compDens(data.A = samp.A, data.B = samp.B, xlab="age", wA = "ww", type='qqplot')
+
+
+compDens(data.A = samp.A, data.B = samp.B, xlab="age", type='qqshift')
+
+compDens(data.A = samp.A, data.B = samp.B, xlab="age", type='qqplot')
+
+compDens(data.A = samp.A, data.B = samp.B, xlab="age", type='qqplot', 
+         wA="ww", wB='ww')
+
+compDens(data.A = samp.A, data.B = samp.B, xlab="age", type='qqshift', 
+         wA="ww", wB='ww')
+
+compDens(data.A = samp.A, data.B = samp.B, xlab="age", type='hist')
+compDens(data.A = samp.A, data.B = samp.B, xlab="age", type='hist',
+         wA="ww", wB='ww')
