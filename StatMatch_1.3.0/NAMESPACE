@@ -1,0 +1,19 @@
+# Remove the previous line if you edit this file
+
+# Export all names
+exportPattern(".")
+
+# Import all packages listed as Imports or Depends
+#importFrom("lpSolve", lp.assign, lp.transport)
+import(
+  proxy,
+  clue,
+  survey,
+  RANN,
+  lpSolve
+)
+ importFrom("stats", "as.formula", "chisq.test", "coefficients", "cor",
+     "cov2cor", "lm", "mahalanobis", "model.frame",
+     "model.matrix", "qchisq", "residuals", "rnorm", "runif",
+     "sd", "var", "weights", "xtabs", "ftable", "loglin")
+ importFrom("utils", "combn")
