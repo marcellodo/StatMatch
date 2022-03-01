@@ -1,0 +1,11 @@
+Package: StatMatch
+Version: 1.4.1
+Date: 2022-03-01
+Title: Statistical Matching or Data Fusion
+Author: Marcello D'Orazio
+Maintainer: Marcello D'Orazio <mdo.statmatch@gmail.com>
+Depends: R (>= 2.7.0), proxy, survey, lpSolve, ggplot2 
+Suggests: Hmisc, MASS, mipfp, clue, RANN,  
+Description: Integration of two data sources referred to the same target population which share a number of variables. Some functions can also be used to impute missing values in data sets through hot deck imputation methods. Methods to perform statistical matching when dealing  with data from complex sample surveys are available too.
+License: GPL (>= 2)
+URL: https://github.com/marcellodo/StatMatch, https://github.com/marcellodo/StatMatch/tree/master/Tutorials_Vignette_OtherDocs

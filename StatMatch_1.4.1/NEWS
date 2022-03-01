@@ -1,0 +1,153 @@
+1.4.1 Addedd function for comparing distributions, improved graphical comparisons
+
+		comp.cont is a NEW function for empirical comparison of the marginal distributions of the same numerical variable(s) 
+		but estimated from two different data sources
+
+		plotCont plots and compares also the empirical cumulative distribution function estimated 
+		from two different data sources
+
+
+######################################################################################################################
+
+1.4.0 Addedd functions for plotting results, changes to some code for better management of the NAs
+
+		NND.hotdeck and RANDwNND.hotdeck NO longer trasform the categorical matching variables in dummies
+		when the chosen distance function is defined only for numerical variables; in practice, mixed-type matching variables
+		can only be used with the Gower's distance
+
+		fact2dummy: when a NA is observed for a categorical variable then the function puts NAs in all the dummy 
+                variables generated from it
+
+		pw.assoc discards NAs before calculation of the associaione or PRE measures; removal follows the pairwise 
+		deletion rule (units where one of both the values are missing are discarded)
+
+		plotTab is a NEW function for comparing the marginal distributions of the same categorical variable(s) but estimated 
+		from two different data sources
+
+		plotCont is a NEW function for comparing the marginal distributions of the same numerical variable but 
+		estimated from two different data sources
+
+		plotBounds is a NEW function providing a graphical summary of the width of the Frechet Bounds estimated with 
+		the Frechet.bounds.cat function
+
+
+#########################################################################################################################
+
+1.3.0 changes in the functions related to uncertainty investigation when dealing with categorical variables
+
+		Frechet.bounds.cat now permits to align marginal distributions of X variables via IPF algorithm
+		(previously harmonization had to be done befor calling it by using harmonize.x function)
+		
+		Fbwidths.by.x provides penalty measures because of the increase of cells to estimate when increasing the number of Xs.
+		Sparsness of tables is explicitly considered.
+
+		New function selMtc.by.unc() permits to identify best subset of matching variables which minimize a penalized 
+		uncertainty estimate, as in D'Orazio, Di Zio, Scanu 2017 paper (see ref in help pages)
+
+		Updates in pw.assoc() to allow computation of bias corrected Cramer's V, mutual information (also 
+		normalized), AIC and BIC. Results can be organized in a data.frame. Changes in the documentation layout
+		to achieve coherence with documentation of other functions in the package
+		
+		Please note that Vignette is frozen to StatMatch 1.2.5, therefore it will not provide new feauter related to investigation
+		of uncertainty and more in general selecting of matching variables. 
+		New vignette related to uncertainty topic is expected to be realesed in future.
+
+#####################################################################################################################
+
+1.2.5 gower.dist is faster and more efficient due improvements of Jan van der Laan (also thanks to Ton de Waal )
+		
+		NND.hotdeck allows performing constrained search of donors, allowing donor to be selected not more than k times (k>=1). 
+                argument k is set by the user		
+
+		fixed a minor bug in RANDwNND.hotdeck (not affecting results)
+		
+		richer output in Frechet.bounds.cat and Fb.widths.byx
+
+1.2.4 added the new function pBayes for applying pseudo-Bayes estimator to sparse contingency tables
+		
+		modified comb.samples to handle a continuous target variable (Y or Z)
+		
+		Faster versions of Frechet.bound.cat and Fbwidths.by.x.
+		 
+		Fbwidths.by.x now provides a richer output. 
+
+1.2.3 corrected a bug in RANDwNND.hotdeck. Thanks to Kirill Muller
+
+1.2.2 added 3 data sets used in the function's help pages and in the vignette
+
+		modified the RANDwNND.hotdeck function to identify the subset of the donors by
+		simple comparing the values of a single matching variable 
+
+		Minor modification of the hotdeck functions to handle and monitor the processing
+		when dealing with donation classes
+		
+1.2.1 now Frechet.bounds.cat() can be called just to compute the uncertainty bounds
+		when no X variables are available.
+		
+		RANDwNND.hotdeck can search for the closest k nearest neighbours by using the
+		function nn2() in the package RANN (wrap of the Artificial Neural Network
+		implemented in the package ANN).  It is very fast and efficient when dealing
+		with large data sources.
+		
+		Fix of a minor bug in mixed.mtc()
+
+1.2.0	new function comp.prop() for computing similarities/dissimilarities
+		between marginal/joint distributions of one or more categorical variables
+		
+		new function pw.assoc() to compute pairwise association measures among 
+		categorical response variable and a series of categorical predictors 
+        
+		rankNND.hotdeck() can perform constrained matching too
+		
+		rankNND.hotdeck(), NND.hotdeck() and mixed.mtc() solve constrained problems 
+		more efficiently  and faster by using solve_LSAP() in package "clue" 
+		or (slower) by means of functions in the package "lpSolve".  
+		It is no more possible to solve constrained  problems by means 
+		of functions in package "optmatch"
+		
+		NDD.hotdeck(), RDDwNND.hotdeck() and rankNND.hotdeck() are more
+		efficient in handling donation classes (thanks to Alexis Eidelman
+		for suggestion).
+		
+		fixed a bug in mahalanobis.dist (thanks to Bruno C. Vidigal)
+ 
+1.1.0   The function comb.samples() now allows to derive predictions
+		at micro level for the target variables Y and Z
+
+1.0.5	fixed some minor bugs
+
+1.0.4	fixed some minor bugs
+
+1.0.3	now mixed.mtc() can handle also categorical common variables
+
+		fixed a bug in comb.samples() when handling factor levels
+
+		new error messages in RANDwNND.hotdeck() when computing ditances 
+		between units with missing values
+
+1.0.2   new function mahalanobis.dist() to compute the mahalanobis distance
+
+		fixed a bug in mixed.mtc() when computing the range of admissible values
+		for rho_yz
+		
+		fixed a bug in NND.hotdeck()  and RANDwNND.hotdeck() when
+		managing the row.names
+		
+1.0.1	new functions harmonize.x() and comb.samples() to perform statistical
+		matching when dealing with complex sample survey data via 
+		weight calibration.
+
+		new function Frechet.bounds.cat() to explore uncertainty when dealing with 
+		categorical variables. The function Fbwidths.by.x()	permits to
+		identify the subset of the common variables that performs better in reducing 
+		uncertainty
+		
+		New function rankNND.hotdeck() to perform rank hot deck distance
+		
+		Update of RANDwNND.hotdeck() to use donor weight in selecting a donor
+		
+		new function maximum.dist() that computes distances according to the
+		L^Inf norm. A rank transformation of the variables can be used.
+		
+0.8    fixed some bugs in NND.hotdeck() and RANDwNND.hotdeck()
+

@@ -1,0 +1,22 @@
+# Remove the previous line if you edit this file
+
+# Export all names
+exportPattern(".")
+
+# Import all packages listed as Imports or Depends
+
+import(
+  proxy,
+  survey,
+  ggplot2
+)
+ importFrom("stats", "as.formula", "chisq.test", "coefficients", "cor",
+     "cov2cor", "ecdf", "IQR","lm", "mahalanobis", "model.frame",
+     "model.matrix", "model.matrix.lm","quantile", "qchisq", "residuals", "rnorm", "runif",
+     "sd", "var", "weights", "weighted.mean", "xtabs", "ftable", "loglin")
+ importFrom("utils", "combn", "globalVariables")
+ importFrom("graphics", "plot", "lines", "axis", "text", "par")
+ importFrom("lpSolve", lp.assign, lp.transport) 
+# importFrom("clue", "solve_LSAP")
+# importFrom("RANN", "nn2")
+# importFrom("Hmisc", "wtd.quantile")
