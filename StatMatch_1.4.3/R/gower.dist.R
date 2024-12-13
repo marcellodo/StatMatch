@@ -1,8 +1,8 @@
 gower.dist<- function(data.x, data.y = data.x, rngs = NULL, KR.corr = TRUE,
-                      var.weights = NULL, robcb=NULL){
+                      var.weights = NULL, robcb = NULL){
 
-####################    
-        gower.fcn <- function(x, y, rng = NULL, KR.corr = TRUE) {
+#################### basic function ###################################   
+        gower.fcn <- function(x, y, rng = NULL, KR.corr = TRUE, rob=NULL) {
         nx <- length(x)
         ny <- length(y)
         cx <- class(x)
@@ -51,15 +51,15 @@ gower.dist<- function(data.x, data.y = data.x, rngs = NULL, KR.corr = TRUE,
         }
         else {
             if (is.null(rng) || is.na(rng)) rng <- max(x, y, na.rm=TRUE) - min(x, y, na.rm=TRUE)
-            if(!is.null(robcb)){
+            if(!is.null(rob)){
                 qq <- quantile(x = c(x,y), probs=c(0.25, 0.5, 0.75))
-                if(tolower(robcb)=="boxp") {
+                if(tolower(rob)=="boxp") {
                     low <- max(low, qq[1] - 3*(qq[3]-qq[1]) )
                     up <-  min( up, qq[3] + 3*(qq[3]-qq[1]) ) 
                 }
-                if(tolower(robcb)=="asyboxp") {
-                    low <- max(low, qq[1] - 1.5*2*(qq[2]-qq[1]) )
-                    up <-  min( up, qq[3] + 1.5*2*(qq[3]-qq[2]) ) 
+                if(tolower(rob)=="asyboxp") {
+                    low <- max(low, qq[1] - 3*2*(qq[2]-qq[1]) )
+                    up <-  min( up, qq[3] + 3*2*(qq[3]-qq[2]) ) 
                 }
                 rng <- up - low
             }  
@@ -74,12 +74,15 @@ gower.dist<- function(data.x, data.y = data.x, rngs = NULL, KR.corr = TRUE,
     }
 
 ######## END  gower.fcn() ###################       
-
+#
+# call gower.fcn according to the type of input data
+# (1) both vectors        
     if (is.null(dim(data.x)) && is.null(dim(data.y))) {
         out.gow <- gower.fcn(x = data.x, y = data.y, rng = rngs, 
-                             KR.corr = KR.corr)
+                             KR.corr = KR.corr, rob = robcb)
         out <- (out.gow$dist * out.gow$delta)/out.gow$delta
     }
+    # (2) a vector and a matrix    
     else if (is.null(dim(data.x)) && !is.null(dim(data.y))) {
         p <- ncol(data.y)
         if (length(data.x) != p) 
@@ -94,7 +97,7 @@ gower.dist<- function(data.x, data.y = data.x, rngs = NULL, KR.corr = TRUE,
             else rng.k <- rngs[k]
             w.k <- var.weights[k]
             out.gow <- gower.fcn(x = data.x[, k], y = data.y[,k],
-              rng = rng.k, KR.corr = KR.corr)
+                                 rng = rng.k, KR.corr = KR.corr, rob = robcb)
             n <- out.gow$dist * out.gow$delta * w.k
             
             n[is.na(n)] <- 0
@@ -105,6 +108,7 @@ gower.dist<- function(data.x, data.y = data.x, rngs = NULL, KR.corr = TRUE,
         }
         out <- num/den
     }
+    # (3) both inputs are matrices    
     else {
         p <- ncol(data.y)
         if (ncol(data.x) != p) 
@@ -119,7 +123,7 @@ gower.dist<- function(data.x, data.y = data.x, rngs = NULL, KR.corr = TRUE,
             else rng.k <- rngs[k]
             w.k <- var.weights[k]
             out.gow <- gower.fcn(x = data.x[, k], y = data.y[, k], rng = rng.k,
-              KR.corr = KR.corr)
+                                 KR.corr = KR.corr, rob = robcb)
             n <- out.gow$dist * out.gow$delta * w.k
             
             n[is.na(n)] <- 0
@@ -130,5 +134,6 @@ gower.dist<- function(data.x, data.y = data.x, rngs = NULL, KR.corr = TRUE,
         }
         out <- num/den
     }
+    # output 
     out
 }    
