@@ -116,7 +116,10 @@ function(formula, data, weights=NULL, out.df=FALSE)
 #    p.x <- length(lab) - 1
     lab <- all.vars(formula)
     lab.y <- lab[1]
-    if(lab[2]=='.') lab.x <- setdiff(colnames(data), c(lab[1], weights, lab.w))
+    if(lab[2]=='.') {
+        if(!is.null(weights)) lab.x <- setdiff(colnames(data), c(lab[1], weights, lab.w))
+        else lab.x <- setdiff(colnames(data), lab[1])
+    }
     else lab.x <- lab[-1]
     p.x <- length(lab.x)
     
