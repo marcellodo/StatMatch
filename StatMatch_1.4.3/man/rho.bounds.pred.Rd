@@ -4,48 +4,41 @@
 \alias{rho.bounds.pred}
 \title{Estimates plausible values of the Pearson's correlation coefficient between two variables observed in distinct samples referred to the same target population.}
 \description{
-This function assesses the uncertainty in estimating the Pearson's correlation coefficient between \code{y.rec}(Y) and \code{z.don} (Z)  when the two variables are observed in two different samples sharing a number of common predictors (Xs). The Xs are used for predicting respectively Y and Z, and then estimating uncertainty.
+This function evaluates the uncertainty in estimating the Pearson's correlation coefficient between \code{y.rec} (Y) and \code{z.don} (Z) when the two variables are observed in two different samples that share a set of common predictors (Xs). The Xs are used to predict Y and Z respectively, and then the predictions become the input for estimating the uncertainty.
 }
 \usage{
-rho.bounds.pred(
-  data.rec,
-  data.don,
-  match.vars,
-  y.rec,
-  z.don,
-  pred = "lm",
-  w.rec = NULL,
-  w.don = NULL,
-  ...
-)
+rho.bounds.pred(data.rec, data.don,
+                match.vars, y.rec, z.don,
+                pred = "lm",
+                w.rec = NULL, w.don = NULL, ...)
 }
 \arguments{
-\item{data.rec}{: dataframe including the Xs (predictors, listed in \code{match.vars}) and \code{y.rec} (response; target variable in this dataset).}
+\item{data.rec}{dataframe including the Xs (predictors, listed in \code{match.vars}) and \code{y.rec} (response; target variable in this dataset).}
 
-\item{data.don}{: dataframe including the Xs (predictors, listed in  \code{match.vars}) and \code{z.don} (response; target variable in this dataset).}
+\item{data.don}{dataframe including the Xs (predictors, listed in  \code{match.vars}) and \code{z.don} (response; target variable in this dataset).}
 
-\item{match.vars}{: vector with the names of the Xs variables to be used, as (possible) predictors of respectively \code{y.rec} and \code{z.don}.}
+\item{match.vars}{vector with the names of the Xs variables to be used, as (possible) predictors of respectively \code{y.rec} and \code{z.don}.}
 
-\item{y.rec}{: character indicating the name of Y target variable in \code{data.rec}. It should be a numeric variable.}
+\item{y.rec}{character indicating the name of Y target variable in \code{data.rec}. It should be a numeric variable.}
 
-\item{z.don}{: character indicating the name of Z target variable in \code{data.don}. It should be a numeric variable.}
+\item{z.don}{character indicating the name of Z target variable in \code{data.don}. It should be a numeric variable.}
 
-\item{pred}{: method to get predictions of both Y and Z. Available methods include:
-\code{pred = "lm"} (default) fits two linear regressions models (function \code{lm}) to get predictions considering respectively Y and Z as response variables and \code{match.vars} as predictors; 
-\code{pred = "roblm"} (default) fits two robust linear regressions models (function \code{rlm} in package \pkg{MASS});
-\code{pred = "lasso"} uses lasso method (\R package \pkg{glmnet}, function \code{\link[glmnet]{cv.glmnet}}) and cross validation to select a subset of \code{match.vars} being the best predictors of Y (Z) and then gets the models predictions;
-\code{pred = "rf"} fits randomForest to get predictions of both Y and Z (function \code{\link[randomForest]{randomForest}} in \pkg{randomForest})}
+\item{pred}{String specifying the method used to obtain predictions of both Y and Z. Available methods include
+\code{pred = "lm"} (default) fits two linear regression models (function \code{lm}) to get predictions with Y and Z as response variables and \code{match.vars} as predictors; 
+\code{pred = "roblm"} (default) fits two robust linear regression models (function \code{rlm} in package \pkg{MASS});
+\code{pred = "lasso"} uses the lasso method (\R package \pkg{glmnet}, function \code{\link[glmnet]{cv.glmnet}}) and cross-validation to select a subset of \code{match.vars} that are the best predictors of Y (Z) and then obtain the model predictions;
+\code{pred = "rf"} fits randomForest to get predictions of both Y and Z (function \code{\link[randomForest]{randomForest}} in \pkg{randomForest}).}
 
-\item{w.rec}{: eventual name of the variable with units' weights in \code{data.rec}; the weights are only used in estimating the correlations but not when fitting models.}
+\item{w.rec}{possible name of the variable with the weights associated to the units in \code{data.rec}, if available; the weights are only used in estimating correlations, not in fitting models.}
 
-\item{w.don}{: eventual name of the variable with units' weights in \code{data.don}; the weights are only used in estimating the bounds but not when fitting models.}
+\item{w.don}{possible name of the variable with the weights associated to the units in \code{data.don}, if available; the weights are only used in estimating correlations, not in fitting models.}
 
-\item{...}{: addition eventual parameters needed.}
+\item{...}{addition eventual parameters needed.}
 }
 \details{
-The function assess the uncertainty in estimating the Pearson's correlation coefficient between \code{y.rec}(Y) and \code{z.don} (Z)  when the two variables are observed in two different samples referred to same target population but the samples share a number of common predictors X (\code{match.vars}). The evaluation of uncertainty corresponds to estimate the bounds (lower and upper) of the correlation coefficient between Y and Z, given the available data. The method applies the expressions suggested by Rodgers and DeVol (1982), but instead of using directly the Xs \code{match.vars}, they are replaced by predictions od both Y and Z provided by the fitted models according to \code{pred}. This latter way of working avoids drawbacks encountered in estimating covariances in presence of several X variables, where some of them are categorical (factors) and therefore pose the problem of working with the dummies. The final estimation of conditional of bounds is provided by the function \code{\link[StatMatch]{rho.bounds}}. Note that the correlations between the predictions of both Y and Z are estimated after pooling the samples. Survey weights, if available (arguments \code{w.rec} ans \code{w.don}) are used in estimating the corellations but not whend fitting the models.
+This function evaluates the uncertainty in the estimation of the Pearson's correlation coefficient between \code{y.rec} (Y) and \code{z.don} (Z), when the two variables are observed in two different samples that refer to the same target population, but that share a set of common predictors X (\code{match.vars}). The evaluation of the uncertainty corresponds to the estimation of the bounds (lower and upper) of the correlation coefficient between Y and Z, given the available data. The method uses the expressions proposed by Rodgers and DeVol (1982), but instead of using the Xs \code{match.vars} directly, they are replaced by the predictions of both Y and Z provided by the fitted models according to \code{pred}. This last way of working avoids the drawbacks encountered when estimating covariances in the presence of several X variables, some of which are categorical (factors) and therefore pose the problem of working with dummies. The final estimation of the bounds is provided by the function \code{\link[StatMatch]{rho.bounds}}. Note that the correlations between the predictions of both Y and Z are estimated after pooling the samples. Survey weights, if available (arguments \code{w.rec} and \code{w.don}), are used in estimating the correlations, but not in fitting the models.
 }
-\value{: a list with two  components: \code{corr} the estimated correlations between Y (Z) and the corresponding predicted values; \code{bounds} a vector with three values: the estimated lower bound for Pearson's correlation coefficient between \code{y.rec}(Y) and \code{z.don} (Z), the estimated upper bound and the mid-point of the interval that corresponds to the estimate Pearson's correlation coefficient under the conditional independence assumption.
+\value{a list with two  components: \code{corr} the estimated correlations between Y (Z) and the corresponding predicted values; \code{bounds} a vector with three values: the estimated lower bound for the Pearson's correlation coefficient between \code{y.rec}(Y) and \code{z.don} (Z); the estimated upper bound;  and, the mid-point of the interval that corresponds to the estimate Pearson's correlation coefficient under the conditional independence assumption.
 }
 \references{
 D'Orazio, M., (2024). \emph{Is Statistical Matching feasible?} Note, \url{https://www.researchgate.net/publication/387699016_Is_statistical_matching_feasible}.

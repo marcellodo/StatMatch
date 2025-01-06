@@ -125,31 +125,33 @@ D'Orazio, M., Di Zio, M. and Scanu, M. (2019). ``Auxiliary variable selection in
 
 \examples{
 
-data(quine, package="MASS") #loads quine from MASS
-str(quine)
-quine$c.Days <- cut(quine$Days, c(-1, seq(0,50,10),100))
-table(quine$c.Days)
-
-
-# split quine in two subsets
-suppressWarnings(RNGversion("3.5.0"))
-set.seed(4567)
-lab.A <- sample(nrow(quine), 70, replace=TRUE)
-quine.A <- quine[lab.A, 1:4]
-quine.B <- quine[-lab.A, c(1:3,6)]
-
-# compute the tables required by Fbwidths.by.x()
-freq.xA <- xtabs(~Eth+Sex+Age, data=quine.A)
-freq.xB <- xtabs(~Eth+Sex+Age, data=quine.B)
-
-freq.xy <- xtabs(~Eth+Sex+Age+Lrn, data=quine.A)
-freq.xz <- xtabs(~Eth+Sex+Age+c.Days, data=quine.B)
-
-# apply Fbwidths.by.x()
-bounds.yz <- Fbwidths.by.x(tab.x=freq.xA+freq.xB, tab.xy=freq.xy,
-        tab.xz=freq.xz)
-
-bounds.yz$sum.unc
+# un-comment to run
+#
+# data(quine, package="MASS") #loads quine from MASS
+# str(quine)
+# quine$c.Days <- cut(quine$Days, c(-1, seq(0,50,10),100))
+# table(quine$c.Days)
+# 
+# 
+# # split quine in two subsets
+# suppressWarnings(RNGversion("3.5.0"))
+# set.seed(4567)
+# lab.A <- sample(nrow(quine), 70, replace=TRUE)
+# quine.A <- quine[lab.A, 1:4]
+# quine.B <- quine[-lab.A, c(1:3,6)]
+# 
+# # compute the tables required by Fbwidths.by.x()
+# freq.xA <- xtabs(~Eth+Sex+Age, data=quine.A)
+# freq.xB <- xtabs(~Eth+Sex+Age, data=quine.B)
+# 
+# freq.xy <- xtabs(~Eth+Sex+Age+Lrn, data=quine.A)
+# freq.xz <- xtabs(~Eth+Sex+Age+c.Days, data=quine.B)
+# 
+# # apply Fbwidths.by.x()
+# bounds.yz <- Fbwidths.by.x(tab.x=freq.xA+freq.xB, tab.xy=freq.xy,
+#                            tab.xz=freq.xz)
+# 
+# bounds.yz$sum.unc
 
 
 }

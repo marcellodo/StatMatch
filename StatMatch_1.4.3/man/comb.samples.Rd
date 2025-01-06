@@ -5,11 +5,11 @@
 \title{Statistical Matching of data from complex sample surveys}
 
 \description{
-This function permits to cross-tabulate two categorical variables, Y and Z, observed separately in two independent surveys (Y is collected in survey A and Z is collected in survey B) carried out on the same target population.  The two surveys share a number of common variables \bold{X}.  When it is available a third survey C, carried on the same population, in which both Y and Z are collected, these data are used as a source of auxiliary information.
+This function allows you to cross-tabulate two categorical variables, Y and Z, observed separately in two independent surveys (Y is collected in survey A and Z is collected in survey B) relating to the same target population.  The two surveys share a number of common variables \bold{X}.  If a third survey C is available on the same population and collects both Y and Z, these data are used as a source of additional information.
 
-The statistical matching is performed by carrying out calibration of the survey weights, as suggested in Renssen (1998).
+The statistical adjustment is done by calibrating the survey weights as suggested in Renssen (1998).
 
-It is possible also to use the function to derive the estimates that a unit falls in one of the categories of the target variable (estimation are based on Liner Probability Models and are obtained as a by-product of the Renssen's method).
+It is also possible to use the function to derive estimates that a unit falls into one of the categories of the target variable (the estimates are based on Linear probability models and are obtained as a by-product of the Renssen method).
 }
 
 \usage{
@@ -47,18 +47,18 @@ A string providing the name of the Z variable available in survey B and in surve
 
 
 \item{form.x}{
-A \R formula specifying the matching variables (subset of the \bold{X} variables) collected in all the surveys, and how have to be considered in combining samples.  For instance, \code{form.x=~x1+x2} means that the variables x1 and x2 have to be considered marginally without taking into account their cross-tabulation; just their marginal distribution is considered.  In order to skip the intercept the formula has to be written as \code{form.x=~x1+x2-1}.
+A \R formula specifying which matching variables (subset of the \bold{X} variables) are collected in all surveys and how they are to be considered when combining samples.  For example, \code{form.x=~x1+x2} means that variables x1 and x2 are to be considered marginally, without taking into account their cross-tabulation; only their marginal distribution is considered.  To skip the intercept, the formula must be written as \code{form.x=~x1+x2-1}.
 
-When dealing with categorical variables, \code{form.x=~x1:x2-1} means that the the joint distribution of the two variables (table of x1 vs. x2) has to be considered.
+When dealing with categorical variables, \code{form.x=~x1:x2-1} means that the joint distribution of the two variables (table of x1 vs. x2) has to be considered.
 
-To better understand the usage of \code{form.x} see \code{\link[stats]{model.matrix}} (see also \cr
+To better understand the use of \code{form.x}, see \code{\link[stats]{model.matrix}} (see also \cr
 \code{\link[stats]{formula}}).
 
-Due to weights calibration features, it is preferable to work  with categorical \bold{X} variables.  In some cases, procedure may be successful when a single continuous variable is considered jointly with one or more categorical variables but, often, it may be necessary to categorize the continuous variable (see Details).
+Due to the weight calibration features, it is preferable to work with categorical \bold{X} variables.  In some cases, the procedure can be successful when a single continuous variable is considered together with one or more categorical variables, but often it may be necessary to categorise the continuous variable (see Details).
 }
 
 \item{estimation}{
-A character string that identifies the method to be used to estimate the table of Y vs. Z when data from survey C are available.  As suggested in Renssen (1998), two alternative methods are available: (i) Incomplete Two-Way Stratification (\code{estimation="incomplete"}, or \code{estimation="ITWS"}, the default one) and (ii) Synthetic Two-Way Stratification (\code{estimation="synthetic"} or \cr \code{estimation="STWS"}).  In the first case (\code{estimation="incomplete"}) only Y and Z variables must be available in \code{svy.C}.  On the contrary, when \cr \code{estimation="synthetic"} the survey C must contain all the \bold{X} variables specified via \code{form.x}, as well as the Y and Z variables.  See Details for further information.
+A string identifying the method to be used to estimate the table of Y vs. Z when data from survey C are available.  As suggested in Renssen (1998), there are two alternative methods: (i) incomplete two-way stratification (\code{estimation="incomplete"} or \code{estimation="ITWS"}, the default) and (ii) synthetic two-way stratification (\code{estimation="synthetic"} or \cr \code{estimation="STWS"}).  In the first case (\code{estimation="incomplete"}), only Y and Z variables need to be available in \code{svy.C}.  On the other hand, in the case of \cr \code{estimation="synthetic"}, the C survey must contain all the \bold{X} variables specified by \code{form.x}, as well as the Y and Z variables.  See details for more information.
 }
 
 \item{micro}{
@@ -83,14 +83,13 @@ See \code{\link[survey]{calibrate}} for further details.
 }
 
 \details{
-This function estimates the contingency table of Y vs. Z by performing a series of calibrations of the survey weights.  In practice the estimation is carried out on data in survey C by exploiting all the information from surveys A and B.  When survey C is not available the table of Y vs. Z is estimated under the assumption of Conditional Independence (CIA), i.e. \eqn{p(Y,Z)=p(Y|\bold{X}) \times p(Z|\bold{X}) \times p(\bold{X})}{p(Y,X)=p(Y|X)*p(Z|X)*p(X)}.
+TThis function estimates the Y vs. Z contingency table by performing a series of calibrations of the survey weights.  In practice, the estimation is carried out on data from survey C, using all the information from surveys A and B. If survey C is not available, the table of Y vs. Z is estimated under the assumption of conditional independence (CIA), i.e. \eqn{p(Y,Z)=p(Y|\bold{X}) \times p(Z|\bold{X}) \times p(\bold{X})}{p(Y,X)=p(Y|X)*p(Z|X)*p(X)}.
 
 When data from survey C are available (Renssen, 1998), the table of Y vs. Z can be estimated by: Incomplete Two-Way Stratification (ITWS) or Synthetic Two-Way Stratification (STWS).  In the first case (ITWS) the weights of the units in survey C are calibrated so that the new weights allow to reproduce the marginal distributions of Y estimated on survey A, and that of Z estimated on survey B.  Note that the distribution of the \bold{X} variables in survey A and in survey B, must be harmonized before performing ITWS (see \code{\link[StatMatch]{harmonize.x}}).  
 
-The Synthetic Two-Way Stratification allows to estimate the table of Y vs. Z by considering also the \bold{X} variables observed in C.  This method consists in correcting the table of Y vs. Z estimated under the CIA according to the relationship between Y and Z observed in survey C (for major details see Renssen, 1998).
+The Synthetic Two-Way Stratification allows to estimate the table of Y vs. Z by considering also the \bold{X} variables observed in C.  This method consists in correcting the table of Y vs. Z estimated under the CIA according to the relationship between Y and Z observed in survey C (for major details see Renssen, 1998.
 
-When the argument \code{micro} is set to \code{TRUE} the function provides also \code{Z.A} and \code{Y.B}.  The first data.frame has the same rows as \code{svy.A} and the number of columns equals the number of categories of the Z variable specified via \code{z.lab}.  Each row provides the estimated probabilities of assuming a value in the various categories.  The same happens for \code{Y.B} which presents the estimated probabilities of assuming a category of \code{y.lab} for each unit in B.  The estimated probabilities are obtained by applying the linear probability models (for major details see Renssen, 1998).  Unfortunately, such models may provide estimated probabilities less than 0 or greater than 1.  Much caution should be used in using such predictions for practical purposes.
-
+If the argument \code{micro} is set to \code{TRUE} the function will also return \code{Z.A} and \code{Y.B}.  The first data.frame has the same rows as \code{svy.A} and the number of columns is equal to the number of categories of the Z variable specified by \code{z.lab}.  Each row gives the estimated probabilities of taking a value in each category.  The same happens for \code{Y.B}, which gives the estimated probabilities of assuming a category of \code{y.lab} for each unit in B. The estimated probabilities are obtained by applying the linear probability models (for more details see Renssen, 1998).  Unfortunately, such models may give estimated probabilities less than 0 or greater than 1. Great care should be taken when using such predictions for practical purposes.
 }
 
 

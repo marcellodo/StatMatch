@@ -31,9 +31,8 @@ A matrix with two columns.  Each row must contain the name or the index of the r
 
 
 \details{
-This function allows to fill in the missing values (NAs) in the recipient with values observed in the donor data set after the search of donors via NND or random hotdeck with available functions in the package, i.e. \code{\link[StatMatch]{NND.hotdeck}}, \code{\link[StatMatch]{RANDwNND.hotdeck}}, \code{\link[StatMatch]{rankNND.hotdeck}}, and \code{\link[StatMatch]{mixed.mtc}}.
-When the same recorc in the recipient dataset presents 2 or more NAs they all will be replaced with values observed on the chosen donor for that unit; this corresponds to joint hotdeck imputation. 
-} 
+This function allows the missing values (NAs) in the recipient to be filled in with values observed in the donor dataset after searching for donors via NND or random hotdeck using the functions available in the package, i.e. \code{\link[StatMatch]{NND.hotdeck}}, \code{\link[StatMatch]{RANDwNND.hotdeck}}, \code{\link[StatMatch]{rankNND.hotdeck}}, and \code{\link[StatMatch]{mixed.mtc}}.
+If the same record in the recipient dataset has 2 or more NAs, they will all be replaced with the values observed for that unit on the selected donor; this is equivalent to joint hotdeck imputation. } 
 
 
 \value{

@@ -7,7 +7,7 @@
 }
 
 \usage{
-mahalanobis.dist(data.x, data.y=NULL, vc=NULL)
+mahalanobis.dist(data.x, data.y = NULL, vc = NULL, rob.vc = FALSE)
 }
 
 \arguments{
@@ -23,7 +23,10 @@ When only \code{data.x} is supplied, the distances between rows of \code{data.x}
 }
 
 \item{vc}{
-Covariance matrix that should be used in distance computation.  If it is not supplied (\code{vc = NULL}) it is estimated from the input data.  In particular, when \code{vc = NULL} and only \code{data.x} is supplied then the covariance matrix is estimated from \code{data.x} (i.e. \code{vc = var(data.x)}).  On the contrary when \code{vc = NULL} and both \code{data.x} and \code{data.y} are available then the covariance matrix is estimated on the joined data sets (i.e. \code{vc = var(rbind(data.x, data.y))}).
+Covariance matrix that should be used in distance computation.  If it is not supplied (\code{vc = NULL}) it is estimated from the input data.  In particular, when \code{vc = NULL} and only \code{data.x} is supplied then the covariance matrix is estimated from \code{data.x} (i.e. \code{vc = var(data.x)}).  On the contrary when \code{vc = NULL} and both \code{data.x} and \code{data.y} are available then the covariance matrix is estimated on the joined data sets.
+}
+\item{rob.vc}{
+Logical, if TRUE when \code{vc = NULL} the covariance matrix is estimated using a robust method by means of the function \code{\link[MASS]{cov.rob}} in the package \pkg{MASS}.
 }
 
 }

@@ -4,39 +4,33 @@
 \alias{rho.bounds}
 \title{Estimates plausible values of the Pearson's correlation coefficient between two variables observed in distinct samples referred to the same target population.}
 \description{
-This function assesses the uncertainty in estimating the Pearson's correlation coefficient between \code{y.rec}(Y) and \code{z.don} (Z)  when the two variables are observed in two different samples sharing a number of common predictors.
+This function assesses the uncertainty in estimating the Pearson's correlation coefficient between \code{y.rec} (Y) and \code{z.don} (Z) when the two variables are observed in two different samples sharing a number of common predictors.
 }
 \usage{
-rho.bounds(
-  data.rec,
-  data.don,
-  match.vars,
-  y.rec,
-  z.don,
-  w.rec = NULL,
-  w.don = NULL
-)
+rho.bounds(data.rec, data.don,
+           match.vars, y.rec, z.don,
+           w.rec = NULL, w.don = NULL)
 }
 \arguments{
-\item{data.rec}{: dataframe including the Xs (predictors, listed in \code{match.vars}) and \code{y.rec} (response; target variable in this dataset).}
+\item{data.rec}{dataframe including the Xs (predictors, listed in \code{match.vars}) and \code{y.rec} (response; target variable in this dataset).}
 
-\item{data.don}{: dataframe including the Xs (predictors, listed in  \code{match.vars}) and \code{z.don} (response; target variable in this dataset).}
+\item{data.don}{dataframe including the Xs (predictors, listed in  \code{match.vars}) and \code{z.don} (response; target variable in this dataset).}
 
-\item{match.vars}{: vector with the names of the Xs variables to be used, jointly with \code{y.rec} and \code{z.don}, in estimating the correlation matrix. If \code{match.vars} include one or more factor variables these will be replaced with the corresponding dummies before estimating the correlation matrix.}
+\item{match.vars}{vector with the names of the Xs variables to be used, jointly with \code{y.rec} and \code{z.don}, in estimating the correlation matrix. If \code{match.vars} include one or more factor variables these will be replaced with the corresponding dummies before estimating the correlation matrix.}
 
-\item{y.rec}{: character indicating the name of Y target variable in \code{data.rec}. It should be a numeric variable.}
+\item{y.rec}{character indicating the name of Y target variable in \code{data.rec}. It should be a numeric variable.}
 
-\item{z.don}{: character indicating the name of Z target variable in \code{data.don}. It should be a numeric variable.}
+\item{z.don}{character indicating the name of Z target variable in \code{data.don}. It should be a numeric variable.}
 
-\item{w.rec}{: eventual name of the variable with units' weights in \code{data.rec}; the weights, if provided, are used in estimating the bounds.}
+\item{w.rec}{name of the variable with units' weights in \code{data.rec}, if available (default NULL); the weights, if provided, are used in estimating the bounds.}
 
-\item{w.don}{: eventual name of the variable with units' weights in \code{data.don}; the weights, if provided, are used in estimating the bounds.}
+\item{w.don}{name of the variable with units' weights in \code{data.don}, if available (default NULL); the weights, if provided, are used in estimating the bounds.}
 }
 
 \details{
-The function assess the uncertainty in estimating the Pearson's correlation coefficient between \code{y.rec}(Y) and \code{z.don} (Z)  when the two variables are observed in two different samples referred to same target population but the samples share a number of common predictors X (\code{match.vars}). The evaluation of uncertainty corresponds to estimate the bounds (lower and upper) of the correlation coefficient between Y and Z, given the available data. The method applies the expressions suggested by Rodgers and DeVol (1982). Note that the correlations between the X variables shared by both the samples (\code{match.vars}) are estimated after pooling the samples. Factor variables, if any in \code{match.vars}, before estimating the correlation are replaced with the corresponding dummies; this way of working suffers from a number of critical issues related to biserial correlation and the underlying assumption of Gaussian distribution. The correlation matrix between Y and Xs is estimated on \code{data.rec} while correlation matrix between Z and Xs is estimated on \code{data.don}; this way of working may return unreliable estimates in some cases, due to problems in the samples (usually when they are not representative of the same target population).
+This function evaluates the uncertainty in the estimation of the Pearson's correlation coefficient between \code{y.rec} (Y) and \code{z.don} (Z), when the two variables are observed in two different samples that refer to the same target population, but that share a set of common predictors X (\code{match.vars}). The evaluation of the uncertainty corresponds to the estimation of the bounds (lower and upper) of the correlation coefficient between Y and Z, given the available data. The method uses the expressions proposed by Rodgers and DeVol (1982). Note that the correlations between the X variables common to both samples (\code{match.vars}) are estimated after pooling the samples. Factor variables, if present in \code{match.vars}, are replaced by the corresponding dummies before estimating the correlation; this method suffers from a number of critical problems related to the estimation of biserial correlation and the underlying assumption of a Gaussian distribution. The correlation matrix between Y and Xs is estimated on \code{data.rec}, while the correlation matrix between Z and Xs is estimated on \code{data.don}; this way of working can in some cases give unreliable estimates due to problems with the samples (usually when they are not representative of the same target population).
 }
-\value{: a vector with three values: the estimated lower bound for Pearson's correlation coefficient between \code{y.rec}(Y) and \code{z.don} (Z), the estimated upper bound and the mid-point of the interval that corresponds to the estimate Pearson's correlation coefficient under the conditional independence assumption (i.e. the correlations between Y and Z is fully explained by the available X variables \code{match.vars}).
+\value{A vector with three values: the estimated lower bound for Pearson's correlation coefficient between \code{y.rec}(Y) and \code{z.don} (Z); the estimated upper bound; and, the mid-point of the interval that corresponds to the estimate Pearson's correlation coefficient under the conditional independence assumption (i.e. the correlations between Y and Z is fully explained by the available X variables \code{match.vars}).
 }
 \references{
 D'Orazio, M., (2024). \emph{Is Statistical Matching feasible?} Note, \url{https://www.researchgate.net/publication/387699016_Is_statistical_matching_feasible}.
