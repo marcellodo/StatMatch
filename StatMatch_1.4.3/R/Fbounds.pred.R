@@ -41,8 +41,13 @@ Fbounds.pred <-
 #######################################################
         get.class <- function(pp, how="rnd"){
             n <- length(pp)
+            if(n == 1){
+                n <- 2
+                pp <- c(pp, 1-pp)
+            }
             if(how == "rnd") out <- sample(x = 1:n, size = 1, prob = pp)
-            if(how == "mv") out <- which.max(pp)
+            if(how == "mv") out <- which.max(pp)    
+
             out
         }
 #######################################################
@@ -81,6 +86,16 @@ Fbounds.pred <-
             fit.z <- nnet::multinom(as.formula(fz), data = data.don)
             ppz.don <- predict(fit.z, type = "prob") 
             ppz.rec <- predict(fit.z, newdata = data.rec, type = "prob")
+            
+            if(is.null(dim(ppy.rec))){
+                ppy.rec <- cbind(ppy.rec, 1 - ppy.rec)
+                ppy.don <- cbind(ppy.don, 1 - ppy.don)
+            }
+            
+            if(is.null(dim(ppz.don))){
+                ppz.rec <- cbind(ppz.rec, 1 - ppz.rec)
+                ppz.don <- cbind(ppz.don, 1 - ppz.don)
+            }
         }
 # 
         # 0.b) predictions with multinomial regression with lasso selection
@@ -154,14 +169,13 @@ Fbounds.pred <-
             ppz.don <- predict(object = fit.z, newdata = data.don, type = "prob")
             ppz.rec <- predict(object = fit.z, newdata = data.rec, type = "prob")
         }
-        # end get estimated conditional probs (scores)
+        # END : # get estimated conditional probs (scores)
         # ###################################################################
         #
         # from estimated probs to predicted class 
         yy <- data.rec[ , y.rec]
         lev.y <- levels(yy)
         nl.y <- length(lev.y)
-        
         
         zz <- data.don[ , z.don]
         lev.z <- levels(zz)

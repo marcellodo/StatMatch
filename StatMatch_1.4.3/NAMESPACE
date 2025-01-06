@@ -8,7 +8,8 @@ exportPattern(".")
 import(
   proxy,
   survey,
-  ggplot2
+  ggplot2,
+ dplyr
 )
  importFrom("stats", "as.formula", "chisq.test", "coefficients", "cor",
      "cov2cor", cov.wt,"ecdf", "IQR","lm", "mahalanobis", "model.frame",

@@ -7,8 +7,8 @@
 }
 
 \usage{
-comp.cont <- function (data.A, data.B, xlab.A, xlab.B = NULL, w.A = NULL, 
-                       w.B = NULL, ref = FALSE) 
+comp.cont(data.A, data.B, xlab.A, xlab.B = NULL, w.A = NULL, 
+          w.B = NULL, ref = FALSE) 
 }
 
 \arguments{
@@ -18,7 +18,7 @@ comp.cont <- function (data.A, data.B, xlab.A, xlab.B = NULL, w.A = NULL,
 }
 
 \item{data.B}{ 
-	A dataframe or matrix containing the variable of interest \code{xlab.B} and eventual associated survey weights \code{w.B}. 
+ A dataframe or matrix containing the variable of interest \code{xlab.B} and eventual associated survey weights \code{w.B}. 
 }
 
 \item{xlab.A}{
@@ -37,7 +37,7 @@ comp.cont <- function (data.A, data.B, xlab.A, xlab.B = NULL, w.A = NULL,
 }
 
 \item{ref}{
-	Logical.  When \code{ref = TRUE}, the distribution of \code{xlab.B} estimated from \code{data.B} is considered the reference distribution (true or reliable estimate of distribution).
+ Logical.  When \code{ref = TRUE}, the distribution of \code{xlab.B} estimated from \code{data.B} is considered the reference distribution (true or reliable estimate of distribution).
 }
 
 }
@@ -93,10 +93,6 @@ Bellhouse D.R. and J. E. Stafford (1999). \dQuote{Density Estimation from Comple
 
 \seealso{ 
 \code{\link[StatMatch]{plotCont}}
-}
-
-\examples{
-
 }
 
 \keyword{multivariate}

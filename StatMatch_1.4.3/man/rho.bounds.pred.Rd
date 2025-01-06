@@ -3,6 +3,9 @@
 \name{rho.bounds.pred}
 \alias{rho.bounds.pred}
 \title{Estimates plausible values of the Pearson's correlation coefficient between two variables observed in distinct samples referred to the same target population.}
+\description{
+This function assesses the uncertainty in estimating the Pearson's correlation coefficient between \code{y.rec}(Y) and \code{z.don} (Z)  when the two variables are observed in two different samples sharing a number of common predictors (Xs). The Xs are used for predicting respectively Y and Z, and then estimating uncertainty.
+}
 \usage{
 rho.bounds.pred(
   data.rec,

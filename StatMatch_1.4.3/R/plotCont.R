@@ -97,8 +97,9 @@ plotCont <- function(data.A, data.B, xlab.A, xlab.B=NULL, w.A=NULL, w.B=NULL,
                             sep="= ")
             btmlab <- paste(pr.lab, labtvd, sep=", ")
             
-            out <- ggplot(data = df, 
-                          aes(x = Var1, y = Freq, fill = sample)) +
+            out <- ggplot2::ggplot(data = df, 
+                                   aes(x = .data$Var1, y = .data$Freq, 
+                                   fill = .data$sample)) +
                 geom_bar(stat = "identity", position = "dodge") +
                 labs(x = btmlab, y="rel freq")
         
@@ -109,7 +110,8 @@ plotCont <- function(data.A, data.B, xlab.A, xlab.B=NULL, w.A=NULL, w.B=NULL,
             xx <- rbind(dfxA, dfxB)
             colnames(xx) <- c(pr.lab, "sample")
             xx$w <- c(tA, tB)
-            out <- ggplot2::ggplot(xx, aes(xx[ ,pr.lab], weight=w, colour=sample)) +
+            out <- ggplot2::ggplot(xx, aes(xx[ ,pr.lab], weight=.data$w, 
+                                           colour=.data$sample)) +
                 geom_density(alpha=0.4, lwd=0.8, adjust=0.5) +
                 labs(x = pr.lab)
         }    
@@ -133,7 +135,8 @@ plotCont <- function(data.A, data.B, xlab.A, xlab.B=NULL, w.A=NULL, w.B=NULL,
         dfxB = data.frame(x=usx, ecdf=ecdf.xB, sample="B")
         xx <- rbind(dfxA, dfxB)
         
-        out <- ggplot2::ggplot(xx, aes(x=x, y=ecdf, color=sample)) +
+        out <- ggplot2::ggplot(xx, aes(x=.data$x, y=.data$ecdf, 
+                                       color=.data$sample)) +
             geom_point(size=0.5) +
             geom_line() +
             xlab(label = xlab.A) +
@@ -179,7 +182,7 @@ plotCont <- function(data.A, data.B, xlab.A, xlab.B=NULL, w.A=NULL, w.B=NULL,
             
             qq <- data.frame(qA=qB, qB=qA-qB)
             #colnames(qq) <- paste(xlab, c("A","B"), sep=".")
-            out <- ggplot(qq, aes(x=qA, y=qB)) +
+            out <- ggplot2::ggplot(qq, aes(x=qA, y=qB)) +
                 geom_point(shape=19, color="orangered1", size=3) +
                 geom_hline(yintercept = 0, color="blue", size=1.5, 
                            linetype="dashed") +

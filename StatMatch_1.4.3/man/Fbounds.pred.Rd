@@ -2,10 +2,10 @@
 % Please edit documentation in R/Fbounds.pred.R
 \name{Fbounds.pred}
 \alias{Fbounds.pred}
-\title{Estimates Frechet bounds for the relative frequencies in the contingency table crossing two categorical variables observed in distinct samples referred to the same target population.}
+\title{
+Estimates Frechet bounds for cells in the contingency table crossing two categorical variables observed in distinct samples referred to the same target population.}
 \description{
-This function assesses the uncertainty in estimating the contingency table crossing \code{y.rec}(Y) and \code{z.don} (Z)  when the two variables are observed in two different samples sharing a number of common predictors.}.
-
+This function assesses the uncertainty in estimating the contingency table crossing \code{y.rec}(Y) and \code{z.don} (Z)  when the two variables are observed in two different samples sharing a number of common predictors.}
 \usage{
 Fbounds.pred(
   data.rec,
@@ -41,9 +41,9 @@ Fbounds.pred(
 \item{w.don}{: eventual name of the variable with units' weights in \code{data.don}; the weights are only used in estimating the bounds but not when fitting models.}
 
 \item{type.pred}{: string specifying how to obtain the predictions of Y and Z. By default the fitted models return conditional probabilities (or scores), then when \code{type.pred = "random"} (default) the predicted class of Y (Z) is obtained by a random draw with selection probabilities equal to estimated conditional probabilities (scores); on the contrary, when \code{type.pred = "mostvoted"} the predicted class is that having the highest estimated conditional probability (score).}
-}
 
 \item{...}{: addition eventual parameters needed.}
+
 }
 
 \details{
