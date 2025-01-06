@@ -1,12 +1,20 @@
-mahalanobis.dist <- function(data.x, data.y=NULL, vc=NULL){
+mahalanobis.dist <- function(data.x, data.y=NULL, vc=NULL, rob.vc=FALSE){
 
     xx <- as.matrix(data.x)
     if(is.null(data.y)) yy <- as.matrix(data.x)
     else yy <- as.matrix(data.y)
 
     if(is.null(vc)){
-        if(is.null(data.y)) vc <- var(xx)
-        else vc <- var(rbind(xx,yy))
+        if(is.null(data.y)) mm <- xx
+        else mm <- rbind(xx, yy)
+        
+        if(rob.vc){
+            oo <- MASS::cov.rob(x = mm, cor = FALSE)
+            vc <- oo$cov
+        }
+        else{
+            vc <- var(mm)
+        }
     }
 
     ny <- nrow(yy)

@@ -6,6 +6,8 @@
 # 	respectively Y and Z
 # 
 # 	pw.assoc: correction of a bug related to the call of the weighting variable 
+#
+#          mahalanobis.dist: now allows estimation of the covariance matrix in a robust manner
 # 
 # ###################################################################################################################
 # 1.4.2 Added function for using output of hotdeck functions for imputing missing values in a dataset
