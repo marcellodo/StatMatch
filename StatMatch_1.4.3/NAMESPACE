@@ -11,9 +11,9 @@ import(
   ggplot2
 )
  importFrom("stats", "as.formula", "chisq.test", "coefficients", "cor",
-     "cov2cor", "ecdf", "IQR","lm", "mahalanobis", "model.frame",
+     "cov2cor", cov.wt,"ecdf", "IQR","lm", "mahalanobis", "model.frame",
      "model.matrix", "model.matrix.lm","quantile", "qchisq", "residuals", "rnorm", "runif",
-     "sd", "var", "weights", "weighted.mean", "xtabs", "ftable", "loglin")
+     "sd", "var", "weights", "weighted.mean", "xtabs", "ftable", "loglin", "predict")
  importFrom("utils", "combn", "globalVariables")
  importFrom("graphics", "plot", "lines", "axis", "text", "par")
  importFrom("lpSolve", lp.assign, lp.transport) 

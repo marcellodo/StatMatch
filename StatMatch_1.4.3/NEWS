@@ -1,3 +1,13 @@
+1.4.3 Added functions for assessing uncertainty before performing matching:
+	rho.bounds: uses available data (A=(Y,X) and B=(Z,X)) to get bounds for Pearson's correlation between Y and Z using the available Xs;
+ 	rho.bounds.pred: as rho.bounds but intead of using the X directly, uses them as predictors for respectively Y and Z to get the corresponding 
+            predictions and use these latter ones to assess uncertainty (usefule when there are many Xs including categorical ones);
+	Fbounds.pred: assesses uncertainty characterizing the contigency table crossing Y and Z, with two samples and using Xs to predict 
+	respectively Y and Z
+
+	pw.assoc: correction of a bug related to the call of the weighting variable 
+
+###################################################################################################################
 1.4.2 Added function for using output of hotdeck functions for imputing missing values in a dataset
 		
 		create.imputed is a NEW function that uses the output of hotdeck functions to impute missing values
