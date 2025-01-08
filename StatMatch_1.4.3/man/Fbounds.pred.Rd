@@ -10,7 +10,7 @@ This function assesses the uncertainty in estimating the contingency table cross
 Fbounds.pred(data.rec, data.don,
              match.vars, y.rec, z.don, pred = "multinom",
              w.rec = NULL, w.don = NULL, type.pred = "random",
-             ...)
+             out.pred = FALSE, ...)
 }
 \arguments{
 \item{data.rec}{dataframe including the Xs (predictors, listed in \code{match.vars}) and \code{y.rec} (response; target variable in this dataset)}
@@ -34,6 +34,8 @@ Fbounds.pred(data.rec, data.don,
 
 \item{type.pred}{string specifying how to obtain the predictions of Y and Z. By default, the fitted models return conditional probabilities (or scores), then if \code{type.pred = "random"} (default), the predicted class of Y (Z) is obtained by a random draw with selection probabilities equal to the estimated conditional probabilities (scores); on the contrary, if \code{type.pred = "mostvoted"}, the predicted class is the one with the highest estimated conditional probability (score).}
 
+\item{out.pred}{ Logical. If TRUE (default is FALSE) returns the input datasets with the estimated conditional probabilities (depending on \code{pred} argument), the predicted class for the target variable (Y or Z) in the dataset (depending on \code{type.pred} argument) and the true observed class of Y (or Z).
+}
 \item{...}{additional arguments, if needed.}
 
 }
@@ -42,6 +44,10 @@ Fbounds.pred(data.rec, data.don,
 The function evaluates the uncertainty in estimating the contingency table crossing \code{y.rec} (Y) and \code{z.don} (Z) when the two variables are observed in two different samples related to the same target population, but the samples share a number of common predictors. The evaluation of the uncertainty is equivalent to estimating the bounds for each cell in the contingency table where Y and Z intersect; the bounds can be unconditional (Frechet property) or conditional on the predictions of both Y and Z provided by the models fitted according to the \code{pred} argument. This latter way of working avoids many of the drawbacks of obtaining expectations of conditional bounds when conditioning on many X variables, and allows the inclusion of non-categorical predictors. The final estimation of the conditional bounds is provided by the function \code{\link[StatMatch]{Frechet.bounds.cat}}.
 }
 \value{a list with the following components: 
+
+\code{up.rec} only when \code{out.pred = TRUE} it corresponds to a smaller version of \code{data.rec} with the estimated conditional probabilities for both Y and Z (depending on \code{pred} argument), the predicted class of Y (depending on \code{type.pred} argument),  the predicted class of Z (depending on \code{type.pred} argument), the true observed class of Y and the predictors (argument \code{match.vars}) (and the weights when \code{w.rec} is specified).
+
+\code{up.don} only when \code{out.pred = TRUE} it corresponds to a smaller version of \code{data.don} with the estimated conditional probabilities for both Y and Z (depending on \code{pred} argument), the predicted class of Y (depending on \code{type.pred} argument), the predicted class of Z (depending on \code{type.pred} argument), the true observed class of Z and the predictors (argument \code{match.vars}) (and the weights when \code{w.don} is specified).
 
 \code{p.xx.ini} the estimated relative frequencies in the table crossing predictions of Y and Z; it is estimated after pooling the samples (weighted average of estimates obtained on the separates samples);
 

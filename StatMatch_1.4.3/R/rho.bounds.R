@@ -1,17 +1,3 @@
-#' Title
-#'
-#' @param data.rec
-#' @param data.don
-#' @param match.vars
-#' @param y.rec
-#' @param z.don
-#' @param w.rec
-#' @param w.don
-#'
-#' @return
-#' @export
-#'
-#' @examples
 rho.bounds <-
     function (data.rec, data.don, match.vars, y.rec, z.don,
               w.rec=NULL, w.don=NULL)

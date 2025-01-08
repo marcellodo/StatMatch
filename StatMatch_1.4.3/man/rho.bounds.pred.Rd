@@ -10,7 +10,8 @@ This function evaluates the uncertainty in estimating the Pearson's correlation 
 rho.bounds.pred(data.rec, data.don,
                 match.vars, y.rec, z.don,
                 pred = "lm",
-                w.rec = NULL, w.don = NULL, ...)
+                w.rec = NULL, w.don = NULL, 
+								out.pred =FALSE, ...)
 }
 \arguments{
 \item{data.rec}{dataframe including the Xs (predictors, listed in \code{match.vars}) and \code{y.rec} (response; target variable in this dataset).}
@@ -33,12 +34,22 @@ rho.bounds.pred(data.rec, data.don,
 
 \item{w.don}{possible name of the variable with the weights associated to the units in \code{data.don}, if available; the weights are only used in estimating correlations, not in fitting models.}
 
+\item{out.pred}{Logical, when TRUE (default is FALSE) the output includes the input datasets with the predictions of both the target variables.}
+
 \item{...}{addition eventual parameters needed.}
 }
 \details{
 This function evaluates the uncertainty in the estimation of the Pearson's correlation coefficient between \code{y.rec} (Y) and \code{z.don} (Z), when the two variables are observed in two different samples that refer to the same target population, but that share a set of common predictors X (\code{match.vars}). The evaluation of the uncertainty corresponds to the estimation of the bounds (lower and upper) of the correlation coefficient between Y and Z, given the available data. The method uses the expressions proposed by Rodgers and DeVol (1982), but instead of using the Xs \code{match.vars} directly, they are replaced by the predictions of both Y and Z provided by the fitted models according to \code{pred}. This last way of working avoids the drawbacks encountered when estimating covariances in the presence of several X variables, some of which are categorical (factors) and therefore pose the problem of working with dummies. The final estimation of the bounds is provided by the function \code{\link[StatMatch]{rho.bounds}}. Note that the correlations between the predictions of both Y and Z are estimated after pooling the samples. Survey weights, if available (arguments \code{w.rec} and \code{w.don}), are used in estimating the correlations, but not in fitting the models.
 }
-\value{a list with two  components: \code{corr} the estimated correlations between Y (Z) and the corresponding predicted values; \code{bounds} a vector with three values: the estimated lower bound for the Pearson's correlation coefficient between \code{y.rec}(Y) and \code{z.don} (Z); the estimated upper bound;  and, the mid-point of the interval that corresponds to the estimate Pearson's correlation coefficient under the conditional independence assumption.
+\value{a list with the following components:
+
+\code{up.rec} only when \code{out.pred = TRUE} the output list includes \code{data.rec} with the predicted values of both Y and Z;
+
+\code{up.don} only when \code{out.pred = TRUE} the output list includes \code{data.don} with the predicted values of both Y and Z;
+
+\code{corr} the estimated correlations between Y (Z) and the corresponding predicted values;
+
+\code{bounds} a vector with three values: the estimated lower bound for the Pearson's correlation coefficient between \code{y.rec}(Y) and \code{z.don} (Z); the estimated upper bound;  and, the mid-point of the interval that corresponds to the estimate Pearson's correlation coefficient under the conditional independence assumption.
 }
 \references{
 D'Orazio, M., (2024). \emph{Is Statistical Matching feasible?} Note, \url{https://www.researchgate.net/publication/387699016_Is_statistical_matching_feasible}.

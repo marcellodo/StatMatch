@@ -1,37 +1,7 @@
-#' Estimates Frechet bounds for the relative frequencies in the contingency 
-#' table crossing y.rec and z.don variables. Estimates also expected values
-#' of bounds conditional on predictions of both y.rec and z.don
-#'
-#' @param data.rec : dataset including the Xs (argument match,vars) and y.rec (dependent)
-#' @param data.don : dataset including the Xs (argument match,vars) and z.don (dependent)
-#' @param match.vars : vector with the names of the Xs variables (predictors)
-#' @param y.rec : character indicating with the name of Y variable
-#' @param z.don : character indicating with the name of Z variable
-#' @param pred : method to get predictions of both Y and Z. Available methods include:
-#' pred = "multinom" (deafult) fits two multinomial models to get predictions considering respectively Y and Z as 
-#' dependent variables and match.vars as Xs; pred = "lasso" uses lasso method to select a subset of 
-#' of "match.vars" being best predictors of respectively Y and Z and then fits the multinomial model;
-#' pred = "aic" uses AIC to find best predictors of respectively Y and Z and then fits the multinomial model 
-#' but can be used only if all the match.vars (Xs) are categorical; pred = "rf" fits randomForest to get 
-#' predictions of both Y and Z.
-#'
-#' @param w.rec : eventual name of the variable with units' weights in data.rec; 
-#' the weigths are only used in estimating the bounds but not when getting predictions 
-#' @param w.don : eventual name of the variable with units' weights in data.don
-#' the weigths are only used in estimating the bounds but not when getting predictions 
-#' @param ... : addition eventual parameters needed by the called functions; e.g. argument align
-#' align.margins that is estimating bounds to eventually align the distribution of the predictions 
-#' in both the samples
-#'
-#' @return: a list with two arguments: the estimated bounds for each cell in the contingency table 
-#'  Y * Z and and estimate of the uncertainty in terms of average widths of the bounds
-#' @export
-#'
-#' @examples
 Fbounds.pred <-
     function (data.rec, data.don, match.vars, y.rec, z.don, 
               pred="multinom", w.rec=NULL, w.don=NULL, 
-              type.pred = "random",
+              type.pred = "random", out.pred = FALSE,
               ...)
     {
 #######################################################
@@ -174,11 +144,14 @@ Fbounds.pred <-
         #
         # from estimated probs to predicted class 
         yy <- data.rec[ , y.rec]
-        lev.y <- levels(yy)
+        if(is.factor(yy))  lev.y <- levels(yy)
+        else lev.y <- sort(unique(yy)) # integer
+        
         nl.y <- length(lev.y)
         
         zz <- data.don[ , z.don]
-        lev.z <- levels(zz)
+        if(is.factor(zz)) lev.z <- levels(zz)
+        else lev.z <- sort(unique(zz))
         nl.z <- length(lev.z)
         
         if(type.pred == "random" | type.pred == "rnd"){
@@ -273,9 +246,9 @@ Fbounds.pred <-
             d.A <- 1 + (sd(w.A)/mean(w.A))^2
             d.B <- 1 + (sd(w.B)/mean(w.B))^2
             l.A <- (n.A/d.A) / (n.A/d.A + n.B/d.B)
-            l.B <- 1 - l.A
+            # l.B <- 1 - l.A
             new.rec[ , w.rec] <- l.A * w.A
-            new.don[ , w.don] <- l.B * w.B
+            new.don[ , w.don] <- (1 - l.A) * w.B
 
             ## estimate input tables for function Frechet.bounds.cat
             tx.rec <- xtabs(as.formula(paste(w.rec, fxx)), data=new.rec)
@@ -305,11 +278,35 @@ Fbounds.pred <-
                                   print.f = "data.frame", ...)
         
         # prepare output
-        linp <- list(p.xx.ini = prop.table(txx), 
-                     p.xy.ini = prop.table(txy), 
-                     p.xz.ini = prop.table(txz),
-                     accuracy=c(y = acc.y, z = acc.z))
-
+        if(out.pred){
+           
+            out.rec <- data.frame(ppy.rec, ppz.rec, py.rec, pz.rec,
+                                  data.rec[, c(y.rec, match.vars, w.rec)])
+            colnames(out.rec) <- c(paste("pr", y.rec, lev.y, sep = "."),
+                                   paste("pr", z.don, lev.z, sep = "."), 
+                                   paste("pred", c(y.rec, z.don), sep="."),
+                                   y.rec, match.vars, w.rec)
+              
+            out.don <- data.frame(ppy.don, ppz.don, py.don, pz.don,
+                                  data.don[, c(z.don, match.vars, w.don)])
+            colnames(out.don) <- c(paste("prob", y.rec, lev.y, sep = "."),
+                                   paste("prob", z.don, lev.z, sep = "."), 
+                                   paste("pred", c(y.rec, z.don), sep="."),
+                                   z.don, match.vars, w.don)
+              
+            linp <- list(up.rec = out.rec, up.don = out.don,
+                           p.xx.ini = prop.table(txx), 
+                           p.xy.ini = prop.table(txy), 
+                           p.xz.ini = prop.table(txz),
+                           accuracy=c(y = acc.y, z = acc.z))
+        }
+        else{
+            linp <- list(p.xx.ini = prop.table(txx), 
+                         p.xy.ini = prop.table(txy), 
+                         p.xz.ini = prop.table(txz),
+                         accuracy=c(y = acc.y, z = acc.z))
+        }
+        
         # final output
         c(linp, out)
     }

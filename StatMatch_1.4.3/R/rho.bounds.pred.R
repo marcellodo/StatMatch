@@ -1,22 +1,7 @@
-#' Title
-#'
-#' @param data.rec
-#' @param data.don
-#' @param match.vars
-#' @param y.rec
-#' @param z.don
-#' @param pred
-#' @param w.rec
-#' @param w.don
-#' @param ...
-#'
-#' @return
-#' @export
-#'
-#' @examples
 rho.bounds.pred <-
     function (data.rec, data.don, match.vars, y.rec, z.don,
-              pred="lm", w.rec=NULL, w.don=NULL, ...)
+              pred="lm", w.rec=NULL, w.don=NULL, 
+              out.pred = FALSE, ...)
     {
 
         n.A <- nrow(data.rec)
@@ -126,7 +111,25 @@ rho.bounds.pred <-
                          w.rec=w.rec, w.don=w.don)
 
         }
-
-        list(corr=c(py.y=c.yy, pz.z=c.zz), bounds=out)
+        ####################################################
+        # output
+        fine <- list(corr=c(py.y=c.yy, pz.z=c.zz), bounds=out)
+        
+        if(out.pred){
+           up.rec <- data.frame(data.rec[ ,c(match.vars, y.rec, w.rec)], 
+                                c(py.rec), c(pz.rec))
+           colnames(up.rec) <- c(match.vars, y.rec, w.rec, 
+                                        paste("pred", c(y.rec, z.don), sep="."))
+           
+           up.don <- data.frame(data.don[ ,c(match.vars, z.don, w.don)], 
+                                c(py.don), pz=c(pz.don))
+           colnames(up.don) <- c(match.vars, z.don, w.don, 
+                                        paste("pred", c(y.rec, z.don), sep="."))
+           ld <- list(up.rec = up.rec, up.don = up.don)
+           fine <- c(ld, fine)
+        }
+        
+        fine
+        
     }
 
