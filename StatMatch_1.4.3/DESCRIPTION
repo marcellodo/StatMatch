@@ -1,8 +1,12 @@
 Package: StatMatch
 Version: 1.4.3
-Date: 2025-01-06
+Date: 2025-01-08
 Title: Statistical Matching or Data Fusion
-Author: Marcello D'Orazio
+Authors@R: person(given = "Marcello",
+                    family = "D'Orazio",
+                    role = c("aut", "cre"),
+                    email = "mdo.statmatch@gmail.com")
+Author: Marcello D'Orazio [aut, cre]
 Maintainer: Marcello D'Orazio <mdo.statmatch@gmail.com>
 Depends: R (>= 2.7.0), proxy, survey, lpSolve, ggplot2, dplyr 
 Suggests: Hmisc, MASS, mipfp, clue, RANN, randomForest, nnet, glmnet, naivebayes
