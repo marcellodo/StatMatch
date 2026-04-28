@@ -8,8 +8,8 @@ Marcello D’Orazio
 [![CRAN
 version](https://www.r-pkg.org/badges/version/StatMatch.png)](https://CRAN.R-project.org/package=StatMatch)
 [![CRAN
-downloads](https://cranlogs.r-pkg.org/badges/StatMatch.png)](https://CRAN.R-project.org/package=StatMatch)
-[![Mentioned in Awesome Official
+downloads](https://cranlogs.r-pkg.org/badges/grand-total/StatMatch.png)](https://CRAN.R-project.org/package=StatMatch)[![Mentioned
+in Awesome Official
 Statistics](https://awesome.re/mentioned-badge.svg)](http://www.awesomeofficialstatistics.org)
 
 ------------------------------------------------------------------------
